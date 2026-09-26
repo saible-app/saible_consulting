@@ -1,0 +1,35 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Activate Melos
+        run: dart pub global activate melos
+
+      - name: Bootstrap Monorepo Dependencies
+        run: melos bootstrap
+
+      - name: Static Code Analysis
+        run: melos exec -- dart analyze .
+
+      - name: Run Unit Tests
+        run: melos exec --dir-exists="test" -- flutter test --coverage
+
+      - name: Verify pub.dev Package Validity (Dry-Run)
+        run: melos exec --scope="*field,saible_core" -- flutter pub publish --dry-run

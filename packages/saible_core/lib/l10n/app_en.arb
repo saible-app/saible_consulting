@@ -1,0 +1,999 @@
+{
+  "@@locale": "en",
+  "country_AF": "Afghanistan",
+  "@country_AF": {
+    "description": "Name of Afghanistan"
+  },
+  "country_AX": "Åland Islands",
+  "@country_AX": {
+    "description": "Name of Åland Islands"
+  },
+  "country_AL": "Albania",
+  "@country_AL": {
+    "description": "Name of Albania"
+  },
+  "country_DZ": "Algeria",
+  "@country_DZ": {
+    "description": "Name of Algeria"
+  },
+  "country_AS": "American Samoa",
+  "@country_AS": {
+    "description": "Name of American Samoa"
+  },
+  "country_AD": "Andorra",
+  "@country_AD": {
+    "description": "Name of Andorra"
+  },
+  "country_AO": "Angola",
+  "@country_AO": {
+    "description": "Name of Angola"
+  },
+  "country_AI": "Anguilla",
+  "@country_AI": {
+    "description": "Name of Anguilla"
+  },
+  "country_AQ": "Antarctica",
+  "@country_AQ": {
+    "description": "Name of Antarctica"
+  },
+  "country_AG": "Antigua and Barbuda",
+  "@country_AG": {
+    "description": "Name of Antigua and Barbuda"
+  },
+  "country_AR": "Argentina",
+  "@country_AR": {
+    "description": "Name of Argentina"
+  },
+  "country_AM": "Armenia",
+  "@country_AM": {
+    "description": "Name of Armenia"
+  },
+  "country_AW": "Aruba",
+  "@country_AW": {
+    "description": "Name of Aruba"
+  },
+  "country_AU": "Australia",
+  "@country_AU": {
+    "description": "Name of Australia"
+  },
+  "country_AT": "Austria",
+  "@country_AT": {
+    "description": "Name of Austria"
+  },
+  "country_AZ": "Azerbaijan",
+  "@country_AZ": {
+    "description": "Name of Azerbaijan"
+  },
+  "country_BS": "Bahamas",
+  "@country_BS": {
+    "description": "Name of Bahamas"
+  },
+  "country_BH": "Bahrain",
+  "@country_BH": {
+    "description": "Name of Bahrain"
+  },
+  "country_BD": "Bangladesh",
+  "@country_BD": {
+    "description": "Name of Bangladesh"
+  },
+  "country_BB": "Barbados",
+  "@country_BB": {
+    "description": "Name of Barbados"
+  },
+  "country_BY": "Belarus",
+  "@country_BY": {
+    "description": "Name of Belarus"
+  },
+  "country_BE": "Belgium",
+  "@country_BE": {
+    "description": "Name of Belgium"
+  },
+  "country_BZ": "Belize",
+  "@country_BZ": {
+    "description": "Name of Belize"
+  },
+  "country_BJ": "Benin",
+  "@country_BJ": {
+    "description": "Name of Benin"
+  },
+  "country_BM": "Bermuda",
+  "@country_BM": {
+    "description": "Name of Bermuda"
+  },
+  "country_BT": "Bhutan",
+  "@country_BT": {
+    "description": "Name of Bhutan"
+  },
+  "country_BO": "Bolivia (Plurinational State of)",
+  "@country_BO": {
+    "description": "Name of Bolivia (Plurinational State of)"
+  },
+  "country_BQ": "Bonaire, Sint Eustatius and Saba",
+  "@country_BQ": {
+    "description": "Name of Bonaire, Sint Eustatius and Saba"
+  },
+  "country_BA": "Bosnia and Herzegovina",
+  "@country_BA": {
+    "description": "Name of Bosnia and Herzegovina"
+  },
+  "country_BW": "Botswana",
+  "@country_BW": {
+    "description": "Name of Botswana"
+  },
+  "country_BV": "Bouvet Island",
+  "@country_BV": {
+    "description": "Name of Bouvet Island"
+  },
+  "country_BR": "Brazil",
+  "@country_BR": {
+    "description": "Name of Brazil"
+  },
+  "country_IO": "British Indian Ocean Territory",
+  "@country_IO": {
+    "description": "Name of British Indian Ocean Territory"
+  },
+  "country_BN": "Brunei Darussalam",
+  "@country_BN": {
+    "description": "Name of Brunei Darussalam"
+  },
+  "country_BG": "Bulgaria",
+  "@country_BG": {
+    "description": "Name of Bulgaria"
+  },
+  "country_BF": "Burkina Faso",
+  "@country_BF": {
+    "description": "Name of Burkina Faso"
+  },
+  "country_BI": "Burundi",
+  "@country_BI": {
+    "description": "Name of Burundi"
+  },
+  "country_CV": "Cabo Verde",
+  "@country_CV": {
+    "description": "Name of Cabo Verde"
+  },
+  "country_KH": "Cambodia",
+  "@country_KH": {
+    "description": "Name of Cambodia"
+  },
+  "country_CM": "Cameroon",
+  "@country_CM": {
+    "description": "Name of Cameroon"
+  },
+  "country_CA": "Canada",
+  "@country_CA": {
+    "description": "Name of Canada"
+  },
+  "country_KY": "Cayman Islands",
+  "@country_KY": {
+    "description": "Name of Cayman Islands"
+  },
+  "country_CF": "Central African Republic",
+  "@country_CF": {
+    "description": "Name of Central African Republic"
+  },
+  "country_TD": "Chad",
+  "@country_TD": {
+    "description": "Name of Chad"
+  },
+  "country_CL": "Chile",
+  "@country_CL": {
+    "description": "Name of Chile"
+  },
+  "country_CN": "China",
+  "@country_CN": {
+    "description": "Name of China"
+  },
+  "country_CX": "Christmas Island",
+  "@country_CX": {
+    "description": "Name of Christmas Island"
+  },
+  "country_CC": "Cocos (Keeling) Islands",
+  "@country_CC": {
+    "description": "Name of Cocos (Keeling) Islands"
+  },
+  "country_CO": "Colombia",
+  "@country_CO": {
+    "description": "Name of Colombia"
+  },
+  "country_KM": "Comoros",
+  "@country_KM": {
+    "description": "Name of Comoros"
+  },
+  "country_CD": "Congo",
+  "@country_CD": {
+    "description": "Name of Congo"
+  },
+  "country_CG": "Congo (the Democratic Republic of the)",
+  "@country_CG": {
+    "description": "Name of Congo (the Democratic Republic of the)"
+  },
+  "country_CK": "Cook Islands",
+  "@country_CK": {
+    "description": "Name of Cook Islands"
+  },
+  "country_CR": "Costa Rica",
+  "@country_CR": {
+    "description": "Name of Costa Rica"
+  },
+  "country_CI": "Côte d'Ivoire",
+  "@country_CI": {
+    "description": "Name of Côte d'Ivoire"
+  },
+  "country_HR": "Croatia",
+  "@country_HR": {
+    "description": "Name of Croatia"
+  },
+  "country_CU": "Cuba",
+  "@country_CU": {
+    "description": "Name of Cuba"
+  },
+  "country_CW": "Curaçao",
+  "@country_CW": {
+    "description": "Name of Curaçao"
+  },
+  "country_CY": "Cyprus",
+  "@country_CY": {
+    "description": "Name of Cyprus"
+  },
+  "country_CZ": "Czechia",
+  "@country_CZ": {
+    "description": "Name of Czechia"
+  },
+  "country_DK": "Denmark",
+  "@country_DK": {
+    "description": "Name of Denmark"
+  },
+  "country_DJ": "Djibouti",
+  "@country_DJ": {
+    "description": "Name of Djibouti"
+  },
+  "country_DM": "Dominica",
+  "@country_DM": {
+    "description": "Name of Dominica"
+  },
+  "country_DO": "Dominican Republic",
+  "@country_DO": {
+    "description": "Name of Dominican Republic"
+  },
+  "country_EC": "Ecuador",
+  "@country_EC": {
+    "description": "Name of Ecuador"
+  },
+  "country_EG": "Egypt",
+  "@country_EG": {
+    "description": "Name of Egypt"
+  },
+  "country_SV": "El Salvador",
+  "@country_SV": {
+    "description": "Name of El Salvador"
+  },
+  "country_GQ": "Equatorial Guinea",
+  "@country_GQ": {
+    "description": "Name of Equatorial Guinea"
+  },
+  "country_ER": "Eritrea",
+  "@country_ER": {
+    "description": "Name of Eritrea"
+  },
+  "country_EE": "Estonia",
+  "@country_EE": {
+    "description": "Name of Estonia"
+  },
+  "country_SZ": "Eswatini",
+  "@country_SZ": {
+    "description": "Name of Eswatini"
+  },
+  "country_ET": "Ethiopia",
+  "@country_ET": {
+    "description": "Name of Ethiopia"
+  },
+  "country_FK": "Falkland Islands [Malvinas]",
+  "@country_FK": {
+    "description": "Name of Falkland Islands [Malvinas]"
+  },
+  "country_FO": "Faroe Islands",
+  "@country_FO": {
+    "description": "Name of Faroe Islands"
+  },
+  "country_FJ": "Fiji",
+  "@country_FJ": {
+    "description": "Name of Fiji"
+  },
+  "country_FI": "Finland",
+  "@country_FI": {
+    "description": "Name of Finland"
+  },
+  "country_FR": "France",
+  "@country_FR": {
+    "description": "Name of France"
+  },
+  "country_GF": "French Guiana",
+  "@country_GF": {
+    "description": "Name of French Guiana"
+  },
+  "country_PF": "French Polynesia",
+  "@country_PF": {
+    "description": "Name of French Polynesia"
+  },
+  "country_TF": "French Southern Territories",
+  "@country_TF": {
+    "description": "Name of French Southern Territories"
+  },
+  "country_GA": "Gabon",
+  "@country_GA": {
+    "description": "Name of Gabon"
+  },
+  "country_GM": "Gambia",
+  "@country_GM": {
+    "description": "Name of Gambia"
+  },
+  "country_GE": "Georgia",
+  "@country_GE": {
+    "description": "Name of Georgia"
+  },
+  "country_DE": "Germany",
+  "@country_DE": {
+    "description": "Name of Germany"
+  },
+  "country_GH": "Ghana",
+  "@country_GH": {
+    "description": "Name of Ghana"
+  },
+  "country_GI": "Gibraltar",
+  "@country_GI": {
+    "description": "Name of Gibraltar"
+  },
+  "country_GR": "Greece",
+  "@country_GR": {
+    "description": "Name of Greece"
+  },
+  "country_GL": "Greenland",
+  "@country_GL": {
+    "description": "Name of Greenland"
+  },
+  "country_GD": "Grenada",
+  "@country_GD": {
+    "description": "Name of Grenada"
+  },
+  "country_GP": "Guadeloupe",
+  "@country_GP": {
+    "description": "Name of Guadeloupe"
+  },
+  "country_GU": "Guam",
+  "@country_GU": {
+    "description": "Name of Guam"
+  },
+  "country_GT": "Guatemala",
+  "@country_GT": {
+    "description": "Name of Guatemala"
+  },
+  "country_GG": "Guernsey",
+  "@country_GG": {
+    "description": "Name of Guernsey"
+  },
+  "country_GN": "Guinea",
+  "@country_GN": {
+    "description": "Name of Guinea"
+  },
+  "country_GW": "Guinea-Bissau",
+  "@country_GW": {
+    "description": "Name of Guinea-Bissau"
+  },
+  "country_GY": "Guyana",
+  "@country_GY": {
+    "description": "Name of Guyana"
+  },
+  "country_HT": "Haiti",
+  "@country_HT": {
+    "description": "Name of Haiti"
+  },
+  "country_HM": "Heard Island and McDonald Islands",
+  "@country_HM": {
+    "description": "Name of Heard Island and McDonald Islands"
+  },
+  "country_VA": "Holy See",
+  "@country_VA": {
+    "description": "Name of Holy See"
+  },
+  "country_HN": "Honduras",
+  "@country_HN": {
+    "description": "Name of Honduras"
+  },
+  "country_HK": "Hong Kong",
+  "@country_HK": {
+    "description": "Name of Hong Kong"
+  },
+  "country_HU": "Hungary",
+  "@country_HU": {
+    "description": "Name of Hungary"
+  },
+  "country_IS": "Iceland",
+  "@country_IS": {
+    "description": "Name of Iceland"
+  },
+  "country_IN": "India",
+  "@country_IN": {
+    "description": "Name of India"
+  },
+  "country_ID": "Indonesia",
+  "@country_ID": {
+    "description": "Name of Indonesia"
+  },
+  "country_IR": "Iran (Islamic Republic of)",
+  "@country_IR": {
+    "description": "Name of Iran (Islamic Republic of)"
+  },
+  "country_IQ": "Iraq",
+  "@country_IQ": {
+    "description": "Name of Iraq"
+  },
+  "country_IE": "Ireland",
+  "@country_IE": {
+    "description": "Name of Ireland"
+  },
+  "country_IM": "Isle of Man",
+  "@country_IM": {
+    "description": "Name of Isle of Man"
+  },
+  "country_IL": "Israel",
+  "@country_IL": {
+    "description": "Name of Israel"
+  },
+  "country_IT": "Italy",
+  "@country_IT": {
+    "description": "Name of Italy"
+  },
+  "country_JM": "Jamaica",
+  "@country_JM": {
+    "description": "Name of Jamaica"
+  },
+  "country_JP": "Japan",
+  "@country_JP": {
+    "description": "Name of Japan"
+  },
+  "country_JE": "Jersey",
+  "@country_JE": {
+    "description": "Name of Jersey"
+  },
+  "country_JO": "Jordan",
+  "@country_JO": {
+    "description": "Name of Jordan"
+  },
+  "country_KZ": "Kazakhstan",
+  "@country_KZ": {
+    "description": "Name of Kazakhstan"
+  },
+  "country_KE": "Kenya",
+  "@country_KE": {
+    "description": "Name of Kenya"
+  },
+  "country_KI": "Kiribati",
+  "@country_KI": {
+    "description": "Name of Kiribati"
+  },
+  "country_KP": "Korea (the Democratic People's Republic of)",
+  "@country_KP": {
+    "description": "Name of Korea (the Democratic People's Republic of)"
+  },
+  "country_KR": "Korea (the Republic of)",
+  "@country_KR": {
+    "description": "Name of Korea (the Republic of)"
+  },
+  "country_KW": "Kuwait",
+  "@country_KW": {
+    "description": "Name of Kuwait"
+  },
+  "country_KG": "Kyrgyzstan",
+  "@country_KG": {
+    "description": "Name of Kyrgyzstan"
+  },
+  "country_LA": "Lao People's Democratic Republic",
+  "@country_LA": {
+    "description": "Name of Lao People's Democratic Republic"
+  },
+  "country_LV": "Latvia",
+  "@country_LV": {
+    "description": "Name of Latvia"
+  },
+  "country_LB": "Lebanon",
+  "@country_LB": {
+    "description": "Name of Lebanon"
+  },
+  "country_LS": "Lesotho",
+  "@country_LS": {
+    "description": "Name of Lesotho"
+  },
+  "country_LR": "Liberia",
+  "@country_LR": {
+    "description": "Name of Liberia"
+  },
+  "country_LY": "Libya",
+  "@country_LY": {
+    "description": "Name of Libya"
+  },
+  "country_LI": "Liechtenstein",
+  "@country_LI": {
+    "description": "Name of Liechtenstein"
+  },
+  "country_LT": "Lithuania",
+  "@country_LT": {
+    "description": "Name of Lithuania"
+  },
+  "country_LU": "Luxembourg",
+  "@country_LU": {
+    "description": "Name of Luxembourg"
+  },
+  "country_MO": "Macao",
+  "@country_MO": {
+    "description": "Name of Macao"
+  },
+  "country_MG": "Madagascar",
+  "@country_MG": {
+    "description": "Name of Madagascar"
+  },
+  "country_MW": "Malawi",
+  "@country_MW": {
+    "description": "Name of Malawi"
+  },
+  "country_MY": "Malaysia",
+  "@country_MY": {
+    "description": "Name of Malaysia"
+  },
+  "country_MV": "Maldives",
+  "@country_MV": {
+    "description": "Name of Maldives"
+  },
+  "country_ML": "Mali",
+  "@country_ML": {
+    "description": "Name of Mali"
+  },
+  "country_MT": "Malta",
+  "@country_MT": {
+    "description": "Name of Malta"
+  },
+  "country_MH": "Marshall Islands",
+  "@country_MH": {
+    "description": "Name of Marshall Islands"
+  },
+  "country_MQ": "Martinique",
+  "@country_MQ": {
+    "description": "Name of Martinique"
+  },
+  "country_MR": "Mauritania",
+  "@country_MR": {
+    "description": "Name of Mauritania"
+  },
+  "country_MU": "Mauritius",
+  "@country_MU": {
+    "description": "Name of Mauritius"
+  },
+  "country_YT": "Mayotte",
+  "@country_YT": {
+    "description": "Name of Mayotte"
+  },
+  "country_MX": "Mexico",
+  "@country_MX": {
+    "description": "Name of Mexico"
+  },
+  "country_FM": "Micronesia (Federated States of)",
+  "@country_FM": {
+    "description": "Name of Micronesia (Federated States of)"
+  },
+  "country_MD": "Moldova (the Republic of)",
+  "@country_MD": {
+    "description": "Name of Moldova (the Republic of)"
+  },
+  "country_MC": "Monaco",
+  "@country_MC": {
+    "description": "Name of Monaco"
+  },
+  "country_MN": "Mongolia",
+  "@country_MN": {
+    "description": "Name of Mongolia"
+  },
+  "country_ME": "Montenegro",
+  "@country_ME": {
+    "description": "Name of Montenegro"
+  },
+  "country_MS": "Montserrat",
+  "@country_MS": {
+    "description": "Name of Montserrat"
+  },
+  "country_MA": "Morocco",
+  "@country_MA": {
+    "description": "Name of Morocco"
+  },
+  "country_MZ": "Mozambique",
+  "@country_MZ": {
+    "description": "Name of Mozambique"
+  },
+  "country_MM": "Myanmar",
+  "@country_MM": {
+    "description": "Name of Myanmar"
+  },
+  "country_NA": "Namibia",
+  "@country_NA": {
+    "description": "Name of Namibia"
+  },
+  "country_NR": "Nauru",
+  "@country_NR": {
+    "description": "Name of Nauru"
+  },
+  "country_NP": "Nepal",
+  "@country_NP": {
+    "description": "Name of Nepal"
+  },
+  "country_NL": "Netherlands",
+  "@country_NL": {
+    "description": "Name of Netherlands"
+  },
+  "country_NC": "New Caledonia",
+  "@country_NC": {
+    "description": "Name of New Caledonia"
+  },
+  "country_NZ": "New Zealand",
+  "@country_NZ": {
+    "description": "Name of New Zealand"
+  },
+  "country_NI": "Nicaragua",
+  "@country_NI": {
+    "description": "Name of Nicaragua"
+  },
+  "country_NE": "Niger",
+  "@country_NE": {
+    "description": "Name of Niger"
+  },
+  "country_NG": "Nigeria",
+  "@country_NG": {
+    "description": "Name of Nigeria"
+  },
+  "country_NU": "Niue",
+  "@country_NU": {
+    "description": "Name of Niue"
+  },
+  "country_NF": "Norfolk Island",
+  "@country_NF": {
+    "description": "Name of Norfolk Island"
+  },
+  "country_MK": "North Macedonia",
+  "@country_MK": {
+    "description": "Name of North Macedonia"
+  },
+  "country_MP": "Northern Mariana Islands",
+  "@country_MP": {
+    "description": "Name of Northern Mariana Islands"
+  },
+  "country_NO": "Norway",
+  "@country_NO": {
+    "description": "Name of Norway"
+  },
+  "country_OM": "Oman",
+  "@country_OM": {
+    "description": "Name of Oman"
+  },
+  "country_PK": "Pakistan",
+  "@country_PK": {
+    "description": "Name of Pakistan"
+  },
+  "country_PW": "Palau",
+  "@country_PW": {
+    "description": "Name of Palau"
+  },
+  "country_PS": "Palestine, State of",
+  "@country_PS": {
+    "description": "Name of Palestine, State of"
+  },
+  "country_PA": "Panama",
+  "@country_PA": {
+    "description": "Name of Panama"
+  },
+  "country_PG": "Papua New Guinea",
+  "@country_PG": {
+    "description": "Name of Papua New Guinea"
+  },
+  "country_PY": "Paraguay",
+  "@country_PY": {
+    "description": "Name of Paraguay"
+  },
+  "country_PE": "Peru",
+  "@country_PE": {
+    "description": "Name of Peru"
+  },
+  "country_PH": "Philippines",
+  "@country_PH": {
+    "description": "Name of Philippines"
+  },
+  "country_PN": "Pitcairn",
+  "@country_PN": {
+    "description": "Name of Pitcairn"
+  },
+  "country_PL": "Poland",
+  "@country_PL": {
+    "description": "Name of Poland"
+  },
+  "country_PT": "Portugal",
+  "@country_PT": {
+    "description": "Name of Portugal"
+  },
+  "country_PR": "Puerto Rico",
+  "@country_PR": {
+    "description": "Name of Puerto Rico"
+  },
+  "country_QA": "Qatar",
+  "@country_QA": {
+    "description": "Name of Qatar"
+  },
+  "country_RE": "Réunion",
+  "@country_RE": {
+    "description": "Name of Réunion"
+  },
+  "country_RO": "Romania",
+  "@country_RO": {
+    "description": "Name of Romania"
+  },
+  "country_RU": "Russian Federation",
+  "@country_RU": {
+    "description": "Name of Russian Federation"
+  },
+  "country_RW": "Rwanda",
+  "@country_RW": {
+    "description": "Name of Rwanda"
+  },
+  "country_BL": "Saint Barthélemy",
+  "@country_BL": {
+    "description": "Name of Saint Barthélemy"
+  },
+  "country_SH": "Saint Helena, Ascension and Tristan da Cunha",
+  "@country_SH": {
+    "description": "Name of Saint Helena, Ascension and Tristan da Cunha"
+  },
+  "country_KN": "Saint Kitts and Nevis",
+  "@country_KN": {
+    "description": "Name of Saint Kitts and Nevis"
+  },
+  "country_LC": "Saint Lucia",
+  "@country_LC": {
+    "description": "Name of Saint Lucia"
+  },
+  "country_MF": "Saint Martin (French part)",
+  "@country_MF": {
+    "description": "Name of Saint Martin (French part)"
+  },
+  "country_PM": "Saint Pierre and Miquelon",
+  "@country_PM": {
+    "description": "Name of Saint Pierre and Miquelon"
+  },
+  "country_VC": "Saint Vincent and the Grenadines",
+  "@country_VC": {
+    "description": "Name of Saint Vincent and the Grenadines"
+  },
+  "country_WS": "Samoa",
+  "@country_WS": {
+    "description": "Name of Samoa"
+  },
+  "country_SM": "San Marino",
+  "@country_SM": {
+    "description": "Name of San Marino"
+  },
+  "country_ST": "Sao Tome and Principe",
+  "@country_ST": {
+    "description": "Name of Sao Tome and Principe"
+  },
+  "country_SA": "Saudi Arabia",
+  "@country_SA": {
+    "description": "Name of Saudi Arabia"
+  },
+  "country_SN": "Senegal",
+  "@country_SN": {
+    "description": "Name of Senegal"
+  },
+  "country_RS": "Serbia",
+  "@country_RS": {
+    "description": "Name of Serbia"
+  },
+  "country_SC": "Seychelles",
+  "@country_SC": {
+    "description": "Name of Seychelles"
+  },
+  "country_SL": "Sierra Leone",
+  "@country_SL": {
+    "description": "Name of Sierra Leone"
+  },
+  "country_SG": "Singapore",
+  "@country_SG": {
+    "description": "Name of Singapore"
+  },
+  "country_SX": "Sint Maarten (Dutch part)",
+  "@country_SX": {
+    "description": "Name of Sint Maarten (Dutch part)"
+  },
+  "country_SK": "Slovakia",
+  "@country_SK": {
+    "description": "Name of Slovakia"
+  },
+  "country_SI": "Slovenia",
+  "@country_SI": {
+    "description": "Name of Slovenia"
+  },
+  "country_SB": "Solomon Islands",
+  "@country_SB": {
+    "description": "Name of Solomon Islands"
+  },
+  "country_SO": "Somalia",
+  "@country_SO": {
+    "description": "Name of Somalia"
+  },
+  "country_ZA": "South Africa",
+  "@country_ZA": {
+    "description": "Name of South Africa"
+  },
+  "country_GS": "South Georgia",
+  "@country_GS": {
+    "description": "Name of South Georgia"
+  },
+  "country_SS": "South Sudan",
+  "@country_SS": {
+    "description": "Name of South Sudan"
+  },
+  "country_ES": "Spain",
+  "@country_ES": {
+    "description": "Name of Spain"
+  },
+  "country_LK": "Sri Lanka",
+  "@country_LK": {
+    "description": "Name of Sri Lanka"
+  },
+  "country_SD": "Sudan",
+  "@country_SD": {
+    "description": "Name of Sudan"
+  },
+  "country_SR": "Suriname",
+  "@country_SR": {
+    "description": "Name of Suriname"
+  },
+  "country_SJ": "Svalbard and Jan Mayen",
+  "@country_SJ": {
+    "description": "Name of Svalbard and Jan Mayen"
+  },
+  "country_SE": "Sweden",
+  "@country_SE": {
+    "description": "Name of Sweden"
+  },
+  "country_CH": "Switzerland",
+  "@country_CH": {
+    "description": "Name of Switzerland"
+  },
+  "country_SY": "Syrian Arab Republic",
+  "@country_SY": {
+    "description": "Name of Syrian Arab Republic"
+  },
+  "country_TW": "Taiwan (Province of China)",
+  "@country_TW": {
+    "description": "Name of Taiwan (Province of China)"
+  },
+  "country_TJ": "Tajikistan",
+  "@country_TJ": {
+    "description": "Name of Tajikistan"
+  },
+  "country_TZ": "Tanzania, the United Republic of",
+  "@country_TZ": {
+    "description": "Name of Tanzania, the United Republic of"
+  },
+  "country_TH": "Thailand",
+  "@country_TH": {
+    "description": "Name of Thailand"
+  },
+  "country_TL": "Timor-Leste",
+  "@country_TL": {
+    "description": "Name of Timor-Leste"
+  },
+  "country_TG": "Togo",
+  "@country_TG": {
+    "description": "Name of Togo"
+  },
+  "country_TK": "Tokelau",
+  "@country_TK": {
+    "description": "Name of Tokelau"
+  },
+  "country_TO": "Tonga",
+  "@country_TO": {
+    "description": "Name of Tonga"
+  },
+  "country_TT": "Trinidad and Tobago",
+  "@country_TT": {
+    "description": "Name of Trinidad and Tobago"
+  },
+  "country_TN": "Tunisia",
+  "@country_TN": {
+    "description": "Name of Tunisia"
+  },
+  "country_TR": "Türkiye",
+  "@country_TR": {
+    "description": "Name of Türkiye"
+  },
+  "country_TM": "Turkmenistan",
+  "@country_TM": {
+    "description": "Name of Turkmenistan"
+  },
+  "country_TC": "Turks and Caicos Islands",
+  "@country_TC": {
+    "description": "Name of Turks and Caicos Islands"
+  },
+  "country_TV": "Tuvalu",
+  "@country_TV": {
+    "description": "Name of Tuvalu"
+  },
+  "country_UG": "Uganda",
+  "@country_UG": {
+    "description": "Name of Uganda"
+  },
+  "country_UA": "Ukraine",
+  "@country_UA": {
+    "description": "Name of Ukraine"
+  },
+  "country_AE": "United Arab Emirates",
+  "@country_AE": {
+    "description": "Name of United Arab Emirates"
+  },
+  "country_GB": "United Kingdom",
+  "@country_GB": {
+    "description": "Name of United Kingdom"
+  },
+  "country_US": "United States",
+  "@country_US": {
+    "description": "Name of United States"
+  },
+  "country_UM": "US Minor Outlying Islands",
+  "@country_UM": {
+    "description": "Name of US Minor Outlying Islands"
+  },
+  "country_UY": "Uruguay",
+  "@country_UY": {
+    "description": "Name of Uruguay"
+  },
+  "country_UZ": "Uzbekistan",
+  "@country_UZ": {
+    "description": "Name of Uzbekistan"
+  },
+  "country_VU": "Vanuatu",
+  "@country_VU": {
+    "description": "Name of Vanuatu"
+  },
+  "country_VE": "Venezuela (Bolivarian Republic of)",
+  "@country_VE": {
+    "description": "Name of Venezuela (Bolivarian Republic of)"
+  },
+  "country_VN": "Viet Nam",
+  "@country_VN": {
+    "description": "Name of Viet Nam"
+  },
+  "country_VG": "Virgin Islands (British)",
+  "@country_VG": {
+    "description": "Name of Virgin Islands (British)"
+  },
+  "country_VI": "Virgin Islands (U.S.)",
+  "@country_VI": {
+    "description": "Name of Virgin Islands (U.S.)"
+  },
+  "country_WF": "Wallis and Futuna",
+  "@country_WF": {
+    "description": "Name of Wallis and Futuna"
+  },
+  "country_EH": "Western Sahara",
+  "@country_EH": {
+    "description": "Name of Western Sahara"
+  },
+  "country_YE": "Yemen",
+  "@country_YE": {
+    "description": "Name of Yemen"
+  },
+  "country_ZM": "Zambia",
+  "@country_ZM": {
+    "description": "Name of Zambia"
+  },
+  "country_ZW": "Zimbabwe",
+  "@country_ZW": {
+    "description": "Name of Zimbabwe"
+  }
+}

@@ -1,0 +1,61 @@
+name: saible_consulting
+environment:
+  sdk: ">=3.13.2 <4.0.0"
+dev_dependencies:
+  melos: ^7.8.2
+workspace:
+  - packages/country_picker_form_field
+  - packages/date_picker_form_field
+  - packages/phone_number_form_field
+  - packages/saible_core
+  - apps/form_demo
+
+melos:
+  scripts:
+    add:provider:
+      exec: flutter pub add provider
+      packageFilters:
+        dependsOn: flutter
+
+    add:formz:
+      exec: flutter pub add formz
+      packageFilters:
+        dependsOn: flutter
+
+    add:intl:
+      exec: flutter pub add intl
+      packageFilters:
+        dependsOn: flutter
+
+    test:coverage:
+      exec: flutter test --coverage --branch-coverage
+      packageFilters:
+        dirExists: test
+        dependsOn: flutter
+      description: Run Flutter tests with line and branch coverage in all packages.
+
+    coverage:merge:
+      run: |
+        mkdir -p coverage
+        rm -f coverage/lcov.info
+        melos exec --dir-exists="test" --concurrency=1 -- \
+          'if [ -f coverage/lcov.info ]; then sed -e "s#^SF:#SF:$MELOS_PACKAGE_PATH/#" coverage/lcov.info >> "$MELOS_ROOT_PATH/coverage/lcov.info"; fi'
+      description: Merge sub-package coverage trace files into a single root lcov.info.
+
+    coverage:clean:
+      # Filter out auto-generated code and localized strings
+      run: |
+        coverde transform -i coverage/lcov.info \
+          -o coverage/lcov.info \
+          -m w \
+          -t "skip-by-regex=\.g\.dart" \
+          -t "skip-by-regex=\.freezed\.dart" \
+          -t "skip-by-regex=app_localizations.*\.dart"
+
+    coverage:report:
+      run: |
+        melos run test:coverage
+        melos run coverage:merge
+        melos run coverage:clean
+        genhtml coverage/lcov.info -o coverage/html --branch-coverage --function-coverage --ignore-errors inconsistent,corrupt,inconsistent
+      description: Execute tests, merge coverage, clean, and build an HTML report with genhtml.
