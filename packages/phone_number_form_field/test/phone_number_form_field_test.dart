@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:phone_number_form_field/application/phone_util.dart';
 import 'package:phone_number_form_field/domain/phone_number.dart';
 import 'package:phone_number_form_field/presentation/phone_number_form_field.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,8 @@ void main() {
     String? labelText,
     String? errorText,
     int? errorMaxLines,
-    PhoneNumberInputs? initialValue,
-    ValueChanged<PhoneNumberInputs>? onPhoneNumberChanged,
+    PhoneNumberState? initialValue,
+    ValueChanged<PhoneNumberState>? onPhoneNumberChanged,
   }) {
     final saibleLoc = lookupCountryLocalizations(locale);
     return MaterialApp(
@@ -30,9 +31,11 @@ void main() {
         body: Center(
           child: PhoneNumberFormField(
             focusNode: focusNode,
-            labelText: labelText,
-            errorText: errorText,
-            errorMaxLines: errorMaxLines,
+            decoration: InputDecoration(
+              labelText: labelText,
+              errorText: errorText,
+              errorMaxLines: errorMaxLines,
+            ),
             initialValue: initialValue,
             onPhoneNumberChanged: onPhoneNumberChanged,
           ),
@@ -82,7 +85,7 @@ void main() {
 
     testWidgets('renders with initialValue and pre-selects country and formatted text', (tester) async {
       // Official Ofcom reserved drama dummy number: 020 7946 0123 / +442079460123
-      const initial = PhoneNumberInputs(
+      const initial = PhoneNumberState(
         rawText: '20 7946 0123',
         e164: '+442079460123',
         regionCode: '+44',
@@ -107,7 +110,7 @@ void main() {
 
     testWidgets('renders with foreign initialValue (e.g. US) and selects US country', (tester) async {
       // Standard reserved 555 fictional US number: +12015550123
-      const initial = PhoneNumberInputs(
+      const initial = PhoneNumberState(
         rawText: '201 555 0123',
         e164: '+12015550123',
         regionCode: '+1',
@@ -126,7 +129,7 @@ void main() {
     });
 
     testWidgets('formats as-you-type and notifies onPhoneNumberChanged with valid E164', (tester) async {
-      final changedValues = <PhoneNumberInputs>[];
+      final changedValues = <PhoneNumberState>[];
 
       await tester.pumpWidget(
         buildTestWidget(
@@ -149,7 +152,7 @@ void main() {
     });
 
     testWidgets('notifies with null e164 when phone number is incomplete or cleared', (tester) async {
-      final changedValues = <PhoneNumberInputs>[];
+      final changedValues = <PhoneNumberState>[];
 
       await tester.pumpWidget(
         buildTestWidget(
@@ -185,7 +188,7 @@ void main() {
     });
 
     testWidgets('can search country in prefix search view, change country and reset input', (tester) async {
-      PhoneNumberInputs? latestValue;
+      PhoneNumberState? latestValue;
 
       await tester.pumpWidget(
         buildTestWidget(
@@ -241,6 +244,49 @@ void main() {
 
       final franceTileKey = PhoneNumberFormField.countrySuggestionKey(Iso3166Country.france);
       expect(find.byKey(franceTileKey), findsOneWidget);
+    });
+
+    testWidgets('handles parse error gracefully in formatting', (tester) async {
+      final changedValues = <PhoneNumberState>[];
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Phone',
+          onPhoneNumberChanged: changedValues.add,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Enter text that could trigger parsing exceptions
+      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '+++');
+      await tester.pumpAndSettle();
+
+      expect(changedValues.last.e164, isNull);
+    });
+  });
+
+  group('PhoneNumberState and FormatUtils', () {
+    test('PhoneNumberState.empty initializes with default region code and empty rawText', () {
+      const state = PhoneNumberState.empty();
+      expect(state.rawText, '');
+      expect(state.e164, isNull);
+      expect(state.regionCode, defaultRegionCode);
+      expect(state.isEmpty, isTrue);
+      expect(state.isNotEmpty, isFalse);
+      expect(state.isValid, isFalse);
+    });
+
+    test('PhoneNumberState.fromPhoneNumber creates valid state and FormatUtils formats without trunk', () {
+      final parsed = phoneUtil.parse('+442079460123', 'GB');
+      final state = PhoneNumberState.fromPhoneNumber(parsed);
+
+      expect(state.rawText, '20 7946 0123');
+      expect(state.e164, '+442079460123');
+      expect(state.regionCode, '+44');
+      expect(state.isEmpty, isFalse);
+      expect(state.isNotEmpty, isTrue);
+      expect(state.isValid, isTrue);
+      expect(parsed.internationalFormatWithoutTrunk(), '20 7946 0123');
     });
 
   });

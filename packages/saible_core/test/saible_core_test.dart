@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:saible_core/application/jaro_winkler.dart';
-import 'package:saible_core/application/text_search_item.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
 
 import 'package:saible_core/saible_core.dart';
 

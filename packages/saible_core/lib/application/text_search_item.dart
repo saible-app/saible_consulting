@@ -2,10 +2,16 @@ import 'dart:math' as math;
 
 import 'package:saible_core/application/jaro_winkler.dart';
 
-
+/// A search term with an optional score penalty used in text matching.
 class TextSearchItemTerm(this.term, [this.scorePenalty = 0.0]) {
+  /// The search term string.
   final String term;
+
+  /// The penalty added to the matching distance for this term.
   final double scorePenalty;
+
+  /// Creates a [TextSearchItemTerm] with [term] and an optional [scorePenalty].
+  this;
 
   /// [term] in lowercase, precomputed once so that per-keystroke searches
   /// do not allocate.
@@ -22,17 +28,33 @@ class TextSearchItemTerm(this.term, [this.scorePenalty = 0.0]) {
   late final String stripped = isSingleWord ? lower : lower.replaceAll(' ', '');
 }
 
+/// An item associated with search terms for text search queries.
 class const TextSearchItem<T>(this.item, this.terms) {
+  /// The underlying item.
   final T item;
+
+  /// The search terms associated with [item].
   final Iterable<TextSearchItemTerm> terms;
+
+  /// Creates a [TextSearchItem] for [item] with [terms].
+  this;
+
+  /// Creates a [TextSearchItem] from a collection of raw string [terms].
   factory TextSearchItem.fromTerms(T object, Iterable<String> terms) => TextSearchItem(
     object, terms.map(TextSearchItemTerm.new
   ));
 }
 
+/// A matched result containing the matched [item] and its matching [score].
 class TextSearchResult<T>(this.item, this.score) {
+  /// The matched item.
   final T item;
+
+  /// The matching score (lower is better, 0 is exact match).
   final double score;
+
+  /// Creates a [TextSearchResult] with [item] and [score].
+  this;
 }
 
 /// Used for doing simple in-memory text searching based on a given set of
@@ -42,7 +64,12 @@ class TextSearchResult<T>(this.item, this.score) {
 /// An empty search term matches every item (with a score of 0), which both
 /// [TextSearch.search] and [TextSearch.fastSearch] agree on.
 class TextSearch<T>(this.items) {
+  /// Creates a [TextSearch] instance over the provided [items].
+  this;
+
   static final _editDistance = JaroWinkler();
+
+  /// The collection of searchable items.
   final List<TextSearchItem<T>> items;
 
   /// Returns the search results along with their scores, ordered by
@@ -176,18 +203,11 @@ class TextSearch<T>(this.items) {
     // everything, matching the historical behaviour of this search.
     if (!hasConsideredWords) return penalty;
 
-    final strippedScore = _scoreStripped(lcSearch.replaceAll(' ', ''), itemTerm.stripped, effectiveThreshold);
+    final strippedSearch = lcSearch.replaceAll(' ', '');
+    final strippedScore = strippedSearch == itemTerm.stripped
+        ? 0.0
+        : _scaledDistance(strippedSearch, itemTerm.stripped, effectiveThreshold);
     return math.min(strippedScore, math.min(initialScore, perWordScore)) + penalty;
-  }
-
-  /// Scores the space-stripped search term against the space-stripped item
-  /// term, mirroring the single-word scoring rules.
-  double _scoreStripped(String strippedSearch, String strippedTerm, double effectiveThreshold) {
-    if (strippedTerm.length == 1) {
-      return strippedSearch.startsWith(strippedTerm) ? 0 : 4;
-    }
-    if (strippedSearch == strippedTerm) return 0;
-    return _scaledDistance(strippedSearch, strippedTerm, effectiveThreshold);
   }
 
   /// The Jaro-Winkler distance between [lcSearch] and [candidate] (both

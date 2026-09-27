@@ -8,10 +8,13 @@ class const _DatePattern({required this.parts, required this.separator}) {
   final String separator;
 }
 
+/// Formats user date input dynamically based on the date format of the given [locale].
 class DateInputFormatter({this.locale = 'en_GB'}) extends TextInputFormatter {
+  /// The locale string (e.g. `'en_GB'`, `'en_US'`) determining the date part ordering and separator.
   final String locale;
   late final _DatePattern _pattern;
 
+  /// Creates a [DateInputFormatter] configured for [locale].
   this {
     _pattern = _parseLocale(locale);
   }
@@ -59,7 +62,9 @@ class DateInputFormatter({this.locale = 'en_GB'}) extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // Gracefully handle backspacing over separators
-    if (newValue.text.length < oldValue.text.length) {
+    final isDeleting = newValue.text.length < oldValue.text.length &&
+        oldValue.text.startsWith(newValue.text);
+    if (isDeleting) {
       String text = newValue.text;
       if (text.endsWith(_pattern.separator)) {
         text = text.substring(0, text.length - 1);

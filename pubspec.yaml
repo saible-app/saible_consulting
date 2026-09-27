@@ -2,7 +2,7 @@ name: saible_consulting
 environment:
   sdk: ">=3.13.2 <4.0.0"
 dev_dependencies:
-  melos: ^7.8.2
+  melos: ^8.9.0
 workspace:
   - packages/country_picker_form_field
   - packages/date_picker_form_field

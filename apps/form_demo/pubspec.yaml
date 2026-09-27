@@ -28,6 +28,12 @@ dependencies:
   date_picker_form_field: ^0.0.1
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_localizations:
+    sdk: flutter
+  formz: ^0.8.1
+  google_fonts: ^8.2.1
+  intl: ^0.20.3
   material_ui: ^1.4.0
   phone_number_form_field: ^0.0.1
   provider: ^6.1.5+1
@@ -48,6 +54,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Generate the app's own localizations from the ARB files in lib/l10n.
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

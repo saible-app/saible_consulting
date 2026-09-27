@@ -1,0 +1,31 @@
+{
+  "@@locale": "cy",
+  "appTitle": "Demo Cofrestru",
+  "privacyNotice": "Rhybudd Preifatrwydd: Mae hwn yn ap arddangos. Ni chair unrhyw un o'r wybodaeth a nodir yma ei storio, ei throsglwyddo na'i rhannu.",
+  "dateOfBirthErrorRequired": "Mae angen eich dyddiad geni.",
+  "dateOfBirthErrorInvalid": "Mae angen dyddiad geni dilys.",
+  "dateOfBirthErrorTooEarly": "Ni all eich dyddiad geni fod cyn {min}.",
+  "@dateOfBirthErrorTooEarly": {
+    "placeholders": {
+      "min": { "type": "String", "example": "01/01/1899" }
+    }
+  },
+  "dateOfBirthErrorTooLate": "Ni all eich dyddiad geni fod ar ôl {max}.",
+  "@dateOfBirthErrorTooLate": {
+    "placeholders": {
+      "max": { "type": "String", "example": "01/01/2020" }
+    }
+  },
+  "dateOfBirthLabel": "Dyddiad Geni",
+  "nationalityErrorRequired": "Mae angen eich cenedligrwydd.",
+  "nationalityLabel": "Cenedligrwydd",
+  "phoneNumberErrorRequired": "Mae angen eich rhif ffôn.",
+  "phoneNumberErrorInvalid": "Mae angen rhif ffôn dilys.",
+  "phoneNumberLabel": "Rhif Ffôn",
+  "submitButton": "Cyflwyno'r Ffurflen Ddemo",
+  "formValidated": "Ffurflen wedi'i ddilysu!",
+  "dateOfBirthPrefix": "Dyddiad Geni",
+  "nationalityPrefix": "Cenedligrwydd",
+  "phonePrefix": "Ffôn",
+  "languageMenuTooltip": "Iaith"
+}

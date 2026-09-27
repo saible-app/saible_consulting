@@ -7,6 +7,10 @@ import 'dart:math';
 /// in practice the single-threaded nature of a Dart isolate makes this a
 /// non-issue.
 class JaroWinkler([this._scalingFactor = 0.1]) {
+  /// Creates a [JaroWinkler] similarity metric instance with an optional
+  /// prefix [_scalingFactor] (defaults to 0.1).
+  this;
+
   /// The maximum number of leading characters considered for the
   /// Winkler common-prefix bonus.
   static const _maxPrefixLength = 4;
@@ -31,6 +35,8 @@ class JaroWinkler([this._scalingFactor = 0.1]) {
     return min(1, jaroBound + maxPrefixBonus * (1 - jaroBound));
   }
 
+  /// Calculates the Jaro-Winkler similarity between [s1] and [s2],
+  /// returning a score between 0.0 (completely dissimilar) and 1.0 (identical).
   double similarity(String s1, String s2) {
     if (s1.isEmpty || s2.isEmpty) return 0;
     if (s1 == s2) return 1;
@@ -80,6 +86,8 @@ class JaroWinkler([this._scalingFactor = 0.1]) {
     return jaro + (prefix * _scalingFactor * (1 - jaro));
   }
 
+  /// Calculates the Jaro-Winkler distance between [s1] and [s2],
+  /// which is `1 - similarity(s1, s2)`.
   double distance(String s1, String s2) => 1 - similarity(s1, s2);
 
   /// Returns a cleared scratch buffer of at least [length] entries,

@@ -1,10 +1,10 @@
-import 'package:date_picker_form_field/application/date_input_state.dart';
 import 'package:date_picker_form_field/presentation/date_picker_form_field.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:saible_core/domain/date_inputs.dart';
+
+const usLocale = Locale('en', 'US');
 
 void main() {
   setUpAll(() async {
@@ -14,14 +14,18 @@ void main() {
 
   Widget buildTestWidget({
     Locale locale = const Locale('en', 'GB'),
-    DateInputState? initial,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
     InputDecoration? decoration,
     String? pickerHelpText,
     FocusNode? focusNode,
     void Function(DateTime)? onPickDate,
+    void Function(DateInputValue)? onDateChanged,
     void Function(String)? onEditText,
     void Function(String)? onFieldSubmitted,
     void Function()? onEditingComplete,
+    bool passFirstLast = true,
   }) {
     final first = DateTime(1900);
     final last = DateTime(2100, 12, 31);
@@ -42,11 +46,14 @@ void main() {
       home: Scaffold(
         body: Center(
           child: DatePickerFormField(
-            initial: initial ?? DateInputState.pure(first, last),
+            initialDate: initialDate,
+            firstDate: passFirstLast ? (firstDate ?? first) : null,
+            lastDate: passFirstLast ? (lastDate ?? last) : null,
             decoration: decoration ?? const InputDecoration(labelText: 'Date of Birth'),
             pickerHelpText: pickerHelpText,
             focusNode: focusNode,
             onPickDate: onPickDate ?? (_) {},
+            onDateChanged: onDateChanged,
             onEditText: onEditText ?? (_) {},
             onFieldSubmitted: onFieldSubmitted,
             onEditingComplete: onEditingComplete,
@@ -59,26 +66,34 @@ void main() {
   Future<void> pumpDatePicker(
     WidgetTester tester, {
     Locale locale = const Locale('en', 'GB'),
-    DateInputState? initial,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
     InputDecoration? decoration,
     String? pickerHelpText,
     FocusNode? focusNode,
     void Function(DateTime)? onPickDate,
+    void Function(DateInputValue)? onDateChanged,
     void Function(String)? onEditText,
     void Function(String)? onFieldSubmitted,
     void Function()? onEditingComplete,
+    bool passFirstLast = true,
   }) async {
     await tester.pumpWidget(
       buildTestWidget(
         locale: locale,
-        initial: initial,
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate,
         decoration: decoration,
         pickerHelpText: pickerHelpText,
         focusNode: focusNode,
         onPickDate: onPickDate,
+        onDateChanged: onDateChanged,
         onEditText: onEditText,
         onFieldSubmitted: onFieldSubmitted,
         onEditingComplete: onEditingComplete,
+        passFirstLast: passFirstLast,
       ),
     );
     await tester.pumpAndSettle();
@@ -103,13 +118,21 @@ void main() {
       matching: find.byType(EditableText),
     );
     final currentText = tester.widget<EditableText>(editableFinder).controller.text;
+    if (currentText.isEmpty) return '';
     final newText = currentText.substring(0, currentText.length - 1);
     tester.testTextInput.enterText(newText);
     await tester.pump();
     return tester.widget<EditableText>(editableFinder).controller.text;
   }
 
-  group('DatePickerField - Rendering and Initialization', () {
+  void verifyEditableText(WidgetTester tester, String expected) {
+    final editableText = tester.widget<EditableText>(
+      find.descendant(of: find.byKey(DatePickerFormField.textInputKey), matching: find.byType(EditableText)),
+    );
+    expect(editableText.controller.text, expected);
+  }
+
+  group('DatePickerFormField - Rendering and Initialization', () {
     testWidgets('renders TextFormField with decoration, hint, and calendar icon button', (tester) async {
       await pumpDatePicker(
         tester,
@@ -129,49 +152,21 @@ void main() {
 
     testWidgets('initializes empty when current date is null', (tester) async {
       await pumpDatePicker(tester);
-
-      final editable = tester.widget<EditableText>(
-        find.descendant(of: find.byKey(DatePickerFormField.textInputKey), matching: find.byType(EditableText)),
-      );
-      expect(editable.controller.text, isEmpty);
+      verifyEditableText(tester, '');
     });
 
     testWidgets('formats initial current date according to locale en-GB', (tester) async {
-      final initial = DateInputState.dirty(
-        inputs: DateInputs(
-          current: DateTime(1999, 10, 31),
-          text: '',
-          first: DateTime(1900),
-          last: DateTime(2100, 12, 31),
-        ),
-      );
-      await pumpDatePicker(tester, initial: initial);
-
-      final editable = tester.widget<EditableText>(
-        find.descendant(of: find.byKey(DatePickerFormField.textInputKey), matching: find.byType(EditableText)),
-      );
-      expect(editable.controller.text, '31/10/1999');
+      await pumpDatePicker(tester, initialDate: DateTime(1999, 10, 31));
+      verifyEditableText(tester, '31/10/1999');
     });
 
     testWidgets('formats initial current date according to locale en-US', (tester) async {
-      final initial = DateInputState.dirty(
-        inputs: DateInputs(
-          current: DateTime(1999, 10, 31),
-          text: '',
-          first: DateTime(1900),
-          last: DateTime(2100, 12, 31),
-        ),
-      );
-      await pumpDatePicker(tester, locale: const Locale('en', 'US'), initial: initial);
-
-      final editable = tester.widget<EditableText>(
-        find.descendant(of: find.byKey(DatePickerFormField.textInputKey), matching: find.byType(EditableText)),
-      );
-      expect(editable.controller.text, '10/31/1999');
+      await pumpDatePicker(tester, locale: usLocale, initialDate: DateTime(1999, 10, 31));
+      verifyEditableText(tester, '10/31/1999');
     });
   });
 
-  group('DatePickerField - Text Input Formatting Across Locales', () {
+  group('DatePickerFormField - Text Input Formatting Across Locales', () {
     final formatTestCases = <Map<String, dynamic>>[
       {'locale': const Locale('en', 'GB'), 'digits': '31101999', 'expected': '31/10/1999'},
       {'locale': const Locale('en', 'US'), 'digits': '10311999', 'expected': '10/31/1999'},
@@ -198,7 +193,7 @@ void main() {
     }
   });
 
-  group('DatePickerField - Backspacing', () {
+  group('DatePickerFormField - Backspacing', () {
     final backspaceTestCases = <Map<String, dynamic>>[
       {
         'locale': const Locale('en', 'GB'),
@@ -238,7 +233,7 @@ void main() {
     }
   });
 
-  group('DatePickerField - Callbacks and User Interactions', () {
+  group('DatePickerFormField - Callbacks and User Interactions', () {
     testWidgets('calls onEditText when user types text', (tester) async {
       final edits = <String>[];
       await pumpDatePicker(
@@ -267,15 +262,10 @@ void main() {
 
     testWidgets('calls onEditingComplete when editing completes', (tester) async {
       var completed = false;
-      await pumpDatePicker(
-        tester,
-        onEditingComplete: () => completed = true,
-      );
-
+      await pumpDatePicker(tester, onEditingComplete: () => completed = true);
       await tester.showKeyboard(find.byKey(DatePickerFormField.textInputKey));
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pump();
-
       expect(completed, isTrue);
     });
 
@@ -304,18 +294,11 @@ void main() {
     testWidgets('opens date picker dialog, confirms date, updates text and triggers onPickDate', (tester) async {
       DateTime? pickedDate;
       final initialDate = DateTime(1999, 10, 31);
-      final initial = DateInputState.dirty(
-        inputs: DateInputs(
-          current: initialDate,
-          text: '',
-          first: DateTime(1900),
-          last: DateTime(2100, 12, 31),
-        ),
-      );
-
       await pumpDatePicker(
         tester,
-        initial: initial,
+        initialDate: initialDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100, 12, 31),
         onPickDate: (date) => pickedDate = date,
       );
 
@@ -341,13 +324,128 @@ void main() {
     testWidgets('uses provided focusNode', (tester) async {
       final focusNode = FocusNode();
       await pumpDatePicker(tester, focusNode: focusNode);
-
       expect(focusNode.hasFocus, isFalse);
       await tester.tap(find.byKey(DatePickerFormField.textInputKey));
       await tester.pump();
       expect(focusNode.hasFocus, isTrue);
-
       focusNode.dispose();
     });
+
+    testWidgets('uses defaultFirstDate and defaultLastDate when not provided', (tester) async {
+      expect(defaultFirstDate, DateTime(1900));
+      expect(defaultLastDate, DateTime(2099, 12, 31));
+
+      await pumpDatePicker(
+        tester,
+        passFirstLast: false,
+      );
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+      final cancelButton = find.byType(TextButton).first;
+      await tester.tap(cancelButton);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('clamps initial date when before firstDate or after lastDate', (tester) async {
+      // Proposed date is before firstDate -> clamps to firstDate
+      await pumpDatePicker(
+        tester,
+        initialDate: DateTime(1990),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2010),
+      );
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+      var cancelButton = find.byType(TextButton).first;
+      await tester.tap(cancelButton);
+      await tester.pumpAndSettle();
+
+      // Proposed date is after lastDate -> clamps to lastDate
+      await pumpDatePicker(
+        tester,
+        initialDate: DateTime(2025),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2010),
+      );
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+      cancelButton = find.byType(TextButton).first;
+      await tester.tap(cancelButton);
+      await tester.pumpAndSettle();
+    });
+    testWidgets('calls onDateChanged with parsed date when valid and null when invalid/incomplete', (tester) async {
+      final changedDates = <DateInputValue>[];
+      await pumpDatePicker(
+        tester,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2099, 12, 31),
+        onDateChanged: changedDates.add,
+      );
+
+      // Incomplete text typing
+      await typeIntoDateField(tester, '31');
+      expect(changedDates.last.parsedDate, isNull);
+
+      await typeIntoDateField(tester, '10');
+      expect(changedDates.last.parsedDate, isNull);
+
+      // Complete valid date 31/10/1999
+      await typeIntoDateField(tester, '1999');
+      expect(changedDates.last.parsedDate, DateTime(1999, 10, 31));
+
+      // Invalid date (e.g. backspace and type an invalid year or month)
+      // Backspace 4 times over year
+      for (int i = 0; i < 4; i++) {
+        await backspaceInDateField(tester);
+      }
+      expect(changedDates.last.parsedDate, isNull);
+
+      // Date parsed even when before firstDate (e.g. year 1899)
+      await typeIntoDateField(tester, '1899');
+      expect(changedDates.last.parsedDate, DateTime(1899, 10, 31));
+
+      // Date parsed even when after lastDate (e.g. year 2100)
+      for (int i = 0; i < 4; i++) {
+        await backspaceInDateField(tester);
+      }
+      await typeIntoDateField(tester, '2100');
+      expect(changedDates.last.parsedDate, DateTime(2100, 10, 31));
+
+      // Invalid date format/digits: 31/02/2026 (triggers catch on parseStrict)
+      for (int i = 0; i < 10; i++) {
+        await backspaceInDateField(tester);
+      }
+      await typeIntoDateField(tester, '31022026');
+      expect(changedDates.last.parsedDate, isNull);
+
+    });
+
+    testWidgets('calls onDateChanged when date is selected from calendar picker', (tester) async {
+      DateInputValue changedDate = (parsedDate: null, rawText: '');
+      final selectedDate = DateTime(1999, 10, 31);
+      await pumpDatePicker(
+        tester,
+        initialDate: selectedDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2099, 12, 31),
+        onDateChanged: (date) => changedDate = date,
+      );
+
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      final okButton = find.byType(TextButton).last;
+      await tester.tap(okButton);
+      await tester.pumpAndSettle();
+
+      expect(changedDate.parsedDate, selectedDate);
+    });
+
   });
 }

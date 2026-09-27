@@ -7,17 +7,15 @@ import 'package:saible_core/presentation/countries_provider.dart';
 import 'package:saible_core/presentation/nation_tile.dart';
 
 class const _CountryPicker({
-  required this.labelText,
   required this.onCountryPicked,
   this.initial,
-  this.hintText,
+  this.decoration,
   this.focusNode,
 }) extends StatefulWidget {
   static Key countrySuggestionKey(Iso3166Country country) => Key('countryPicker_country_${country.alpha2}');
-  final String labelText;
   final void Function(Iso3166Country country) onCountryPicked;
   final Iso3166Country? initial;
-  final String? hintText;
+  final InputDecoration? decoration;
   final FocusNode? focusNode;
 
   @override
@@ -62,15 +60,13 @@ class _CountryPickerState() extends State<_CountryPicker> {
         controller: controller,
         onTap: () => controller.openView(),
         onChanged: (_) => controller.openView(),
-        decoration: InputDecoration(
+        decoration: (widget.decoration ?? const InputDecoration()).copyWith(
           suffixIcon: country == null
             ? const Icon(Icons.language)
             : Padding(
                 padding: const EdgeInsets.all(8),
                 child: FlagIcon.forIso3166(country: country),
               ),
-          hintText: widget.hintText,
-          labelText: widget.labelText,
         ),
       ),
       viewOnClose: () {
@@ -97,27 +93,40 @@ class _CountryPickerState() extends State<_CountryPicker> {
   }
 }
 
+/// A form field widget that allows selecting a country using a searchable view.
 class const CountryPickerFormField({
   super.key,
-  required this.labelText,
+  required this.decoration,
   required this.onCountryPicked,
   this.initial,
-  this.hintText,
   this.focusNode,
 }) extends StatelessWidget {
+  /// The [Key] for the country search anchor view.
   static const Key countrySearchAnchorKey = Key('countryPicker_searchAnchor');
+
+  /// The [Key] for the country search bar field.
   static const Key countrySearchBarKey = Key('countryPicker_searchBar');
-  final String labelText;
+
+  /// Creates a [CountryPickerFormField].
+  this;
+
+  /// The decoration applied to the underlying [TextFormField].
+  final InputDecoration? decoration;
+
+  /// Callback invoked when a country is selected.
   final void Function(Iso3166Country country) onCountryPicked;
+
+  /// The initially selected country, if any.
   final Iso3166Country? initial;
-  final String? hintText;
+
+  /// An optional [FocusNode] to control the focus of the field.
   final FocusNode? focusNode;
+
   @override
   Widget build(BuildContext context) => CountriesProvider(child: _CountryPicker(
-    labelText: labelText, 
+    decoration: decoration, 
     onCountryPicked: onCountryPicked,
     initial: initial,
-    hintText: hintText,
     focusNode: focusNode,
   ));
 }

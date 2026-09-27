@@ -30,10 +30,12 @@ void main() {
       home: Scaffold(
         body: Center(
           child: CountryPickerFormField(
-            labelText: labelText,
+            decoration: InputDecoration(
+              labelText: labelText,
+              hintText: hintText,
+            ),
             onCountryPicked: onCountryPicked,
             initial: initial,
-            hintText: hintText,
             focusNode: focusNode,
           ),
         ),
@@ -172,5 +174,21 @@ void main() {
       expect(find.text('Royaume-Uni'), findsOneWidget);
       expect(find.text('Pays'), findsOneWidget);
     });
+    
+    testWidgets('typing or changing text opens suggestions view via onChanged', (tester) async {
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Country',
+          onCountryPicked: (_) {},
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(CountryPickerFormField.countrySearchBarKey), 'Fra');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NationTile), findsWidgets);
+    });
+
   });
 }

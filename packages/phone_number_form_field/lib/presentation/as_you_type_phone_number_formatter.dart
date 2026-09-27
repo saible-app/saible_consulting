@@ -1,18 +1,22 @@
 import 'package:dlibphonenumber/dlibphonenumber.dart';
 import 'package:flutter/services.dart';
+import 'package:phone_number_form_field/application/phone_util.dart';
 import 'package:saible_core/domain/iso3166_countries.dart';
 
 /// A [TextInputFormatter] that uses dlibphonenumber's [AsYouTypeFormatter]
 /// to format phone numbers in real-time as the user types.
-
 class AsYouTypePhoneNumberFormatter({
   required this.country,
   this.onFormatFinished,
 }) extends TextInputFormatter {
-  final Iso3166Country country; // e.g., _selectedCountry.countryCode ('GB', 'US')
-  final void Function(String formattedValue)? onFormatFinished;
+  /// Creates an [AsYouTypePhoneNumberFormatter].
+  this;
 
-  final PhoneNumberUtil _phoneUtil = PhoneNumberUtil.instance;
+  /// The [Iso3166Country] used to determine formatting rules (e.g. GB, US).
+  final Iso3166Country country; // e.g., _selectedCountry.countryCode ('GB', 'US')
+
+  /// Optional callback invoked whenever formatting finishes with the formatted text.
+  final void Function(String formattedValue)? onFormatFinished;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -24,7 +28,7 @@ class AsYouTypePhoneNumberFormatter({
       return newValue;
     }
 
-    final AsYouTypeFormatter formatter = _phoneUtil.getAsYouTypeFormatter(country.alpha2);
+    final AsYouTypeFormatter formatter = phoneUtil.getAsYouTypeFormatter(country.alpha2);
     String formattedText = '';
 
     // Feed digits into AsYouTypeFormatter

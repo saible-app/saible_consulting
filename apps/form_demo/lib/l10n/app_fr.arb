@@ -1,0 +1,31 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Démo d'inscription",
+  "privacyNotice": "Avis de confidentialité : Ceci est une application de démonstration. Aucune des informations saisies ici n'est stockée, transmise ou partagée.",
+  "dateOfBirthErrorRequired": "Votre date de naissance est obligatoire.",
+  "dateOfBirthErrorInvalid": "Une date de naissance valide est requise.",
+  "dateOfBirthErrorTooEarly": "Votre date de naissance ne peut pas être antérieure au {min}.",
+  "@dateOfBirthErrorTooEarly": {
+    "placeholders": {
+      "min": { "type": "String", "example": "01/01/1899" }
+    }
+  },
+  "dateOfBirthErrorTooLate": "Votre date de naissance ne peut pas être postérieure au {max}.",
+  "@dateOfBirthErrorTooLate": {
+    "placeholders": {
+      "max": { "type": "String", "example": "01/01/2020" }
+    }
+  },
+  "dateOfBirthLabel": "Date de naissance",
+  "nationalityErrorRequired": "Votre nationalité est obligatoire.",
+  "nationalityLabel": "Nationalité",
+  "phoneNumberErrorRequired": "Votre numéro de téléphone est obligatoire.",
+  "phoneNumberErrorInvalid": "Un numéro de téléphone valide est requis.",
+  "phoneNumberLabel": "Numéro de téléphone",
+  "submitButton": "Envoyer le formulaire de démo",
+  "formValidated": "Formulaire validé !",
+  "dateOfBirthPrefix": "Date de naissance",
+  "nationalityPrefix": "Nationalité",
+  "phonePrefix": "Téléphone",
+  "languageMenuTooltip": "Langue"
+}

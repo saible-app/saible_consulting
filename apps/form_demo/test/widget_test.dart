@@ -2,11 +2,20 @@ import 'package:country_picker_form_field/country_picker_form_field.dart';
 import 'package:date_picker_form_field/date_picker_form_field.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:form_demo/main.dart';
+import 'package:form_demo/presentation/language_menu.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:phone_number_form_field/phone_number_form_field.dart';
 import 'package:saible_core/domain/iso3166_countries.dart';
+import 'package:saible_core/presentation/nation_tile.dart';
 
 void main() {
+  setUpAll(() async {
+    // The date picker formats dates via intl, which needs the date symbols
+    // for every locale the language switcher can select.
+    await initializeDateFormatting();
+  });
+
   group('Form Demo App Widget Tests', () {
     testWidgets('renders all primary form fields and UI elements', (tester) async {
       await tester.pumpWidget(const DemoApp());
@@ -31,28 +40,119 @@ void main() {
       expect(find.byKey(PhoneNumberFormField.countrySearchBarKey), findsOneWidget);
       expect(find.text('+44'), findsOneWidget);
 
-      // Submit Button
-      expect(find.widgetWithText(ElevatedButton, 'Submit Demo Form'), findsOneWidget);
+      // Submit Button is disabled initially
+      final submitButtonFinder = find.widgetWithText(ElevatedButton, 'Submit Demo Form');
+      expect(submitButtonFinder, findsOneWidget);
+      final submitButton = tester.widget<ElevatedButton>(submitButtonFinder);
+      expect(submitButton.onPressed, isNull);
     });
 
-    testWidgets('submitting form with default empty state displays SnackBar with null values', (tester) async {
+    testWidgets('language switcher icon opens a menu listing all supported languages', (tester) async {
       await tester.pumpWidget(const DemoApp());
       await tester.pumpAndSettle();
 
-      // Tap Submit
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
-      await tester.pumpAndSettle();
-
-      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.byKey(LanguageSwitcher.switcherButtonKey), findsOneWidget);
+      // Icons.language also appears as the nationality field's empty-state
+      // suffix icon, so scope this check to the app bar.
       expect(
-        find.text('Form Validated!\nDoB: null\nNationality: null\nPhone: null'),
+        find.descendant(of: find.byType(AppBar), matching: find.byIcon(Icons.language)),
         findsOneWidget,
       );
-      final snackBar = tester.widget<SnackBar>(find.byType(SnackBar));
-      expect(snackBar.backgroundColor, Colors.green[800]);
+
+      await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
+      await tester.pumpAndSettle();
+
+      expect(find.text('English'), findsOneWidget);
+      expect(find.text('Français'), findsOneWidget);
+      expect(find.text('Deutsch'), findsOneWidget);
+      expect(find.text('Cymraeg'), findsOneWidget);
+      expect(find.text('日本語'), findsOneWidget);
     });
 
-    testWidgets('selecting date of birth updates DoB in submission SnackBar', (tester) async {
+    testWidgets('the active language is ticked in the menu', (tester) async {
+      await tester.pumpWidget(const DemoApp());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
+      await tester.pumpAndSettle();
+
+      // English is active by default in the test environment.
+      expect(find.byIcon(Icons.check), findsOneWidget);
+
+      // Switch to Deutsch and reopen the menu.
+      await tester.tap(find.byKey(LanguageSwitcher.menuItemKey(const Locale('de'))));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.check), findsOneWidget);
+      expect(
+        find.descendant(of: find.byKey(LanguageSwitcher.menuItemKey(const Locale('de'))), matching: find.byIcon(Icons.check)),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('switching language localises the app bar, labels and submit button', (tester) async {
+      await tester.pumpWidget(const DemoApp());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Français'));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Démo d'inscription"), findsOneWidget);
+      expect(find.text('Date de naissance'), findsOneWidget);
+      expect(find.text('Nationalité'), findsOneWidget);
+      expect(find.text('Numéro de téléphone'), findsOneWidget);
+      expect(find.widgetWithText(ElevatedButton, 'Envoyer le formulaire de démo'), findsOneWidget);
+
+      // Switching back to English restores the English strings.
+      await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('English'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Registration Demo'), findsOneWidget);
+      expect(find.text('Date of Birth'), findsOneWidget);
+    });
+
+    testWidgets('validating date of birth shows error messages on invalid input', (tester) async {
+      await tester.pumpWidget(const DemoApp());
+      await tester.pumpAndSettle();
+
+      final dobField = find.byKey(DatePickerFormField.textInputKey);
+
+      // 1. Typing incomplete date (triggers invalid error)
+      await tester.enterText(dobField, '1');
+      await tester.pumpAndSettle();
+      expect(find.text('A valid date of birth is required.'), findsOneWidget);
+
+      // 2. Clear date (triggers required error)
+      await tester.enterText(dobField, '');
+      await tester.pumpAndSettle();
+      expect(find.text('Your date of birth is required.'), findsOneWidget);
+
+      // 3. Year before 1900 (triggers tooEarly error)
+      await tester.enterText(dobField, '01011899');
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Your date of birth cannot precede'), findsOneWidget);
+
+      // 4. Future/underage date (triggers tooLate error)
+      await tester.enterText(dobField, '01012025');
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Your date of birth cannot be after'), findsOneWidget);
+
+      // 5. Valid date clears error
+      await tester.enterText(dobField, '15061995');
+      await tester.pumpAndSettle();
+      expect(find.text('A valid date of birth is required.'), findsNothing);
+      expect(find.text('Your date of birth is required.'), findsNothing);
+      expect(find.textContaining('Your date of birth cannot precede'), findsNothing);
+      expect(find.textContaining('Your date of birth cannot be after'), findsNothing);
+    });
+
+    testWidgets('selecting date of birth via calendar picker sets valid date', (tester) async {
       await tester.pumpWidget(const DemoApp());
       await tester.pumpAndSettle();
 
@@ -72,56 +172,58 @@ void main() {
 
       expect(find.byType(DatePickerDialog), findsNothing);
 
-      // Submit form
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
-      await tester.pumpAndSettle();
-
-      // Date of Birth is populated (year-month-day)
-      expect(find.textContaining('-15'), findsOneWidget);
-      expect(find.textContaining('Nationality: null'), findsOneWidget);
-      expect(find.textContaining('Phone: null'), findsOneWidget);
+      // Field text now contains '15'
+      final dobField = tester.widget<TextFormField>(find.byKey(DatePickerFormField.textInputKey));
+      expect(dobField.controller?.text, contains('15'));
     });
-    testWidgets('selecting nationality updates Nationality in submission SnackBar', (tester) async {
+
+    testWidgets('selecting nationality updates field and shows country flag', (tester) async {
       await tester.pumpWidget(const DemoApp());
       await tester.pumpAndSettle();
 
-      // Tap Nationality search bar
+      // Tap Nationality search bar to open suggestions view
       await tester.tap(find.byKey(CountryPickerFormField.countrySearchBarKey));
       await tester.pumpAndSettle();
 
-      // Search for Franceß
+      // Search for France
       await tester.enterText(find.byType(TextField).last, 'France');
       await tester.pumpAndSettle();
 
       final franceTileKey = Key('countryPicker_country_${Iso3166Country.france.alpha2}');
       expect(find.byKey(franceTileKey), findsOneWidget);
+
+      // Select France
       await tester.tap(find.byKey(franceTileKey));
       await tester.pumpAndSettle();
 
-      // Submit form
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
-      await tester.pumpAndSettle();
-
-      expect(find.textContaining('Nationality: france'), findsOneWidget);
+      expect(find.text('France'), findsOneWidget);
+      expect(find.byType(FlagIcon), findsOneWidget);
     });
 
-    testWidgets('entering valid phone number updates Phone in submission SnackBar', (tester) async {
+    testWidgets('validating phone number shows error messages on invalid input', (tester) async {
       await tester.pumpWidget(const DemoApp());
       await tester.pumpAndSettle();
 
-      // Enter valid UK dummy number into phone field
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '02079460123');
-      await tester.pumpAndSettle();
+      final phoneField = find.byKey(PhoneNumberFormField.countrySearchBarKey);
 
-      // Submit form
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      // Incomplete phone number triggers invalid error
+      await tester.enterText(phoneField, '123');
       await tester.pumpAndSettle();
+      expect(find.text('A valid phone number is required.'), findsOneWidget);
 
-      expect(find.textContaining('Phone: +442079460123'), findsOneWidget);
+      // Clearing phone number triggers required error
+      await tester.enterText(phoneField, '');
+      await tester.pumpAndSettle();
+      expect(find.text('Your phone number is required.'), findsOneWidget);
+
+      // Valid phone number clears errors
+      await tester.enterText(phoneField, '02079460123');
+      await tester.pumpAndSettle();
+      expect(find.text('A valid phone number is required.'), findsNothing);
+      expect(find.text('Your phone number is required.'), findsNothing);
     });
 
-    testWidgets('changing country code in phone field formats number with new prefix in submission SnackBar',
-        (tester) async {
+    testWidgets('changing country code in phone number field updates prefix', (tester) async {
       await tester.pumpWidget(const DemoApp());
       await tester.pumpAndSettle();
 
@@ -138,51 +240,57 @@ void main() {
       await tester.tap(find.byKey(francePhoneTileKey));
       await tester.pumpAndSettle();
 
-      // Enter French telephone number: 01 23 45 67 89
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '0123456789');
-      await tester.pumpAndSettle();
-
-      // Submit form
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
-      await tester.pumpAndSettle();
-
-      expect(find.textContaining('Phone: +33123456789'), findsOneWidget);
+      expect(find.text('+33'), findsOneWidget);
+      expect(find.text(Iso3166Country.france.flagEmoji()), findsOneWidget);
     });
 
-    testWidgets('complete form submission with all fields populated', (tester) async {
+    testWidgets('submit button enables when all fields are valid and shows SnackBar on submission', (tester) async {
       await tester.pumpWidget(const DemoApp());
       await tester.pumpAndSettle();
 
-      // 1. Pick DoB via date picker dialog
-      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('15').first);
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(TextButton, 'OK'));
+      // Initially submit button is disabled
+      var submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      expect(submitButton.onPressed, isNull);
+
+      // 1. Enter valid Date of Birth: 15/06/1990
+      await tester.enterText(find.byKey(DatePickerFormField.textInputKey), '15061990');
       await tester.pumpAndSettle();
 
-      // 2. Pick Nationality (Germany)
+      // Submit still disabled
+      submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      expect(submitButton.onPressed, isNull);
+
+      // 2. Select Nationality: United Kingdom
       await tester.tap(find.byKey(CountryPickerFormField.countrySearchBarKey));
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField).last, 'Germany');
+      await tester.enterText(find.byType(TextField).last, 'United Kingdom');
       await tester.pumpAndSettle();
-      final germanyTileKey = Key('countryPicker_country_${Iso3166Country.germany.alpha2}');
-      await tester.tap(find.byKey(germanyTileKey));
+      final ukTileKey = Key('countryPicker_country_${Iso3166Country.unitedKingdom.alpha2}');
+      await tester.tap(find.byKey(ukTileKey));
       await tester.pumpAndSettle();
 
-      // 3. Enter Phone Number
+      // Submit still disabled
+      submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      expect(submitButton.onPressed, isNull);
+
+      // 3. Enter valid phone number: 020 7946 0123
       await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '02079460123');
       await tester.pumpAndSettle();
 
-      // 4. Submit Form
+      // Submit button is now enabled!
+      submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      expect(submitButton.onPressed, isNotNull);
+
+      // 4. Tap submit button
       await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
       await tester.pumpAndSettle();
 
+      // Verify SnackBar content
       expect(find.byType(SnackBar), findsOneWidget);
       expect(find.textContaining('Form Validated!'), findsOneWidget);
-      expect(find.textContaining('-15'), findsOneWidget);
-      expect(find.textContaining('Nationality: germany'), findsOneWidget);
-      expect(find.textContaining('Phone: +442079460123'), findsOneWidget);
+      expect(find.textContaining('DoB: 15/06/1990'), findsOneWidget);
+      expect(find.textContaining('Nationality: United Kingdom'), findsOneWidget);
+      expect(find.textContaining('Phone: +44 020 7946 0123'), findsOneWidget);
     });
   });
 }
