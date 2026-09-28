@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/scheduler.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:saible_consulting_core/application/text_search_item.dart';
@@ -38,16 +39,32 @@ class const _CountryPicker({
 class _CountryPickerState() extends State<_CountryPicker> {
   late final SearchController controller;
   Iso3166Country? chosenCountry;
+  Locale? _lastLocale;
 
   @override
   void initState() {
     super.initState();
     controller = SearchController();
-    final initial = widget.initial;
-    if (initial != null) {
-      controller.text = initial.tr(context);
-      chosenCountry = widget.initial;
-    }
+    // The initial display text is seeded in didChangeDependencies, which runs
+    // immediately after initState with a fully mounted context; localization
+    // lookups are not legal in initState itself.
+    chosenCountry = widget.initial;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.maybeLocaleOf(context);
+    // isOpen asserts that the controller is attached to a SearchAnchor, which
+    // it is not during the first pass, so isAttached is checked first.
+    if (locale == _lastLocale || (controller.isAttached && controller.isOpen)) return;
+    _lastLocale = locale;
+    // The controller text is a pure presentation of the selection, so it is
+    // re-derived whenever the ambient locale changes (e.g. the user switches
+    // the app language and "United Kingdom" becomes "Vereinigtes Königreich").
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.text = chosenCountry?.tr(context) ?? '';
+    });
   }
 
   @override

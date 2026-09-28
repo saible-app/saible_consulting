@@ -187,6 +187,41 @@ void main() {
       expect(find.text('Pays'), findsOneWidget);
     });
     
+    testWidgets('re-translates the selected country name when the locale changes', (tester) async {
+      var pickedCount = 0;
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Country',
+          initial: Iso3166Country.unitedKingdom,
+          onCountryPicked: (_) {
+            pickedCount++;
+          },
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('United Kingdom'), findsOneWidget);
+
+      // Switch the app locale from en-GB to de; the same field state is kept
+      // alive (same element tree position) so only dependencies re-resolve.
+      await tester.pumpWidget(
+        buildTestWidget(
+          locale: const Locale('de'),
+          labelText: 'Country',
+          initial: Iso3166Country.unitedKingdom,
+          onCountryPicked: (_) {
+            pickedCount++;
+          },
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Vereinigtes Königreich'), findsOneWidget);
+      expect(find.text('United Kingdom'), findsNothing);
+      // The selection is unchanged; only its presentation was re-derived.
+      expect(pickedCount, 0);
+    });
+
     testWidgets('typing or changing text opens suggestions view via onChanged', (tester) async {
       await tester.pumpWidget(
         buildTestWidget(

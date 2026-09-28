@@ -303,7 +303,7 @@ void main() {
       expect(find.textContaining('Form Validated!'), findsOneWidget);
       expect(find.textContaining('DoB: 15/06/1990'), findsOneWidget);
       expect(find.textContaining('Nationality: United Kingdom'), findsOneWidget);
-      expect(find.textContaining('Phone: +44 020 7946 0123'), findsOneWidget);
+      expect(find.textContaining('Phone: +44 20 7946 0123'), findsOneWidget);
     });
   });
 }

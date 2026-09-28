@@ -14,6 +14,7 @@
 
 import 'package:form_demo/l10n/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 /// The locales the demo app ships translations for, paired with each
 /// language's endonym as shown in the language switcher menu.
@@ -21,12 +22,12 @@ import 'package:material_ui/material_ui.dart';
 /// English is bound to [Locale('en', 'GB')], the app's default language,
 /// so the active-language tick appears for the default locale and
 /// selecting English restores it.
-const List<(Locale, String)> appLanguages = [
-  (Locale('en', 'GB'), 'English'),
-  (Locale('fr'), 'Français'),
-  (Locale('de'), 'Deutsch'),
-  (Locale('cy'), 'Cymraeg'),
-  (Locale('ja'), '日本語'),
+final List<(Locale, String, String)> appLanguages = [
+  (Locale('en', 'GB'), 'English', Iso3166Country.unitedKingdom.flagEmoji()),
+  (Locale('fr'), 'Français', Iso3166Country.france.flagEmoji()),
+  (Locale('de'), 'Deutsch', Iso3166Country.germany.flagEmoji()),
+  (Locale('cy'), 'Cymraeg', '\u{1F3F4}\u{E0067}\u{E0062}\u{E0077}\u{E006C}\u{E0073}\u{E007F}'),
+  (Locale('ja'), '日本語', Iso3166Country.japan.flagEmoji()),
 ];
 
 /// An app bar icon that opens a menu of the locales in [appLanguages],
@@ -55,17 +56,14 @@ class const LanguageSwitcher({super.key, required this.onLocaleChanged}) extends
       initialValue: activeLocale,
       onSelected: onLocaleChanged,
       itemBuilder: (context) => [
-        for (final (locale, endonym) in appLanguages)
+        for (final (locale, endonym, flag) in appLanguages)
           PopupMenuItem(
             key: menuItemKey(locale),
             value: locale,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(width: 24, child: locale == activeLocale ? const Icon(Icons.check) : null),
-                const SizedBox(width: 8),
-                Text(endonym),
-              ],
+            child: ListTile(
+              leading: SizedBox(width: 24, child: locale == activeLocale ? const Icon(Icons.check) : null),
+              title: Text(endonym),
+              trailing: Text(flag, style: Theme.of(context).textTheme.bodyLarge),
             ),
           ),
       ],
