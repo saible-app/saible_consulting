@@ -23,11 +23,12 @@ import 'package:saible_consulting_core/saible_consulting_core.dart';
 /// so the active-language tick appears for the default locale and
 /// selecting English restores it.
 final List<(Locale, String, String)> appLanguages = [
-  (Locale('en', 'GB'), 'English', Iso3166Country.unitedKingdom.flagEmoji()),
-  (Locale('fr'), 'Français', Iso3166Country.france.flagEmoji()),
-  (Locale('de'), 'Deutsch', Iso3166Country.germany.flagEmoji()),
-  (Locale('cy'), 'Cymraeg', '\u{1F3F4}\u{E0067}\u{E0062}\u{E0077}\u{E006C}\u{E0073}\u{E007F}'),
-  (Locale('ja'), '日本語', Iso3166Country.japan.flagEmoji()),
+  (const Locale('en', 'GB'), 'English (GB)', Iso3166Country.unitedKingdom.flagEmoji()),
+  (const Locale('fr'), 'Français', Iso3166Country.france.flagEmoji()),
+  (const Locale('de'), 'Deutsch', Iso3166Country.germany.flagEmoji()),
+  (const Locale('cy'), 'Cymraeg', '\u{1F3F4}\u{E0067}\u{E0062}\u{E0077}\u{E006C}\u{E0073}\u{E007F}'),
+  (const Locale('en'), 'English (US)', Iso3166Country.unitedStates.flagEmoji()),
+  (const Locale('ja'), '日本語', Iso3166Country.japan.flagEmoji()),
 ];
 
 /// An app bar icon that opens a menu of the locales in [appLanguages],

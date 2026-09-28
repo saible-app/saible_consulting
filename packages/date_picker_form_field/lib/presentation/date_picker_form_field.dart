@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:date_picker_form_field/presentation/date_input_formatter.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -29,7 +30,7 @@ final defaultFirstDate = DateTime(1900);
 /// The default latest allowable date for [DatePickerFormField], December 31, 2099.
 final defaultLastDate = DateTime(2099, 12, 31);
 
-Future<void> _chooseDate(
+Future<DateTime?> _chooseDate(
   BuildContext context,
   DateTime initialDate,
   DateTime firstDate,
@@ -39,22 +40,21 @@ Future<void> _chooseDate(
   void Function(DateTime)? onPickDate,
   void Function(DateInputValue)? onDateChanged,
   String? pickerHelpText,
-) async {
-  await showDatePicker(
-    context: context,
-    helpText: pickerHelpText,
-    initialDate: initialDate,
-    firstDate: firstDate,
-    lastDate: lastDate,
-    switchToInputEntryModeIcon: const Icon(Icons.edit, key: DatePickerFormField.switchToEntryModeKey),
-  ).then((date) {
-    if (date == null || !context.mounted) return;
-    controller.text = dateFormat.format(date);
-    if (onPickDate != null) onPickDate(date);
-    if (onDateChanged != null) onDateChanged((rawText: controller.text, parsedDate: date));
-    FocusScope.of(context).nextFocus();
-  });
-}
+) async => await showDatePicker(
+  context: context,
+  helpText: pickerHelpText,
+  initialDate: initialDate,
+  firstDate: firstDate,
+  lastDate: lastDate,
+  switchToInputEntryModeIcon: const Icon(Icons.edit, key: DatePickerFormField.switchToEntryModeKey),
+).then((date) {
+  if (date == null || !context.mounted) return null;
+  controller.text = dateFormat.format(date);
+  if (onPickDate != null) onPickDate(date);
+  if (onDateChanged != null) onDateChanged((rawText: controller.text, parsedDate: date));
+  FocusScope.of(context).nextFocus();
+  return date;
+});
 
 /// A form field widget for selecting or typing dates with calendar picker integration.
 class const DatePickerFormField({
@@ -123,7 +123,8 @@ class const DatePickerFormField({
 
 class _DatePickerFormFieldState() extends State<DatePickerFormField> {
   late final TextEditingController controller;
-  bool _isInitialised = false;
+  Locale? _lastLocale;
+  DateTime? currentDate;
 
   /// The date format used to write dates into the field's text controller.
   ///
@@ -152,6 +153,7 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
   void initState() {
     super.initState();
     controller = TextEditingController();
+    currentDate = widget.initialDate;
   }
 
   @override
@@ -163,12 +165,14 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_isInitialised) {
-      final dateFormat = _fieldDateFormat(context);
-      final currentDate = widget.initialDate;
+    final locale = Localizations.maybeLocaleOf(context);
+    if (locale == _lastLocale) return;
+    _lastLocale = locale;
+    final dateFormat = _fieldDateFormat(context);
+    final currentDate = this.currentDate;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       controller.text = currentDate == null ? '' : dateFormat.format(currentDate);
-      _isInitialised = true;
-    }
+    });
   }
 
   @override
@@ -183,6 +187,10 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
       inputFormatters: [inputFormatter],
       onChanged: (text) {
         widget.onEditText?.call(text);
+        final date = _parseDate(text, dateFormat);
+        setState(() {
+          currentDate = date.parsedDate;
+        });
         widget.onDateChanged?.call(_parseDate(text, dateFormat));
       },
       onFieldSubmitted: widget.onFieldSubmitted,
@@ -195,7 +203,7 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
           key: DatePickerFormField.launchDatePickerKey,
           icon: const Icon(Icons.calendar_month),
           onPressed: () async {
-            await _chooseDate(
+            final date = await _chooseDate(
               context,
               _pickerInitialDate(),
               widget.firstDate ?? defaultFirstDate,
@@ -206,6 +214,12 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
               widget.onDateChanged,
               widget.pickerHelpText,
             );
+
+            if (date != null) {
+              setState(() {
+                currentDate = date;
+              });
+            }
           },
         ),
       ),
