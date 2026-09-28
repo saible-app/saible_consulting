@@ -41,9 +41,9 @@ void main() {
       expect(find.text('+44'), findsOneWidget);
 
       // Submit Button is disabled initially
-      final submitButtonFinder = find.widgetWithText(ElevatedButton, 'Submit Demo Form');
+      final submitButtonFinder = find.widgetWithText(FilledButton, 'Submit Demo Form');
       expect(submitButtonFinder, findsOneWidget);
-      final submitButton = tester.widget<ElevatedButton>(submitButtonFinder);
+      final submitButton = tester.widget<FilledButton>(submitButtonFinder);
       expect(submitButton.onPressed, isNull);
     });
 
@@ -105,7 +105,7 @@ void main() {
       expect(find.text('Date de naissance'), findsOneWidget);
       expect(find.text('Nationalité'), findsOneWidget);
       expect(find.text('Numéro de téléphone'), findsOneWidget);
-      expect(find.widgetWithText(ElevatedButton, 'Envoyer le formulaire de démo'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'Envoyer le formulaire de démo'), findsOneWidget);
 
       // Switching back to English restores the English strings.
       await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
@@ -249,7 +249,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Initially submit button is disabled
-      var submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      var submitButton = tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Submit Demo Form'));
       expect(submitButton.onPressed, isNull);
 
       // 1. Enter valid Date of Birth: 15/06/1990
@@ -257,7 +257,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Submit still disabled
-      submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      submitButton = tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Submit Demo Form'));
       expect(submitButton.onPressed, isNull);
 
       // 2. Select Nationality: United Kingdom
@@ -270,7 +270,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Submit still disabled
-      submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      submitButton = tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Submit Demo Form'));
       expect(submitButton.onPressed, isNull);
 
       // 3. Enter valid phone number: 020 7946 0123
@@ -278,11 +278,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Submit button is now enabled!
-      submitButton = tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      submitButton = tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Submit Demo Form'));
       expect(submitButton.onPressed, isNotNull);
 
       // 4. Tap submit button
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Submit Demo Form'));
+      await tester.tap(find.widgetWithText(FilledButton, 'Submit Demo Form'));
       await tester.pumpAndSettle();
 
       // Verify SnackBar content

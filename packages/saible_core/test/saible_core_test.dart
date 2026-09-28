@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 import 'package:saible_core/application/jaro_winkler.dart';
-
 import 'package:saible_core/saible_core.dart';
 
 void main() {
@@ -55,7 +54,11 @@ void main() {
     expect(Iso3166Country.germany.phoneCode, 49);
 
     for (final country in Iso3166Country.values) {
-      expect(country.phoneCode, isPositive, reason: '${country.name} (${country.alpha2}) should have a positive phoneCode');
+      expect(
+        country.phoneCode,
+        isPositive,
+        reason: '${country.name} (${country.alpha2}) should have a positive phoneCode',
+      );
     }
   });
 
@@ -191,7 +194,9 @@ void main() {
       // Historically the single-character check was case-sensitive, so a
       // lowercase search input never matched an uppercase single-character
       // term such as an ISO-2 code.
-      final search = TextSearch<String>([TextSearchItem.fromTerms('France', ['F'])]);
+      final search = TextSearch<String>([
+        TextSearchItem.fromTerms('France', ['F']),
+      ]);
       expect(search.fastSearch('f'), contains('France'));
     });
 
@@ -204,6 +209,133 @@ void main() {
       final results = buildSearch().search('kingdom');
       expect(results, isNotEmpty);
       expect(results.first.item, 'United Kingdom');
+    });
+
+    test('multi-word term with all single characters matches', () {
+      final search = TextSearch<String>([
+        TextSearchItem.fromTerms('SingleChars', ['a b c']),
+      ]);
+      expect(search.search('z'), isNotEmpty);
+    });
+
+    test('multi-word prefix match', () {
+      final search = TextSearch<String>([
+        TextSearchItem.fromTerms('France', ['republic of france']),
+      ]);
+      expect(search.search('rep'), isNotEmpty);
+    });
+
+    test('fastSearch with limit uses bounded top-k correctly when capacity reached', () {
+      final search = TextSearch<String>([
+        TextSearchItem.fromTerms('Item1', ['apple one']),
+        TextSearchItem.fromTerms('Item2', ['apple two']),
+        TextSearchItem.fromTerms('Item3', ['apple three']),
+      ]);
+      final results = search.fastSearch('apple', limit: 2);
+      expect(results.length, 2);
+    });
+
+    test('fastSearch with limit replaces worst score and inserts mid-list', () {
+      final search = TextSearch<String>([
+        TextSearchItem.fromTerms('Mid', ['apple banana']), // moderate score
+        TextSearchItem.fromTerms('Worst', ['apple zebra xylophone']), // worse score
+        TextSearchItem.fromTerms('Best', ['apple']), // exact match (score 0), replaces worst and inserts before Mid
+      ]);
+      final results = search.fastSearch('apple', limit: 2);
+      expect(results, ['Best', 'Mid']);
+    });
+
+    test('search scaled distance returns effectiveThreshold when length bound fails', () {
+      final search = TextSearch<String>([
+        TextSearchItem.fromTerms('A', ['verylongwordthatclearlyexceedsthresholdandcannotmatch']),
+      ]);
+      expect(search.search('xy', matchThreshold: 0.1), isEmpty);
+    });
+
+    test('fastSearch empty term with limit returns prefix of items', () {
+      final search = buildSearch();
+      final results = search.fastSearch('', limit: 2);
+      expect(results.length, 2);
+      expect(results, ['France', 'Germany']);
+    });
+  });
+
+  group('DateUtils extensions', () {
+    test('DateCollection max returns the latest date', () {
+      final d1 = DateTime(2020, 1, 1, 10, 30);
+      final d2 = DateTime(2021, 5, 20, 8, 15);
+      expect([d1, d2].max(), d2);
+    });
+
+    test('DateOperations extensions work as expected', () {
+      final dt = DateTime(2020, 1, 15, 10, 30, 45);
+      expect(dt.dateOnly(), DateTime(2020, 1, 15));
+      expect(dt.addDays(5), DateTime(2020, 1, 20, 10, 30, 45));
+      expect(dt.addYears(2), DateTime(2022, 1, 15, 10, 30, 45));
+    });
+  });
+
+  group('JaroWinkler edge cases', () {
+    test('similarityUpperBound returns 0 if either length is 0', () {
+      final jw = JaroWinkler();
+      expect(jw.similarityUpperBound(0, 5), 0);
+      expect(jw.similarityUpperBound(5, 0), 0);
+    });
+  });
+
+  group('CountriesProvider and presentation widgets', () {
+    testWidgets('renders CountriesProvider, NationTile, PhoneCodeTile and FlagIcon', (tester) async {
+      final loc = lookupCountryLocalizations(const Locale('en', 'GB'));
+      var nationTapped = false;
+      var phoneCodeTapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Provider<CountryLocalizations>.value(
+            value: loc,
+            child: CountriesProvider(
+              child: Builder(
+                builder: (context) {
+                  final countriesData = context.watch<Countries>();
+                  return Scaffold(
+                    body: ListView(
+                      children: [
+                        Text('Count: ${countriesData.countries.length}'),
+                        NationTile(
+                          country: Iso3166Country.unitedKingdom,
+                          onTap: () {
+                            nationTapped = true;
+                          },
+                        ),
+                        PhoneCodeTile(
+                          country: Iso3166Country.france,
+                          onTap: () {
+                            phoneCodeTapped = true;
+                          },
+                        ),
+                        const FlagIcon.forIso3166(country: Iso3166Country.germany),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Count: 249'), findsOneWidget);
+      expect(find.text('United Kingdom'), findsOneWidget);
+      expect(find.text('France'), findsOneWidget);
+      expect(find.text('+33'), findsOneWidget);
+      expect(find.text(Iso3166Country.germany.flagEmoji()), findsOneWidget);
+
+      await tester.tap(find.text('United Kingdom'));
+      expect(nationTapped, isTrue);
+
+      await tester.tap(find.text('France'));
+      expect(phoneCodeTapped, isTrue);
     });
   });
 }

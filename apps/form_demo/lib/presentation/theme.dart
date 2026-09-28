@@ -185,9 +185,3 @@ class SaibleTheme({
     );
   }
 }
-
-/// Typography extensions for Saible title styles on [TextTheme].
-extension TitleTheme on TextTheme {
-  /// A stylized titleMedium text style with increased weight and font size.
-  TextStyle? get saibleTitle => titleMedium?.apply(fontWeightDelta: 2, fontSizeDelta: 2);
-}
