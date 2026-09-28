@@ -4,13 +4,13 @@
   "privacyNotice": "Datenschutzhinweis: Dies ist eine Demo-App. Keine der hier eingegebenen Informationen wird gespeichert, übertragen oder weitergegeben.",
   "dateOfBirthErrorRequired": "Ihr Geburtsdatum ist erforderlich.",
   "dateOfBirthErrorInvalid": "Ein gültiges Geburtsdatum ist erforderlich.",
-  "dateOfBirthErrorTooEarly": "Ihr Geburtsdatum darf nicht vor dem {min} liegen.",
+  "dateOfBirthErrorTooEarly": "Ihr Geburtsdatum darf nicht vor dem {min} liegen (Sie müssen angeben, über 18 Jahre alt zu sein, um das Formular abzusenden).",
   "@dateOfBirthErrorTooEarly": {
     "placeholders": {
       "min": { "type": "String", "example": "01/01/1899" }
     }
   },
-  "dateOfBirthErrorTooLate": "Ihr Geburtsdatum darf nicht nach dem {max} liegen.",
+  "dateOfBirthErrorTooLate": "Sie müssen angeben, über 18 Jahre alt zu sein, um das Formular zu aktivieren. Wählen Sie ein Datum vor dem {max}.",
   "@dateOfBirthErrorTooLate": {
     "placeholders": {
       "max": { "type": "String", "example": "01/01/2020" }

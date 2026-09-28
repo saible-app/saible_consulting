@@ -75,10 +75,11 @@ void main() {
       await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
       await tester.pumpAndSettle();
 
-      expect(find.text('English'), findsOneWidget);
+      expect(find.text('English (GB)'), findsOneWidget);
       expect(find.text('Français'), findsOneWidget);
       expect(find.text('Deutsch'), findsOneWidget);
       expect(find.text('Cymraeg'), findsOneWidget);
+      expect(find.text('English (US)'), findsOneWidget);
       expect(find.text('日本語'), findsOneWidget);
     });
 
@@ -123,7 +124,7 @@ void main() {
       // Switching back to English restores the English strings.
       await tester.tap(find.byKey(LanguageSwitcher.switcherButtonKey));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('English'));
+      await tester.tap(find.text('English (GB)'));
       await tester.pumpAndSettle();
 
       expect(find.text('Registration Demo'), findsOneWidget);
@@ -154,7 +155,7 @@ void main() {
       // 4. Future/underage date (triggers tooLate error)
       await tester.enterText(dobField, '01012025');
       await tester.pumpAndSettle();
-      expect(find.textContaining('Your date of birth cannot be after'), findsOneWidget);
+      expect(find.textContaining('You must claim to be over 18'), findsOneWidget);
 
       // 5. Valid date clears error
       await tester.enterText(dobField, '15061995');
@@ -162,7 +163,7 @@ void main() {
       expect(find.text('A valid date of birth is required.'), findsNothing);
       expect(find.text('Your date of birth is required.'), findsNothing);
       expect(find.textContaining('Your date of birth cannot precede'), findsNothing);
-      expect(find.textContaining('Your date of birth cannot be after'), findsNothing);
+      expect(find.textContaining('You must claim to be over 18'), findsNothing);
     });
 
     testWidgets('selecting date of birth via calendar picker sets valid date', (tester) async {

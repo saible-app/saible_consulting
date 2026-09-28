@@ -23,12 +23,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String dateOfBirthErrorTooEarly(String min) {
-    return '生年月日は$min以降である必要があります。';
+    return '生年月日は$min以降である必要があります（フォームを送信するには18歳以上であることを申告する必要があります）。';
   }
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return '生年月日は$max以前である必要があります。';
+    return 'フォームを有効にするには18歳以上であることを申告する必要があります。$max以前の日付を選択してください。';
   }
 
   @override

@@ -129,13 +129,13 @@ abstract class AppLocalizations {
   /// No description provided for @dateOfBirthErrorTooEarly.
   ///
   /// In en_GB, this message translates to:
-  /// **'Your date of birth cannot precede {min}.'**
+  /// **'Your date of birth cannot precede {min} (you have to claim to be over 18 to submit the form).'**
   String dateOfBirthErrorTooEarly(String min);
 
   /// No description provided for @dateOfBirthErrorTooLate.
   ///
   /// In en_GB, this message translates to:
-  /// **'Your date of birth cannot be after {max}.'**
+  /// **'You must claim to be over 18 to enable the form. Choose a date before {max}.'**
   String dateOfBirthErrorTooLate(String max);
 
   /// No description provided for @dateOfBirthLabel.

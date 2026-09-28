@@ -4,13 +4,13 @@
   "privacyNotice": "Privacy Notice: This is a demonstration app. None of the information entered here is stored, transmitted, or shared.",
   "dateOfBirthErrorRequired": "Your date of birth is required.",
   "dateOfBirthErrorInvalid": "A valid date of birth is required.",
-  "dateOfBirthErrorTooEarly": "Your date of birth cannot precede {min}.",
+  "dateOfBirthErrorTooEarly": "Your date of birth cannot precede {min} (you have to claim to be over 18 to submit the form).",
   "@dateOfBirthErrorTooEarly": {
     "placeholders": {
       "min": { "type": "String", "example": "01/01/1899" }
     }
   },
-  "dateOfBirthErrorTooLate": "Your date of birth cannot be after {max}.",
+  "dateOfBirthErrorTooLate": "You must claim to be over 18 to enable the form. Choose a date before {max}.",
   "@dateOfBirthErrorTooLate": {
     "placeholders": {
       "max": { "type": "String", "example": "01/01/2020" }

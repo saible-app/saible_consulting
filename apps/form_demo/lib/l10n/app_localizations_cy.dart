@@ -24,12 +24,12 @@ class AppLocalizationsCy extends AppLocalizations {
 
   @override
   String dateOfBirthErrorTooEarly(String min) {
-    return 'Ni all eich dyddiad geni fod cyn $min.';
+    return 'Ni all eich dyddiad geni fod cyn $min (mae\'n rhaid i chi honni eich bod dros 18 oed i gyflwyno\'r ffurflen).';
   }
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'Ni all eich dyddiad geni fod ar ôl $max.';
+    return 'Mae\'n rhaid i chi honni eich bod dros 18 oed i alluogi\'r ffurflen. Dewiswch ddyddiad cyn $max.';
   }
 
   @override

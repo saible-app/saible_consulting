@@ -24,12 +24,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dateOfBirthErrorTooEarly(String min) {
-    return 'Your date of birth cannot precede $min.';
+    return 'Your date of birth cannot precede $min (you have to claim to be over 18 to submit the form).';
   }
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'Your date of birth cannot be after $max.';
+    return 'You must claim to be over 18 to enable the form. Choose a date before $max.';
   }
 
   @override
@@ -88,12 +88,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String dateOfBirthErrorTooEarly(String min) {
-    return 'Your date of birth cannot precede $min.';
+    return 'Your date of birth cannot precede $min (you have to claim to be over 18 to submit the form).';
   }
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'Your date of birth cannot be after $max.';
+    return 'You must claim to be over 18 to enable the form. Choose a date before $max.';
   }
 
   @override

@@ -24,12 +24,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String dateOfBirthErrorTooEarly(String min) {
-    return 'Votre date de naissance ne peut pas être antérieure au $min.';
+    return 'Votre date de naissance ne peut pas être antérieure au $min (vous devez déclarer avoir plus de 18 ans pour envoyer le formulaire).';
   }
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'Votre date de naissance ne peut pas être postérieure au $max.';
+    return 'Vous devez déclarer avoir plus de 18 ans pour activer le formulaire. Choisissez une date antérieure au $max.';
   }
 
   @override

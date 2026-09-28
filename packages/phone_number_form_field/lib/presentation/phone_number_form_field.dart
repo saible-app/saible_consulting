@@ -13,7 +13,8 @@
 // limitations under the License.
 
 import 'package:collection/collection.dart';
-import 'package:dlibphonenumber/dlibphonenumber.dart';
+import 'package:dlibphonenumber/dlibphonenumber.dart' hide Locale;
+import 'package:flutter/scheduler.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:phone_number_form_field/application/phone_util.dart';
 import 'package:phone_number_form_field/domain/phone_number.dart';
@@ -53,6 +54,7 @@ class const _PhoneNumberField({
 class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
   final TextEditingController _controller = TextEditingController();
   Iso3166Country _selectedCountry = Iso3166Country.unitedKingdom;
+  Locale? _lastLocale;
 
   @override
   void initState() {
@@ -67,6 +69,29 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
         _controller.text = phoneUtil.getNationalSignificantNumber(phoneNumber);
       }
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.maybeLocaleOf(context);
+    if (locale == _lastLocale) return;
+    _lastLocale = locale;
+    // Force a rebuild when the locale changes, so that the suggestions builder is always up to
+    // date with the current language
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _lastLocale = locale;
+      });
+      if (_controller.text.isEmpty) {
+        final country = Iso3166Country.values.firstWhereOrNull((c) => c.alpha2 == locale?.countryCode);
+        if (country != null) {
+          setState(() {
+            _selectedCountry = country;
+          });
+        }
+      }
+    });
   }
 
   @override

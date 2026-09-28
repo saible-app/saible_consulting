@@ -47,6 +47,7 @@ Future<DateTime?> _chooseDate(
   firstDate: firstDate,
   lastDate: lastDate,
   switchToInputEntryModeIcon: const Icon(Icons.edit, key: DatePickerFormField.switchToEntryModeKey),
+  keyboardType: TextInputType.datetime,
 ).then((date) {
   if (date == null || !context.mounted) return null;
   controller.text = dateFormat.format(date);

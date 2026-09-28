@@ -4,13 +4,13 @@
   "privacyNotice": "Avis de confidentialité : Ceci est une application de démonstration. Aucune des informations saisies ici n'est stockée, transmise ou partagée.",
   "dateOfBirthErrorRequired": "Votre date de naissance est obligatoire.",
   "dateOfBirthErrorInvalid": "Une date de naissance valide est requise.",
-  "dateOfBirthErrorTooEarly": "Votre date de naissance ne peut pas être antérieure au {min}.",
+  "dateOfBirthErrorTooEarly": "Votre date de naissance ne peut pas être antérieure au {min} (vous devez déclarer avoir plus de 18 ans pour envoyer le formulaire).",
   "@dateOfBirthErrorTooEarly": {
     "placeholders": {
       "min": { "type": "String", "example": "01/01/1899" }
     }
   },
-  "dateOfBirthErrorTooLate": "Votre date de naissance ne peut pas être postérieure au {max}.",
+  "dateOfBirthErrorTooLate": "Vous devez déclarer avoir plus de 18 ans pour activer le formulaire. Choisissez une date antérieure au {max}.",
   "@dateOfBirthErrorTooLate": {
     "placeholders": {
       "max": { "type": "String", "example": "01/01/2020" }
