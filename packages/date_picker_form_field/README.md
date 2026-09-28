@@ -31,6 +31,7 @@ An accessible, locale-adaptive date input field for Flutter that bridges keyboar
 - **Dual Input Modes**: Fluid keyboard entry alongside standard graphical calendar picking.
 - **Strict Range Clamping**: Enforces configurable `firstDate` and `lastDate` boundaries.
 - **Clean Event Lifecycle**: Dedicated callbacks for `onDateChanged`, `onPickDate`, `onEditText`, `onFieldSubmitted`, and `onEditingComplete`.
+- **Form-Ready Validation**: Typed `validator` and `onSaved` callbacks that receive the parsed `DateTime`, integrating with `Form.validate()` and form-level `AutovalidateMode`.
 
 ---
 
@@ -40,10 +41,19 @@ Add `date_picker_form_field` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  date_picker_form_field: ^0.0.1
+  date_picker_form_field: ^0.1.0
 ```
 
-Initialize date formatting in your application `main()` if supporting multiple locales:
+> **UI library:** this package is built on `material_ui`, the official Flutter
+> Material library, and its API accepts `material_ui` types such as
+> `InputDecoration`. Import `package:material_ui/material_ui.dart` in code that
+> constructs those arguments: it exports distinct types that are not assignable
+> to or from the copies exported by `package:flutter/material.dart`.
+
+### Localization setup
+
+Initialize date formatting before the first frame, so that typed input is parsed
+and re-formatted with the pattern of the active locale:
 
 ```dart
 import 'package:intl/date_symbol_data_local.dart';
@@ -55,6 +65,57 @@ void main() async {
 }
 ```
 
+Then configure your `MaterialApp` with the localization plumbing from
+`saible_consulting_core`:
+
+```dart
+import 'package:material_ui/material_ui.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
+
+MaterialApp(
+  supportedLocales: SaibleLocalizations.supportedLocales,
+  localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+  home: const MyFormPage(),
+);
+```
+
+### Migrating from `package:flutter/material.dart`
+
+`material_ui` is the Material library that used to ship inside
+`package:flutter/material.dart`, so migration is mostly mechanical - the bundled
+data-driven fix rewrites the imports for you:
+
+```sh
+dart fix --apply --code=migrate_design_widgets
+```
+
+Two things then need attention. Import `package:material_ui/material_ui.dart`
+wherever you construct `material_ui` types (such as `InputDecoration`), as
+described above - and make sure the localization delegates come from
+`material_ui` too. `material_ui` widgets never read the legacy
+`GlobalMaterialLocalizations`, `GlobalCupertinoLocalizations` or
+`GlobalWidgetsLocalizations` classes from `package:flutter_localizations`, which
+is why `SaibleLocalizations.localizationsDelegates` (shown above) pairs the
+country names with `material_ui`'s own Material, Cupertino and Widgets
+delegates. Use the generated `CountryLocalizations.localizationsDelegates` only
+while parts of your app still build with `package:flutter/material.dart`.
+
+If a dependency or subtree still imports `package:flutter/material.dart`, use
+`MaterialUiCompatibilityBridge` to bridge `ThemeData` and
+`MaterialLocalizations` for it - app-wide through `MaterialApp.builder`, or
+around the individual subtree:
+
+```dart
+MaterialApp(
+  builder: (context, child) => MaterialUiCompatibilityBridge(child: child!),
+  home: const MyScreen(),
+);
+```
+
+The bridge is a temporary migration aid (deprecated in `material_ui` 1.5.0 and
+scheduled for removal in a future release), so migrate the legacy dependency
+rather than shipping it long term.
+
 ---
 
 ## Usage
@@ -62,7 +123,7 @@ void main() async {
 ### Basic Example
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:date_picker_form_field/date_picker_form_field.dart';
 
 class DateOfBirthExample extends StatefulWidget {
@@ -104,7 +165,7 @@ class _DateOfBirthExampleState extends State<DateOfBirthExample> {
 You can also use the formatter independently on any standard Flutter `TextFormField`:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:date_picker_form_field/presentation/date_input_formatter.dart';
 
 final formatter = DateInputFormatter(locale: 'en_GB');
@@ -116,6 +177,38 @@ TextFormField(
   ),
 );
 ```
+
+### Form Validation
+
+`validator` and `onSaved` plug the field into a `Form` and receive the parsed
+`DateTime` - `null` while the input is empty, incomplete, syntactically invalid
+or outside `firstDate`/`lastDate`:
+
+```dart
+final formKey = GlobalKey<FormState>();
+DateTime? dateOfBirth;
+
+Form(
+  key: formKey,
+  child: DatePickerFormField(
+    firstDate: DateTime(1900),
+    lastDate: DateTime.now(),
+    decoration: const InputDecoration(labelText: 'Date of Birth'),
+    validator: (date) => date == null ? 'Enter a valid date' : null,
+    onSaved: (date) => dateOfBirth = date,
+  ),
+);
+
+if (formKey.currentState!.validate()) {
+  formKey.currentState!.save();
+  print(dateOfBirth); // e.g. "1995-06-15 00:00:00.000"
+}
+```
+
+The validator runs whenever the enclosing `Form` validates - through
+`FormState.validate()` or a form-level `AutovalidateMode` - and sees the same
+parsed value that `onDateChanged` reports, whether it was typed or picked from
+the calendar dialog.
 
 ---
 
@@ -141,9 +234,26 @@ await tester.pumpAndSettle();
 
 ---
 
+## How this compares
+
+Alternative pub.dev packages, with their like counts, 30-day downloads and
+latest releases as of 28 September 2026:
+
+| Package | Likes | Downloads | Latest | Trade-offs |
+| --- | --: | --: | --- | --- |
+| [`date_field`](https://pub.dev/packages/date_field) | 139 | 905 | 7.0.0 (Sep 2026) | A well-maintained `DateTimeFormField` wrapping the platform pickers (Material and Cupertino) with date, time or date-and-time modes. Its value always comes from a picker dialog: there is no keyboard-first entry and no locale-driven input mask, and it depends on `cupertino_ui` as well as `material_ui`. |
+| Hand-rolled `TextFormField` + `showDatePicker` | - | - | - | Zero extra dependencies, but you implement locale masking, separator and backspace handling, parsing, range clamping and the validation contract yourself. |
+
+Pick `date_picker_form_field` when you want `DD/MM/YYYY`-style typed entry driven
+by the active locale *and* the calendar dialog in the same field, with the
+parsed `DateTime` (or `null`) handed to your `Form` through `validator` and
+`onSaved`.
+
+---
+
 ## Additional Information
 
-- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting.git)
+- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting)
 - Issue tracker: File bugs or feature requests via GitHub Issues.
 - License: See [LICENSE](LICENSE) for details.
 

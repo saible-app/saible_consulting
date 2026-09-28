@@ -45,9 +45,8 @@ class _DemoAppState() extends State<DemoApp> {
     theme: SaibleTheme().dark(),
     supportedLocales: AppLocalizations.supportedLocales,
     localizationsDelegates: const [
-      ...AppLocalizations.localizationsDelegates,
-      ...CountryLocalizations.localizationsDelegates,
-      ...GlobalMaterialLocalizations.delegates,
+      AppLocalizations.delegate,
+      ...SaibleLocalizations.localizationsDelegates,
     ],
     home: BlocProvider<RegistrationFormBloc>(
       create: (context) => RegistrationFormBloc(),

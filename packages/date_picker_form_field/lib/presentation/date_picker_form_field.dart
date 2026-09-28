@@ -71,6 +71,8 @@ class const DatePickerFormField({
   this.onEditingComplete,
   this.focusNode,
   this.pickerHelpText,
+  this.validator,
+  this.onSaved,
 }) extends StatefulWidget {
   /// The [Key] for switching to text input entry mode within the date picker dialog.
   static const switchToEntryModeKey = Key('datePickerTextField_switchToEntryMode');
@@ -117,6 +119,25 @@ class const DatePickerFormField({
 
   /// Callback invoked when editing is complete on the text field.
   final void Function()? onEditingComplete;
+
+  /// Validates the parsed date whenever the enclosing [Form] validates, e.g.
+  /// through `Form.validate()` or a form-level [AutovalidateMode]. The value is
+  /// the parsed [DateTime], or `null` while the input is empty, incomplete or
+  /// invalid (e.g. `31/02/1999`, or a date outside [firstDate] and [lastDate]).
+  /// Return `null` when the date is acceptable.
+  ///
+  /// ```dart
+  /// DatePickerFormField(
+  ///   decoration: const InputDecoration(labelText: 'Date of Birth'),
+  ///   validator: (date) => date == null ? 'Enter a valid date' : null,
+  ///   onSaved: (date) => _dateOfBirth = date,
+  /// )
+  /// ```
+  final String? Function(DateTime? date)? validator;
+
+  /// Callback invoked with the parsed date (or `null`) when the enclosing
+  /// [Form] saves, i.e. through `Form.save()`.
+  final void Function(DateTime? date)? onSaved;
 
   @override
   State<DatePickerFormField> createState() => _DatePickerFormFieldState();
@@ -196,6 +217,10 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
       },
       onFieldSubmitted: widget.onFieldSubmitted,
       onEditingComplete: widget.onEditingComplete,
+      // Typed form integration: the enclosing Form validates and saves the
+      // parsed DateTime rather than the raw text.
+      validator: (_) => widget.validator?.call(currentDate),
+      onSaved: (_) => widget.onSaved?.call(currentDate),
       controller: controller,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         hintText: inputFormatter.hintText,

@@ -41,11 +41,15 @@ class const _PhoneNumberField({
   this.decoration,
   this.initialValue,
   this.onPhoneNumberChanged,
+  this.validator,
+  this.onSaved,
 }) extends StatefulWidget {
   final FocusNode? focusNode;
   final InputDecoration? decoration;
   final ValueChanged<PhoneNumberState>? onPhoneNumberChanged;
   final PhoneNumberState? initialValue;
+  final String? Function(PhoneNumberState state)? validator;
+  final void Function(PhoneNumberState state)? onSaved;
 
   @override
   State<_PhoneNumberField> createState() => _PhoneNumberFieldState();
@@ -100,6 +104,14 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
     _controller.dispose();
   }
 
+  /// Builds the [PhoneNumberState] for [rawText] as typed in the field, parsed
+  /// against the currently selected country.
+  PhoneNumberState _stateFor(String rawText) => PhoneNumberState(
+    rawText: rawText,
+    e164: _getE164Number(rawText, _selectedCountry),
+    regionCode: '+${_selectedCountry.phoneCode}',
+  );
+
   @override
   Widget build(BuildContext context) {
     final onPhoneNumberChanged = widget.onPhoneNumberChanged;
@@ -115,18 +127,13 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
       inputFormatters: [
         AsYouTypePhoneNumberFormatter(
           country: _selectedCountry,
-          onFormatFinished: (value) {
-            final String? e164Result = _getE164Number(value, _selectedCountry);
-            onPhoneNumberChanged?.call(
-              PhoneNumberState(
-                rawText: value,
-                e164: e164Result,
-                regionCode: '+${_selectedCountry.phoneCode}',
-              ),
-            );
-          },
+          onFormatFinished: (value) => onPhoneNumberChanged?.call(_stateFor(value)),
         ),
       ],
+      // Typed form integration: the enclosing Form validates and saves the
+      // parsed PhoneNumberState rather than the raw text.
+      validator: (_) => widget.validator?.call(_stateFor(_controller.text)),
+      onSaved: (_) => widget.onSaved?.call(_stateFor(_controller.text)),
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         hintText: _selectedCountry.examplePhoneNumberWithoutTrunk(),
         errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
@@ -164,9 +171,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
                         _selectedCountry = result;
                       });
                       _controller.text = '';
-                      widget.onPhoneNumberChanged?.call(
-                        PhoneNumberState(rawText: '', e164: null, regionCode: '+${result.phoneCode}'),
-                      );
+                      widget.onPhoneNumberChanged?.call(_stateFor(''));
                     }
                     controller.closeView(result.tr(context));
                   },
@@ -186,6 +191,8 @@ class const PhoneNumberFormField({
   this.initialValue,
   this.decoration,
   this.onPhoneNumberChanged,
+  this.validator,
+  this.onSaved,
 }) extends StatelessWidget {
   /// Creates a [PhoneNumberFormField].
   this;
@@ -212,11 +219,30 @@ class const PhoneNumberFormField({
 
   /// An optional initial value to populate the field with.
   final PhoneNumberState? initialValue;
+
+  /// Validates the current [PhoneNumberState] whenever the enclosing [Form]
+  /// validates, e.g. through `Form.validate()` or a form-level
+  /// [AutovalidateMode]. Return `null` when the number is acceptable.
+  ///
+  /// ```dart
+  /// PhoneNumberFormField(
+  ///   decoration: const InputDecoration(labelText: 'Phone Number'),
+  ///   validator: (state) => state.isValid ? null : 'Enter a valid phone number',
+  ///   onSaved: (state) => _phoneNumber = state,
+  /// )
+  /// ```
+  final String? Function(PhoneNumberState state)? validator;
+
+  /// Callback invoked with the current [PhoneNumberState] when the enclosing
+  /// [Form] saves, i.e. through `Form.save()`.
+  final void Function(PhoneNumberState state)? onSaved;
   @override
   Widget build(BuildContext context) => CountriesProvider(child: _PhoneNumberField(
     focusNode: focusNode,
     initialValue: initialValue,
     decoration: decoration,
     onPhoneNumberChanged: onPhoneNumberChanged,
+    validator: validator,
+    onSaved: onSaved,
   ));
 }

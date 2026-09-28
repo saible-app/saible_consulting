@@ -25,12 +25,16 @@ class const _CountryPicker({
   this.initial,
   this.decoration,
   this.focusNode,
+  this.validator,
+  this.onSaved,
 }) extends StatefulWidget {
   static Key countrySuggestionKey(Iso3166Country country) => Key('countryPicker_country_${country.alpha2}');
   final void Function(Iso3166Country country) onCountryPicked;
   final Iso3166Country? initial;
   final InputDecoration? decoration;
   final FocusNode? focusNode;
+  final String? Function(Iso3166Country? country)? validator;
+  final void Function(Iso3166Country? country)? onSaved;
 
   @override
   State<_CountryPicker> createState() => _CountryPickerState();
@@ -89,6 +93,10 @@ class _CountryPickerState() extends State<_CountryPicker> {
         controller: controller,
         onTap: () => controller.openView(),
         onChanged: (_) => controller.openView(),
+        // Typed form integration: the enclosing Form validates and saves the
+        // chosen country rather than the search text.
+        validator: (_) => widget.validator?.call(chosenCountry),
+        onSaved: (_) => widget.onSaved?.call(chosenCountry),
         decoration: (widget.decoration ?? const InputDecoration()).copyWith(
           errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
           suffixIcon: country == null
@@ -128,6 +136,8 @@ class const CountryPickerFormField({
   required this.onCountryPicked,
   this.initial,
   this.focusNode,
+  this.validator,
+  this.onSaved,
 }) extends StatelessWidget {
   /// The [Key] for the country search anchor view.
   static const Key countrySearchAnchorKey = Key('countryPicker_searchAnchor');
@@ -150,11 +160,32 @@ class const CountryPickerFormField({
   /// An optional [FocusNode] to control the focus of the field.
   final FocusNode? focusNode;
 
+  /// Validates the chosen country whenever the enclosing [Form] validates, e.g.
+  /// through `Form.validate()` or a form-level [AutovalidateMode]. The value is
+  /// the selected [Iso3166Country], or `null` while nothing is selected. Return
+  /// `null` when the selection is acceptable.
+  ///
+  /// ```dart
+  /// CountryPickerFormField(
+  ///   decoration: const InputDecoration(labelText: 'Nationality'),
+  ///   onCountryPicked: (country) => setState(() => _country = country),
+  ///   validator: (country) => country == null ? 'Select a country' : null,
+  ///   onSaved: (country) => _savedCountry = country,
+  /// )
+  /// ```
+  final String? Function(Iso3166Country? country)? validator;
+
+  /// Callback invoked with the chosen country (or `null`) when the enclosing
+  /// [Form] saves, i.e. through `Form.save()`.
+  final void Function(Iso3166Country? country)? onSaved;
+
   @override
   Widget build(BuildContext context) => CountriesProvider(child: _CountryPicker(
     decoration: decoration, 
     onCountryPicked: onCountryPicked,
     initial: initial,
     focusNode: focusNode,
+    validator: validator,
+    onSaved: onSaved,
   ));
 }
