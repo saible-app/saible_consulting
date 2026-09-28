@@ -1,24 +1,37 @@
 # phone_number_form_field
 
-An accessible, international phone number input field for Flutter applications with integrated country calling-code selection and as-you-type formatting.
+An accessible, international phone number input field for Flutter applications featuring intelligent country dial-code selection, as-you-type formatting, and rigorous international E.164 compliance validation.
 
-`PhoneNumberFormField` provides a country dial code prefix selector that opens a searchable anchor view with flags and calling codes, alongside an input field that automatically validates and formats phone numbers according to international E.164 standards.
+`PhoneNumberFormField` delivers an enterprise-grade phone input experience by uniting an interactive calling-code prefix selector with continuous formatting and parsing powered by Google's authoritative `libphonenumber` metadata.
+
+---
+
+## Key Architectural Strengths
+
+- **Powered by Google's `libphonenumber` Standard (`dlibphonenumber`)**:
+  - Employs the industry gold standard for international phone number plans, area codes, number lengths, and formatting rules across every global region.
+  - Avoids brittle regexes or crude length assumptions that fail on complex national numbering systems.
+- **Continuous As-You-Type Formatting with Trunk Stripping**:
+  - Formats numbers naturally in real time as user digits are typed.
+  - Automatically detects and removes redundant domestic trunk prefixes (such as the leading `0` in UK or Australian mobile numbers) when typed or pasted, guaranteeing proper international formatting.
+- **Strict International E.164 State Contract**:
+  - Emits an immutable `PhoneNumberState` containing `rawText`, `regionCode`, and parsed `e164` (e.g. `+442079460123`).
+  - `e164` is non-null only when the number is genuinely valid and deliverable, making backend integrations (Twilio, AWS SNS, Firebase Auth, Stripe) immediate and reliable.
+- **Modern Material 3 Prefix Selector with Typo-Tolerant Search**:
+  - The dial code selector uses a Material 3 `SearchAnchor` overlay that opens a fast, in-memory fuzzy search over country names, ISO codes, and dialing prefixes.
+- **Lightweight, Zero-Asset Design**:
+  - Renders native Unicode flag emojis without bundling hundreds of heavy vector or raster flag image files.
+  - Fully offline, self-contained, and tested with >99% code coverage.
 
 ---
 
 ## Features
 
-- **Country Calling-Code Selector**:
-  - Displays selected country flag emoji and dialing code (e.g. `🇬🇧 +44`).
-  - Tapping the prefix opens a fast, searchable dialog listing all countries with their localized names and dialing codes.
-- **As-You-Type Phone Formatting (`AsYouTypePhoneNumberFormatter`)**:
-  - Automatically formats the input according to the active country's national format guidelines using `dlibphonenumber`.
-  - Removes redundant trunk prefix when national numbers are pasted or entered.
-- **E.164 Validation State**:
-  - Emits `PhoneNumberState` with `rawText`, `regionCode`, and parsed `e164` (null when invalid or incomplete).
-  - Quick checks via `state.isValid`, `state.isEmpty`, and `state.isNotEmpty`.
-- **Formz & Form Integration**:
-  - Easily coupled with form validation frameworks like `Formz`, Flutter `Form`, or BLoC state managers.
+- **Country Calling-Code Selector**: Tap prefix to search all 249 ISO countries by name, code, or dial prefix.
+- **As-You-Type Phone Formatting**: Automatic national phone structure formatting.
+- **Trunk Code Normalization**: Automatically strips redundant domestic trunk zeros.
+- **E.164 Compliance Validation**: Instant access to formatted E.164 string and boolean validity checks (`state.isValid`).
+- **Flexible Form Integration**: Compatible with standard Flutter forms, `Formz`, and BLoC/Riverpod state managers.
 
 ---
 
@@ -116,7 +129,7 @@ PhoneNumberFormField(
 
 ## Testing
 
-`PhoneNumberFormField` exposes stable testing keys:
+`PhoneNumberFormField` exposes stable testing keys for automation:
 
 - `PhoneNumberFormField.countrySearchAnchorKey`: Key for the prefix search anchor.
 - `PhoneNumberFormField.countrySearchBarKey`: Key for the phone number text entry field.

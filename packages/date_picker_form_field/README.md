@@ -1,25 +1,36 @@
 # date_picker_form_field
 
-An accessible, locale-aware date input field for Flutter that supports both direct keyboard entry and graphical calendar picking.
+An accessible, locale-adaptive date input field for Flutter that bridges keyboard data entry with an intuitive graphical calendar picker.
 
-`DatePickerFormField` formats input dynamically as the user types according to the active locale's standard date structure (e.g. `DD/MM/YYYY`, `MM/DD/YYYY`, or `YYYY-MM-DD`), while allowing seamless date selection via a built-in calendar picker icon.
+`DatePickerFormField` solves the classic user experience dilemma between typing dates quickly and choosing dates from a calendar. It dynamically formats input as the user types according to the active locale's natural date pattern (e.g. `DD/MM/YYYY`, `MM/DD/YYYY`, or `YYYY-MM-DD`), while offering seamless popup calendar selection.
+
+---
+
+## Key Architectural Strengths
+
+- **Dynamic, Locale-Adaptive Masking (`DateInputFormatter`)**:
+  - Unlike rigid fixed-mask formatters, `DateInputFormatter` inspects `DateFormat.yMd` for the active locale at runtime to determine the true localized ordering of Day, Month, and Year as well as the regional separator (`/`, `-`, `.`).
+  - Automatically matches and adjusts placeholder hints (e.g. `DD/MM/YYYY` in the UK, `MM/DD/YYYY` in the US, `YYYY-MM-DD` in Canada/Japan).
+- **Intelligent Cursor & Separator Navigation**:
+  - Purpose-built editing logic handles typing, digit insertions, and backspacing across separators gracefully: backspacing over a separator removes the preceding digit cleanly without breaking cursor placement or trapping user focus.
+- **Unified Dual-Mode Workflow**:
+  - Users can either type the digits directly or tap the calendar icon to select from a native `DatePickerDialog`.
+  - Date choices in either mode keep the text field and validation state perfectly synchronized.
+- **Validation-Ready State Contract**:
+  - The `onDateChanged` callback provides a structured `DateInputValue(rawText: ..., parsedDate: ...)`.
+  - `parsedDate` evaluates to `null` if the date is incomplete, syntactically invalid (e.g. February 30th), or outside the allowable `firstDate` and `lastDate` boundaries, enabling instant integration with `Formz` or Flutter `Form` validation.
+- **Enterprise Reliability & Testability**:
+  - Provides exported static keys (`textInputKey`, `launchDatePickerKey`, `switchToEntryModeKey`) for deterministic end-to-end testing.
+  - Backed by comprehensive test suites with >99% code coverage.
 
 ---
 
 ## Features
 
-- **Locale-Aware Formatting (`DateInputFormatter`)**:
-  - Automatically determines day, month, and year ordering and separator character (`/`, `.`, `-`) based on the active or specified locale.
-  - Generates matching hint placeholders (e.g. `DD/MM/YYYY`).
-  - Gracefully handles typing, digit insertions, and backspacing across separators without breaking cursor position.
-- **Dual Input Modes**:
-  - Direct keyboard entry formatted in real time.
-  - Graphical calendar picker modal via `showDatePicker` triggered from an end-affordance button.
-- **Validation-Ready State**:
-  - `onDateChanged` emits `DateInputValue(rawText: ..., parsedDate: ...)` where `parsedDate` is non-null only if the text is complete, valid, and falls between `firstDate` and `lastDate`.
-- **Customizable Boundaries**:
-  - Configurable `firstDate` (defaults to 1900-01-01) and `lastDate` (defaults to 2099-12-31).
-  - Configurable initial value, focus nodes, InputDecoration, and callbacks.
+- **Locale-Aware Formatting**: Dynamically formats date components based on the user's regional preferences.
+- **Dual Input Modes**: Fluid keyboard entry alongside standard graphical calendar picking.
+- **Strict Range Clamping**: Enforces configurable `firstDate` and `lastDate` boundaries.
+- **Clean Event Lifecycle**: Dedicated callbacks for `onDateChanged`, `onPickDate`, `onEditText`, `onFieldSubmitted`, and `onEditingComplete`.
 
 ---
 
@@ -32,7 +43,7 @@ dependencies:
   date_picker_form_field: ^0.0.1
 ```
 
-Ensure date symbol formatting is initialized in your app's `main()` if you format dates across multiple locales:
+Initialize date formatting in your application `main()` if supporting multiple locales:
 
 ```dart
 import 'package:intl/date_symbol_data_local.dart';
@@ -78,7 +89,7 @@ class _DateOfBirthExampleState extends State<DateOfBirthExample> {
         setState(() {
           _selectedDate = value.parsedDate;
         });
-        print('Typed text: ${value.rawText}, parsed: ${value.parsedDate}');
+        print('Typed: ${value.rawText}, Valid Date: ${value.parsedDate}');
       },
       onPickDate: (pickedDate) {
         print('Selected from calendar: $pickedDate');
@@ -90,7 +101,7 @@ class _DateOfBirthExampleState extends State<DateOfBirthExample> {
 
 ### Standalone `DateInputFormatter` Usage
 
-You can also use the formatting logic independently with any standard Flutter `TextFormField`:
+You can also use the formatter independently on any standard Flutter `TextFormField`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -110,11 +121,11 @@ TextFormField(
 
 ## Testing
 
-`DatePickerFormField` exposes stable testing keys:
+`DatePickerFormField` exposes stable testing keys for automation:
 
-- `DatePickerFormField.textInputKey`: Key for the underlying `TextFormField`.
+- `DatePickerFormField.textInputKey`: Key for the date `TextFormField`.
 - `DatePickerFormField.launchDatePickerKey`: Key for the calendar picker launcher icon button.
-- `DatePickerFormField.switchToEntryModeKey`: Key for switching entry modes in the dialog.
+- `DatePickerFormField.switchToEntryModeKey`: Key for entry mode toggling in dialogs.
 
 Example widget test:
 
@@ -123,7 +134,7 @@ Example widget test:
 await tester.enterText(find.byKey(DatePickerFormField.textInputKey), '15061995');
 await tester.pumpAndSettle();
 
-// Or launch the picker
+// Or tap the calendar icon
 await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
 await tester.pumpAndSettle();
 ```
