@@ -6,18 +6,43 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ar.dart';
+import 'app_localizations_bg.dart';
+import 'app_localizations_bn.dart';
+import 'app_localizations_ca.dart';
+import 'app_localizations_cs.dart';
 import 'app_localizations_cy.dart';
+import 'app_localizations_da.dart';
 import 'app_localizations_de.dart';
+import 'app_localizations_el.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_fa.dart';
+import 'app_localizations_fi.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_he.dart';
 import 'app_localizations_hi.dart';
+import 'app_localizations_hr.dart';
+import 'app_localizations_hu.dart';
+import 'app_localizations_id.dart';
 import 'app_localizations_it.dart';
 import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_ms.dart';
+import 'app_localizations_nb.dart';
 import 'app_localizations_nl.dart';
 import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
+import 'app_localizations_ro.dart';
 import 'app_localizations_ru.dart';
+import 'app_localizations_sk.dart';
+import 'app_localizations_sr.dart';
+import 'app_localizations_sv.dart';
+import 'app_localizations_ta.dart';
+import 'app_localizations_th.dart';
+import 'app_localizations_tr.dart';
+import 'app_localizations_uk.dart';
+import 'app_localizations_ur.dart';
+import 'app_localizations_vi.dart';
 import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
@@ -104,19 +129,44 @@ abstract class CountryLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('ar'),
+    Locale('bg'),
+    Locale('bn'),
+    Locale('ca'),
+    Locale('cs'),
     Locale('cy'),
+    Locale('da'),
     Locale('de'),
+    Locale('el'),
     Locale('en'),
     Locale('en', 'GB'),
     Locale('es'),
+    Locale('fa'),
+    Locale('fi'),
     Locale('fr'),
+    Locale('he'),
     Locale('hi'),
+    Locale('hr'),
+    Locale('hu'),
+    Locale('id'),
     Locale('it'),
     Locale('ja'),
+    Locale('ko'),
+    Locale('ms'),
+    Locale('nb'),
     Locale('nl'),
     Locale('pl'),
     Locale('pt'),
+    Locale('ro'),
     Locale('ru'),
+    Locale('sk'),
+    Locale('sr'),
+    Locale('sv'),
+    Locale('ta'),
+    Locale('th'),
+    Locale('tr'),
+    Locale('uk'),
+    Locale('ur'),
+    Locale('vi'),
     Locale('zh'),
   ];
 
@@ -1626,18 +1676,43 @@ class _CountryLocalizationsDelegate extends LocalizationsDelegate<CountryLocaliz
   @override
   bool isSupported(Locale locale) => <String>[
     'ar',
+    'bg',
+    'bn',
+    'ca',
+    'cs',
     'cy',
+    'da',
     'de',
+    'el',
     'en',
     'es',
+    'fa',
+    'fi',
     'fr',
+    'he',
     'hi',
+    'hr',
+    'hu',
+    'id',
     'it',
     'ja',
+    'ko',
+    'ms',
+    'nb',
     'nl',
     'pl',
     'pt',
+    'ro',
     'ru',
+    'sk',
+    'sr',
+    'sv',
+    'ta',
+    'th',
+    'tr',
+    'uk',
+    'ur',
+    'vi',
     'zh',
   ].contains(locale.languageCode);
 
@@ -1662,30 +1737,80 @@ CountryLocalizations lookupCountryLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar':
       return CountryLocalizationsAr();
+    case 'bg':
+      return CountryLocalizationsBg();
+    case 'bn':
+      return CountryLocalizationsBn();
+    case 'ca':
+      return CountryLocalizationsCa();
+    case 'cs':
+      return CountryLocalizationsCs();
     case 'cy':
       return CountryLocalizationsCy();
+    case 'da':
+      return CountryLocalizationsDa();
     case 'de':
       return CountryLocalizationsDe();
+    case 'el':
+      return CountryLocalizationsEl();
     case 'en':
       return CountryLocalizationsEn();
     case 'es':
       return CountryLocalizationsEs();
+    case 'fa':
+      return CountryLocalizationsFa();
+    case 'fi':
+      return CountryLocalizationsFi();
     case 'fr':
       return CountryLocalizationsFr();
+    case 'he':
+      return CountryLocalizationsHe();
     case 'hi':
       return CountryLocalizationsHi();
+    case 'hr':
+      return CountryLocalizationsHr();
+    case 'hu':
+      return CountryLocalizationsHu();
+    case 'id':
+      return CountryLocalizationsId();
     case 'it':
       return CountryLocalizationsIt();
     case 'ja':
       return CountryLocalizationsJa();
+    case 'ko':
+      return CountryLocalizationsKo();
+    case 'ms':
+      return CountryLocalizationsMs();
+    case 'nb':
+      return CountryLocalizationsNb();
     case 'nl':
       return CountryLocalizationsNl();
     case 'pl':
       return CountryLocalizationsPl();
     case 'pt':
       return CountryLocalizationsPt();
+    case 'ro':
+      return CountryLocalizationsRo();
     case 'ru':
       return CountryLocalizationsRu();
+    case 'sk':
+      return CountryLocalizationsSk();
+    case 'sr':
+      return CountryLocalizationsSr();
+    case 'sv':
+      return CountryLocalizationsSv();
+    case 'ta':
+      return CountryLocalizationsTa();
+    case 'th':
+      return CountryLocalizationsTh();
+    case 'tr':
+      return CountryLocalizationsTr();
+    case 'uk':
+      return CountryLocalizationsUk();
+    case 'ur':
+      return CountryLocalizationsUr();
+    case 'vi':
+      return CountryLocalizationsVi();
     case 'zh':
       return CountryLocalizationsZh();
   }

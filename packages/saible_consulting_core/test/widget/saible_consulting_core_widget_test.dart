@@ -77,6 +77,12 @@ void main() {
       (Locale('zh'), '英国'),
       (Locale('ja'), 'イギリス'),
       (Locale('ar'), 'المملكة المتحدة'),
+      (Locale('ko'), '영국'),
+      (Locale('tr'), 'Birleşik Krallık'),
+      (Locale('el'), 'Ηνωμένο Βασίλειο'),
+      (Locale('uk'), 'Велика Британія'),
+      (Locale('vi'), 'Vương quốc Anh'),
+      (Locale('cs'), 'Spojené království'),
     ];
 
     for (final (locale, translation) in expectations) {
