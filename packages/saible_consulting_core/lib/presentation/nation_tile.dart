@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
+import 'package:saible_consulting_core/domain/iso3166_countries.dart';
+import 'package:saible_consulting_core/l10n/app_localizations.dart';
 
 /// Renders a flag icon using emoji text for a given country.
 class const FlagIcon.forIso3166({super.key, required this.country}) extends StatelessWidget {

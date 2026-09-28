@@ -176,6 +176,7 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
       controller: controller,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         hintText: inputFormatter.hintText,
+        errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
         suffixIcon: IconButton(
           key: DatePickerFormField.launchDatePickerKey,
           icon: const Icon(Icons.calendar_month),

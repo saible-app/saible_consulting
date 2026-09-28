@@ -1,7 +1,7 @@
 # Form Demo Application (`form_demo`)
 
 A lightweight Flutter demonstration application showcasing the Saible Consulting form field package suite:
-- [`saible_core`](../../packages/saible_core)
+- [`saible_consulting_core`](../../packages/saible_consulting_core)
 - [`date_picker_form_field`](../../packages/date_picker_form_field)
 - [`country_picker_form_field`](../../packages/country_picker_form_field)
 - [`phone_number_form_field`](../../packages/phone_number_form_field)

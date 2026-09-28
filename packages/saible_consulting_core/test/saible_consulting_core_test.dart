@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
-
-import 'package:saible_core/application/jaro_winkler.dart';
-import 'package:saible_core/saible_core.dart';
+import 'package:saible_consulting_core/application/jaro_winkler.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 void main() {
   test('CountryLocalizations loads English and Welsh translations for ISO 3166 countries using ISO-2 keys', () async {

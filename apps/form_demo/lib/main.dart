@@ -4,8 +4,7 @@ import 'package:form_demo/l10n/app_localizations.dart';
 import 'package:form_demo/presentation/registration_form.dart';
 import 'package:form_demo/presentation/theme.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:provider/provider.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 void main() {
   runApp(const DemoApp());
@@ -36,10 +35,6 @@ class _DemoAppState() extends State<DemoApp> {
       ...CountryLocalizations.localizationsDelegates,
       ...GlobalMaterialLocalizations.delegates,
     ],
-    builder: (context, child) => Provider<CountryLocalizations>.value(
-      value: lookupCountryLocalizations(Localizations.maybeLocaleOf(context) ?? const Locale('en', 'GB')),
-      child: child,
-    ),
     home: BlocProvider<RegistrationFormBloc>(
       create: (context) => RegistrationFormBloc(),
       child: RegistrationForm(

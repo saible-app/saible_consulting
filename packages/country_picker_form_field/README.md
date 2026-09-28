@@ -37,12 +37,12 @@ An accessible, high-performance country picker form field for Flutter applicatio
 
 ## Getting Started
 
-Add `country_picker_form_field` and `saible_core` to your `pubspec.yaml`:
+Add `country_picker_form_field` and `saible_consulting_core` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
   country_picker_form_field: ^0.0.1
-  saible_core: ^0.0.1
+  saible_consulting_core: ^0.0.1
 ```
 
 Ensure your `MaterialApp` is configured with localization delegates:
@@ -50,7 +50,7 @@ Ensure your `MaterialApp` is configured with localization delegates:
 ```dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/saible_core.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 MaterialApp(
   supportedLocales: CountryLocalizations.supportedLocales,
@@ -74,7 +74,7 @@ MaterialApp(
 ```dart
 import 'package:flutter/material.dart';
 import 'package:country_picker_form_field/country_picker_form_field.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
+import 'package:saible_consulting_core/domain/iso3166_countries.dart';
 
 class NationalityFieldExample extends StatefulWidget {
   const NationalityFieldExample({super.key});

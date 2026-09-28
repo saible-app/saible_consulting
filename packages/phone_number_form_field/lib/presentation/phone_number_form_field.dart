@@ -5,11 +5,7 @@ import 'package:phone_number_form_field/application/phone_util.dart';
 import 'package:phone_number_form_field/domain/phone_number.dart';
 import 'package:phone_number_form_field/presentation/as_you_type_phone_number_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/application/text_search_item.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
-import 'package:saible_core/presentation/countries_provider.dart';
-import 'package:saible_core/presentation/nation_tile.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 String? _getE164Number(String rawValue, Iso3166Country country) {
   if (rawValue.isEmpty) return null;
@@ -94,6 +90,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
       ],
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         hintText: _selectedCountry.examplePhoneNumberWithoutTrunk(),
+        errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
         prefixIcon: SearchAnchor(
           key: PhoneNumberFormField.countrySearchAnchorKey,
           shrinkWrap: true,

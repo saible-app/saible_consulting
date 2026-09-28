@@ -1,7 +1,7 @@
 import 'package:dlibphonenumber/dlibphonenumber.dart';
 import 'package:flutter/services.dart';
 import 'package:phone_number_form_field/application/phone_util.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 /// A [TextInputFormatter] that uses dlibphonenumber's [AsYouTypeFormatter]
 /// to format phone numbers in real-time as the user types.

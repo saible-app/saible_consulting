@@ -2,9 +2,7 @@ import 'package:country_picker_form_field/presentation/country_picker_form_field
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
-import 'package:saible_core/presentation/nation_tile.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 void main() {
   Widget buildTestWidget({

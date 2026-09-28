@@ -1,4 +1,4 @@
-import 'package:saible_core/l10n/app_localizations.dart';
+import 'package:saible_consulting_core/l10n/app_localizations.dart';
 
 String _lookUpAF(CountryLocalizations l) => l.country_AF;
 String _lookUpAX(CountryLocalizations l) => l.country_AX;

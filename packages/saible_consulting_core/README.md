@@ -1,4 +1,4 @@
-# saible_core
+# saible_consulting_core
 
 Shared core domain models, high-performance fuzzy search, localization delegates, and UI components for the Saible Consulting Flutter packages suite (`country_picker_form_field`, `date_picker_form_field`, `phone_number_form_field`, and `form_demo`).
 
@@ -34,17 +34,17 @@ Shared core domain models, high-performance fuzzy search, localization delegates
 
 ## Getting Started
 
-Add `saible_core` to your `pubspec.yaml`:
+Add `saible_consulting_core` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  saible_core: ^0.0.1
+  saible_consulting_core: ^0.0.1
 ```
 
 Import the package in your Dart code:
 
 ```dart
-import 'package:saible_core/saible_core.dart';
+import 'lib/saible_consulting_core.dart';
 ```
 
 ---
@@ -54,8 +54,8 @@ import 'package:saible_core/saible_core.dart';
 ### 1. Working with Countries and Flag Emojis
 
 ```dart
-import 'package:saible_core/domain/iso3166_countries.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
+import 'lib/domain/iso3166_countries.dart';
+import 'lib/l10n/app_localizations.dart';
 
 // Lookup by country enum
 const country = Iso3166Country.unitedKingdom;
@@ -75,7 +75,7 @@ print(country.tr(cyLoc));  // 'y Deyrnas Unedig'
 ### 2. High-Performance Fuzzy Search
 
 ```dart
-import 'package:saible_core/application/text_search_item.dart';
+import 'lib/application/text_search_item.dart';
 
 final search = TextSearch<String>([
   TextSearchItem.fromTerms('United Kingdom', ['united kingdom', 'GB', 'GBR', 'great britain']),
@@ -91,7 +91,7 @@ print(topMatches); // ['United Kingdom']
 ### 3. Date Manipulation Extensions
 
 ```dart
-import 'package:saible_core/application/date_utils.dart';
+import 'lib/application/date_utils.dart';
 
 final now = DateTime.now();
 final date = now.dateOnly(); // Strip time component
@@ -107,7 +107,7 @@ print(dates.max()); // nextWeek
 ```dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/saible_core.dart';
+import 'lib/saible_consulting_core.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

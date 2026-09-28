@@ -32,4 +32,4 @@ jobs:
         run: melos exec --dir-exists="test" -- flutter test --coverage
 
       - name: Verify pub.dev Package Validity (Dry-Run)
-        run: melos exec --scope="*field,saible_core" -- flutter pub publish --dry-run
+        run: melos exec --scope="*field,saible_consulting_core" -- flutter pub publish --dry-run

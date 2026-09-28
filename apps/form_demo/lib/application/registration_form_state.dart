@@ -1,7 +1,7 @@
 import 'package:form_demo/application/country_input_state.dart';
 import 'package:form_demo/application/date_input_state.dart';
 import 'package:form_demo/application/phone_number_input_state.dart';
-import 'package:saible_core/saible_core.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 final _first = DateTime(1900);
 

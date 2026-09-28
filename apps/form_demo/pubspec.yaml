@@ -37,7 +37,7 @@ dependencies:
   material_ui: ^1.4.0
   phone_number_form_field: ^0.0.1
   provider: ^6.1.5+1
-  saible_core: ^0.0.1
+  saible_consulting_core: ^0.0.1
 
 dev_dependencies:
   flutter_lints: ^6.0.0

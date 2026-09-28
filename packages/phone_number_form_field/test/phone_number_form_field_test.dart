@@ -4,9 +4,7 @@ import 'package:phone_number_form_field/application/phone_util.dart';
 import 'package:phone_number_form_field/domain/phone_number.dart';
 import 'package:phone_number_form_field/presentation/phone_number_form_field.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
-import 'package:saible_core/presentation/nation_tile.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 void main() {
   Widget buildTestWidget({

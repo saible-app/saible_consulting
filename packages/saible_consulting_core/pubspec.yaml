@@ -1,4 +1,4 @@
-name: saible_core
+name: saible_consulting_core
 description: "Shared components for Saible Consulting plugins, including a comprehensive country list"
 version: 0.0.1
 repository: https://github.com/saible-app/saible_consulting.git

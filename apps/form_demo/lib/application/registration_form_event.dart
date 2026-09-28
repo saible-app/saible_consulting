@@ -1,7 +1,7 @@
 import 'package:date_picker_form_field/date_picker_form_field.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:phone_number_form_field/domain/phone_number.dart';
-import 'package:saible_core/saible_core.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 /// Base class for events dispatched to registration form bloc.
 sealed class const RegistrationFormEvent() {

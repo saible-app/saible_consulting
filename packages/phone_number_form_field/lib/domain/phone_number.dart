@@ -1,6 +1,6 @@
 import 'package:dlibphonenumber/dlibphonenumber.dart';
 import 'package:phone_number_form_field/application/phone_util.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 /// Default two-letter ISO 3166-1 alpha-2 region code used when none is provided.
 const defaultRegionCode = 'GB';

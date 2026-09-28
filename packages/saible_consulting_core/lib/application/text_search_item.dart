@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
-import 'package:saible_core/application/jaro_winkler.dart';
+import 'package:saible_consulting_core/application/jaro_winkler.dart';
+
 
 /// A search term with an optional score penalty used in text matching.
 class TextSearchItemTerm(this.term, [this.scorePenalty = 0.0]) {

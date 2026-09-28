@@ -1,10 +1,10 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/application/text_search_item.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
-import 'package:saible_core/presentation/countries_provider.dart';
-import 'package:saible_core/presentation/nation_tile.dart';
+import 'package:saible_consulting_core/application/text_search_item.dart';
+import 'package:saible_consulting_core/domain/iso3166_countries.dart';
+import 'package:saible_consulting_core/l10n/app_localizations.dart';
+import 'package:saible_consulting_core/presentation/countries_provider.dart';
+import 'package:saible_consulting_core/presentation/nation_tile.dart';
 
 class const _CountryPicker({
   required this.onCountryPicked,
@@ -61,6 +61,7 @@ class _CountryPickerState() extends State<_CountryPicker> {
         onTap: () => controller.openView(),
         onChanged: (_) => controller.openView(),
         decoration: (widget.decoration ?? const InputDecoration()).copyWith(
+          errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
           suffixIcon: country == null
             ? const Icon(Icons.language)
             : Padding(

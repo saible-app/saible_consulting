@@ -37,12 +37,12 @@ An accessible, international phone number input field for Flutter applications f
 
 ## Getting Started
 
-Add `phone_number_form_field` and `saible_core` to your `pubspec.yaml`:
+Add `phone_number_form_field` and `saible_consulting_core` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
   phone_number_form_field: ^0.0.1
-  saible_core: ^0.0.1
+  saible_consulting_core: ^0.0.1
 ```
 
 Configure your `MaterialApp` with country localizations delegates:
@@ -50,7 +50,7 @@ Configure your `MaterialApp` with country localizations delegates:
 ```dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/saible_core.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 MaterialApp(
   supportedLocales: CountryLocalizations.supportedLocales,

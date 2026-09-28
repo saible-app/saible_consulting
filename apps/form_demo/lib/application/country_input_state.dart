@@ -1,5 +1,5 @@
 import 'package:formz/formz.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 /// Validation errors that can occur on a country selection input.
 enum CountryValidationError() {

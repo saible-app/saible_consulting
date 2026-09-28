@@ -12,7 +12,7 @@ import 'package:form_demo/presentation/language_menu.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:phone_number_form_field/presentation/phone_number_form_field.dart';
-import 'package:saible_core/saible_core.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 /// The main registration form screen of the demo application.
 ///
