@@ -178,6 +178,17 @@ void main() {
       await pumpDatePicker(tester, locale: usLocale, initialDate: DateTime(1999, 10, 31));
       verifyEditableText(tester, '10/31/1999');
     });
+
+    testWidgets('re-formats the current date when the locale changes from en-GB to de', (tester) async {
+      await pumpDatePicker(tester, initialDate: DateTime(2008, 9, 3));
+      verifyEditableText(tester, '03/09/2008');
+
+      // Switch the ambient locale from en-GB to German; the same field state
+      // is kept alive (same element tree position) so only dependencies
+      // re-resolve, and didChangeDependencies re-derives the display text.
+      await pumpDatePicker(tester, locale: const Locale('de', 'DE'), initialDate: DateTime(2008, 9, 3));
+      verifyEditableText(tester, '3.9.2008');
+    });
   });
 
   group('DatePickerFormField - Text Input Formatting Across Locales', () {
