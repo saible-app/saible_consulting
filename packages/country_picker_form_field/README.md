@@ -18,7 +18,7 @@ An accessible, high-performance country picker form field for Flutter applicatio
   - No asset bundles, custom fonts, or hundreds of SVG files: renders crisp country flag icons using system-native Unicode regional indicator flag emojis.
   - Works 100% offline with zero network latency.
 - **Enterprise-Grade Localization**:
-  - Built-in translations across 15+ global languages (English, French, German, Spanish, Welsh, Japanese, Chinese, Arabic, Russian, and more).
+  - Built-in translations across 39 global languages (English, French, German, Spanish, Welsh, Japanese, Chinese, Arabic, Russian, Korean, Turkish, Hindi, and more).
 - **Comprehensive Testability**:
   - Fully decoupled and deterministic, exporting stable testing keys (`countrySearchAnchorKey`, `countrySearchBarKey`) for clean widget test automation.
   - Maintained with over 99% automated test coverage.
@@ -29,7 +29,7 @@ An accessible, high-performance country picker form field for Flutter applicatio
 
 - **Full ISO 3166-1 Country Support**: Covers all 249 recognized countries and territories.
 - **Dynamic Fuzzy Search**: Instant, typo-tolerant search across names, codes, and aliases.
-- **Multi-Lingual Localization**: Displays localized country names matching the active Flutter app locale.
+- **Multi-Lingual Localization**: Displays localized country names matching the active Flutter app locale, with translations for all 39 supported languages.
 - **First-Class Form Integration**: Seamlessly works with `Form`, `Formz`, `InputDecoration`, and state management solutions (BLoC, Riverpod, Provider).
 - **Flag Badge Affordance**: Displays clean suffix/prefix flag emojis for the active selection.
 
@@ -45,22 +45,16 @@ dependencies:
   saible_consulting_core: ^0.0.1
 ```
 
-Ensure your `MaterialApp` is configured with localization delegates:
+Ensure your `MaterialApp` is configured with the `saible_consulting_core`
+localization delegates (no provider or lookup is required):
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 MaterialApp(
   supportedLocales: CountryLocalizations.supportedLocales,
   localizationsDelegates: CountryLocalizations.localizationsDelegates,
-  builder: (context, child) => Provider<CountryLocalizations>.value(
-    value: lookupCountryLocalizations(
-      Localizations.maybeLocaleOf(context) ?? const Locale('en', 'GB'),
-    ),
-    child: child,
-  ),
   home: const MyFormPage(),
 );
 ```

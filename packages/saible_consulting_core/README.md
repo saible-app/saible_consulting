@@ -9,7 +9,7 @@ Shared core domain models, high-performance fuzzy search, localization delegates
 - **Comprehensive, Embedded ISO 3166 Dataset**:
   - Full dataset covering all 249 ISO 3166-1 countries and territories (`Iso3166Country` enum) with ISO-2 alpha codes, ISO-3 codes, international calling codes, and native flag emojis.
   - Zero external network dependencies: all country metadata is bundled, type-safe, and instantly accessible offline.
-  - Deep multi-lingual localization across 15+ locales (English, Welsh, French, German, Spanish, Japanese, Chinese, Arabic, Russian, Hindi, Italian, Dutch, Polish, Portuguese, etc.).
+  - Deep multi-lingual localization across 39 languages (40 locales, including both `en` and `en-GB`): English, Welsh, French, German, Spanish, Japanese, Chinese, Arabic, Russian, Hindi, Italian, Dutch, Polish, Portuguese, Korean, Turkish, Swedish, Danish, Finnish, Norwegian Bokmål, Greek, Czech, Slovak, Hungarian, Romanian, Bulgarian, Ukrainian, Vietnamese, Thai, Indonesian, Malay, Persian, Hebrew, Urdu, Bengali, Tamil, Catalan, Serbian, Croatian.
 - **Mathematically Optimized In-Memory Search**:
   - **Jaro-Winkler with Provable Upper-Bound Pruning**: Computes similarity and distance with Winkler prefix scaling while utilizing a mathematical length bound (`similarityUpperBound`) to prune non-matching candidates before running costly $O(N \cdot M)$ string comparisons.
   - **Bounded Top-$k$ Selection (`fastSearch`)**: Retains only the best matching candidates with early termination, eliminating the need to score or sort full datasets on every keystroke.
@@ -44,7 +44,7 @@ dependencies:
 Import the package in your Dart code:
 
 ```dart
-import 'lib/saible_consulting_core.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 ```
 
 ---
@@ -54,28 +54,27 @@ import 'lib/saible_consulting_core.dart';
 ### 1. Working with Countries and Flag Emojis
 
 ```dart
-import 'lib/domain/iso3166_countries.dart';
-import 'lib/l10n/app_localizations.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 // Lookup by country enum
 const country = Iso3166Country.unitedKingdom;
-print(country.alpha2);     // 'GB'
-print(country.alpha3);     // 'GBR'
-print(country.phoneCode);  // 44
+print(country.alpha2);      // 'GB'
+print(country.alpha3);      // 'GBR'
+print(country.phoneCode);   // 44
 print(country.flagEmoji()); // '🇬🇧'
 
-// Localized translation
-final enLoc = lookupCountryLocalizations(const Locale('en', 'GB'));
-print(country.tr(enLoc));  // 'United Kingdom'
+// Localized translation, resolved synchronously from the ambient
+// BuildContext (i.e. the active locale of the enclosing MaterialApp)
+print(country.tr(context)); // 'United Kingdom', 'y Deyrnas Unedig', ...
 
-final cyLoc = lookupCountryLocalizations(const Locale('cy'));
-print(country.tr(cyLoc));  // 'y Deyrnas Unedig'
+// Search terms (name, codes, localized name, aliases) also take a context
+print(country.searchTerms(context)); // ['GB', 'GBR', 'United Kingdom', ...]
 ```
 
 ### 2. High-Performance Fuzzy Search
 
 ```dart
-import 'lib/application/text_search_item.dart';
+import 'package:saible_consulting_core/application/text_search_item.dart';
 
 final search = TextSearch<String>([
   TextSearchItem.fromTerms('United Kingdom', ['united kingdom', 'GB', 'GBR', 'great britain']),
@@ -91,7 +90,7 @@ print(topMatches); // ['United Kingdom']
 ### 3. Date Manipulation Extensions
 
 ```dart
-import 'lib/application/date_utils.dart';
+import 'package:saible_consulting_core/application/date_utils.dart';
 
 final now = DateTime.now();
 final date = now.dateOnly(); // Strip time component
@@ -102,32 +101,43 @@ final dates = [date, nextWeek, adultDate];
 print(dates.max()); // nextWeek
 ```
 
-### 4. Injecting Country Localization in Widgets
+### 4. Localization Setup for Widgets
+
+Country names resolve synchronously from the ambient `BuildContext`, so there is
+no provider, cache, or lookup call to wire up. Simply add the standard
+`saible_consulting_core` delegates and supported locales to your `MaterialApp`:
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'lib/saible_consulting_core.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       supportedLocales: CountryLocalizations.supportedLocales,
       localizationsDelegates: CountryLocalizations.localizationsDelegates,
-      builder: (context, child) => Provider<CountryLocalizations>.value(
-        value: lookupCountryLocalizations(
-          Localizations.maybeLocaleOf(context) ?? const Locale('en', 'GB'),
-        ),
-        child: child,
-      ),
-      home: const MyHomeScreen(),
+      home: MyHomeScreen(),
     );
   }
 }
 ```
+
+`Iso3166Country.tr(context)` (along with `searchTerms(context)` and
+`phoneSearchTerms(context)`) reads the active locale directly via
+`Localizations.maybeLocaleOf(context)`, so a locale change (e.g. through a
+language switcher) re-translates country names on the next rebuild with no extra
+plumbing. When no `Localizations` widget is present in the ancestor tree the
+lookup falls back to English (`en-GB`), which keeps naive usage and isolated
+tests safe.
+
+> **Note:** `lookupCountryLocalizations` throws for a locale outside
+> `CountryLocalizations.supportedLocales`. Listing `supportedLocales` on your
+> `MaterialApp` (as above) lets Flutter's locale resolution select the nearest
+> supported match (e.g. `pt_BR` → `pt`), so this is only reachable if you call
+> the lookup directly with an unsupported locale.
 
 ---
 

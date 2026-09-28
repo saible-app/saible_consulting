@@ -25,8 +25,9 @@ The application presents a user registration form implementing clean architectur
    - As-you-type formatting tailored to the selected country's conventions.
    - E.164 phone validation via Google `libphonenumber` bindings (`dlibphonenumber`).
 4. **Dynamic Language Switcher**:
-   - Seamlessly switch between English, French, German, Welsh, and Japanese on the fly.
+   - Seamlessly switch between English (UK), French, German, Welsh, English (US), and Japanese on the fly.
    - Fully translates form labels, hint formats, errors, buttons, and country names in real time.
+   - Country names draw on the 39-language `CountryLocalizations` catalogue in `saible_consulting_core`; no locale provider or lookup wiring is needed, as translations resolve directly from the active `BuildContext`.
 5. **State Management & Architecture**:
    - State managed with `flutter_bloc` (`RegistrationFormBloc`) and `formz` (`FormzInput` models for each field).
    - Reactive submit button enabled only when all fields satisfy validation rules.
@@ -98,6 +99,6 @@ apps/form_demo/lib/
 │   ├── language_menu.dart               # Language selection popup menu
 │   ├── registration_form.dart           # Form layout, inputs, and submission action
 │   └── theme.dart                       # Custom Saible design system & dark theme
-└── main.dart                            # Entrypoint & localization provider wiring
+└── main.dart                            # Entrypoint & localization delegate wiring
 ```
 

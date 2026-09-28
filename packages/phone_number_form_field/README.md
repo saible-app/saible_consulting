@@ -19,6 +19,8 @@ An accessible, international phone number input field for Flutter applications f
   - `e164` is non-null only when the number is genuinely valid and deliverable, making backend integrations (Twilio, AWS SNS, Firebase Auth, Stripe) immediate and reliable.
 - **Modern Material 3 Prefix Selector with Typo-Tolerant Search**:
   - The dial code selector uses a Material 3 `SearchAnchor` overlay that opens a fast, in-memory fuzzy search over country names, ISO codes, and dialing prefixes.
+- **Multi-Lingual Country Search**:
+  - Country names and search aliases are translated across 39 global languages (English, French, German, Spanish, Welsh, Japanese, Chinese, Arabic, Russian, Korean, Turkish, Hindi, and more), resolved synchronously from the active `Localizations` locale.
 - **Lightweight, Zero-Asset Design**:
   - Renders native Unicode flag emojis without bundling hundreds of heavy vector or raster flag image files.
   - Fully offline, self-contained, and tested with >99% code coverage.
@@ -27,7 +29,7 @@ An accessible, international phone number input field for Flutter applications f
 
 ## Features
 
-- **Country Calling-Code Selector**: Tap prefix to search all 249 ISO countries by name, code, or dial prefix.
+- **Country Calling-Code Selector**: Tap prefix to search all 249 ISO countries by localized name, code, or dial prefix.
 - **As-You-Type Phone Formatting**: Automatic national phone structure formatting.
 - **Trunk Code Normalization**: Automatically strips redundant domestic trunk zeros.
 - **E.164 Compliance Validation**: Instant access to formatted E.164 string and boolean validity checks (`state.isValid`).
@@ -45,22 +47,16 @@ dependencies:
   saible_consulting_core: ^0.0.1
 ```
 
-Configure your `MaterialApp` with country localizations delegates:
+Configure your `MaterialApp` with the `saible_consulting_core` localization
+delegates (no provider or lookup is required):
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 MaterialApp(
   supportedLocales: CountryLocalizations.supportedLocales,
   localizationsDelegates: CountryLocalizations.localizationsDelegates,
-  builder: (context, child) => Provider<CountryLocalizations>.value(
-    value: lookupCountryLocalizations(
-      Localizations.maybeLocaleOf(context) ?? const Locale('en', 'GB'),
-    ),
-    child: child,
-  ),
   home: const MyPhoneFormPage(),
 );
 ```
