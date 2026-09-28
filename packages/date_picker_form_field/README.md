@@ -40,8 +40,14 @@ Add `date_picker_form_field` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  date_picker_form_field: ^0.0.1
+  date_picker_form_field: ^0.1.0
 ```
+
+> **UI library:** this package is built on `material_ui`, the official Flutter
+> Material library, and its API accepts `material_ui` types such as
+> `InputDecoration`. Import `package:material_ui/material_ui.dart` in code that
+> constructs those arguments: it exports distinct types that are not assignable
+> to or from the copies exported by `package:flutter/material.dart`.
 
 Initialize date formatting in your application `main()` if supporting multiple locales:
 
@@ -62,7 +68,7 @@ void main() async {
 ### Basic Example
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:date_picker_form_field/date_picker_form_field.dart';
 
 class DateOfBirthExample extends StatefulWidget {
@@ -104,7 +110,7 @@ class _DateOfBirthExampleState extends State<DateOfBirthExample> {
 You can also use the formatter independently on any standard Flutter `TextFormField`:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:date_picker_form_field/presentation/date_input_formatter.dart';
 
 final formatter = DateInputFormatter(locale: 'en_GB');
@@ -143,7 +149,7 @@ await tester.pumpAndSettle();
 
 ## Additional Information
 
-- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting.git)
+- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting)
 - Issue tracker: File bugs or feature requests via GitHub Issues.
 - License: See [LICENSE](LICENSE) for details.
 

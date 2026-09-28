@@ -41,15 +41,21 @@ Add `country_picker_form_field` and `saible_consulting_core` to your `pubspec.ya
 
 ```yaml
 dependencies:
-  country_picker_form_field: ^0.0.1
-  saible_consulting_core: ^0.0.1
+  country_picker_form_field: ^0.1.0
+  saible_consulting_core: ^0.1.0
 ```
+
+> **UI library:** this package is built on `material_ui`, the official Flutter
+> Material library, and its API accepts `material_ui` types such as
+> `InputDecoration`. Import `package:material_ui/material_ui.dart` in code that
+> constructs those arguments: it exports distinct types that are not assignable
+> to or from the copies exported by `package:flutter/material.dart`.
 
 Ensure your `MaterialApp` is configured with the `saible_consulting_core`
 localization delegates (no provider or lookup is required):
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 MaterialApp(
@@ -66,7 +72,7 @@ MaterialApp(
 ### Basic Example
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:country_picker_form_field/country_picker_form_field.dart';
 import 'package:saible_consulting_core/domain/iso3166_countries.dart';
 
@@ -137,7 +143,7 @@ await tester.pumpAndSettle();
 
 ## Additional Information
 
-- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting.git)
+- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting)
 - Issue tracker: File bugs or feature requests via GitHub Issues.
 - License: See [LICENSE](LICENSE) for details.
 

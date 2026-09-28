@@ -38,7 +38,7 @@ Add `saible_consulting_core` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  saible_consulting_core: ^0.0.1
+  saible_consulting_core: ^0.1.0
 ```
 
 Import the package in your Dart code:
@@ -46,6 +46,12 @@ Import the package in your Dart code:
 ```dart
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 ```
+
+> **UI library:** the widgets in this package are built on `material_ui`, the
+> official Flutter Material library, and their APIs accept `material_ui` types
+> such as `InputDecoration`. Import `package:material_ui/material_ui.dart` in
+> code that constructs those arguments: it exports distinct types that are not
+> assignable to or from the copies exported by `package:flutter/material.dart`.
 
 ---
 
@@ -108,7 +114,7 @@ no provider, cache, or lookup call to wire up. Simply add the standard
 `saible_consulting_core` delegates and supported locales to your `MaterialApp`:
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 class MyApp extends StatelessWidget {
@@ -143,7 +149,7 @@ tests safe.
 
 ## Additional Information
 
-- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting.git)
+- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting)
 - Issue tracker: File bugs or feature requests via GitHub Issues.
 - License: See [LICENSE](LICENSE) for details.
 

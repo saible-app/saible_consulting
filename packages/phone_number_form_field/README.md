@@ -43,15 +43,21 @@ Add `phone_number_form_field` and `saible_consulting_core` to your `pubspec.yaml
 
 ```yaml
 dependencies:
-  phone_number_form_field: ^0.0.1
-  saible_consulting_core: ^0.0.1
+  phone_number_form_field: ^0.1.0
+  saible_consulting_core: ^0.1.0
 ```
+
+> **UI library:** this package is built on `material_ui`, the official Flutter
+> Material library, and its API accepts `material_ui` types such as
+> `InputDecoration`. Import `package:material_ui/material_ui.dart` in code that
+> constructs those arguments: it exports distinct types that are not assignable
+> to or from the copies exported by `package:flutter/material.dart`.
 
 Configure your `MaterialApp` with the `saible_consulting_core` localization
 delegates (no provider or lookup is required):
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 MaterialApp(
@@ -68,7 +74,7 @@ MaterialApp(
 ### Basic Example
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:phone_number_form_field/phone_number_form_field.dart';
 
 class PhoneInputExample extends StatefulWidget {
@@ -150,7 +156,7 @@ await tester.pumpAndSettle();
 
 ## Additional Information
 
-- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting.git)
+- Source code: [GitHub Repository](https://github.com/saible-app/saible_consulting)
 - Issue tracker: File bugs or feature requests via GitHub Issues.
 - License: See [LICENSE](LICENSE) for details.
 

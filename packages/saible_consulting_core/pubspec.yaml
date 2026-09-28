@@ -1,15 +1,21 @@
 name: saible_consulting_core
 description: "Shared components for Saible Consulting plugins, including a comprehensive country list"
-version: 0.0.1
-repository: https://github.com/saible-app/saible_consulting.git
+version: 0.1.0
+repository: https://github.com/saible-app/saible_consulting
+issue_tracker: https://github.com/saible-app/saible_consulting/issues
+
+topics:
+  - flutter
+  - countries
+  - localization
+  - search
+  - date
 
 environment:
   sdk: ^3.13.2
-  flutter: ">=1.17.0"
+  flutter: ">=3.47.0"
 
 dependencies:
-  collection: ^1.19.1
-  dlibphonenumber: ^1.1.71
   flutter:
     sdk: flutter
   flutter_localizations:
