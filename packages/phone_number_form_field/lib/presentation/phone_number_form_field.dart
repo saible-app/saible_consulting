@@ -1,44 +1,51 @@
+// Copyright 2026 Saible Ltd
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'package:collection/collection.dart';
-import 'package:dlibphonenumber/dlibphonenumber.dart';
+import 'package:dlibphonenumber/dlibphonenumber.dart' hide Locale;
+import 'package:flutter/scheduler.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:phone_number_form_field/application/phone_util.dart';
 import 'package:phone_number_form_field/domain/phone_number.dart';
 import 'package:phone_number_form_field/presentation/as_you_type_phone_number_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:saible_core/application/text_search_item.dart';
-import 'package:saible_core/domain/iso3166_countries.dart';
-import 'package:saible_core/l10n/app_localizations.dart';
-import 'package:saible_core/presentation/countries_provider.dart';
-import 'package:saible_core/presentation/nation_tile.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 String? _getE164Number(String rawValue, Iso3166Country country) {
   if (rawValue.isEmpty) return null;
-  
-  final phoneUtil = PhoneNumberUtil.instance;
   try {
     final PhoneNumber phoneNumber = phoneUtil.parse(rawValue, country.alpha2);
     if (phoneUtil.isValidNumber(phoneNumber)) {
       return phoneUtil.format(phoneNumber, PhoneNumberFormat.e164);
     }
   } catch (_) {
-    // Return null if parsing fails or number is invalid/incomplete
+    return null;
   }
+  
   return null;
 }
 
 class const _PhoneNumberField({
   this.focusNode,
-  this.labelText,
-  this.errorText,
-  this.errorMaxLines,
+  this.decoration,
   this.initialValue,
   this.onPhoneNumberChanged,
 }) extends StatefulWidget {
   final FocusNode? focusNode;
-  final String? labelText;
-  final String? errorText;
-  final int? errorMaxLines;
-  final ValueChanged<PhoneNumberInputs>? onPhoneNumberChanged;
-  final PhoneNumberInputs? initialValue;
+  final InputDecoration? decoration;
+  final ValueChanged<PhoneNumberState>? onPhoneNumberChanged;
+  final PhoneNumberState? initialValue;
 
   @override
   State<_PhoneNumberField> createState() => _PhoneNumberFieldState();
@@ -47,6 +54,7 @@ class const _PhoneNumberField({
 class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
   final TextEditingController _controller = TextEditingController();
   Iso3166Country _selectedCountry = Iso3166Country.unitedKingdom;
+  Locale? _lastLocale;
 
   @override
   void initState() {
@@ -55,13 +63,35 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
     if (initialValue != null && initialValue.isNotEmpty) {
       final phoneNumber = phoneUtil.parse(initialValue.e164, null);
       final regionCode = phoneUtil.getRegionCodeForNumber(phoneNumber)?.toLowerCase();
-      if (regionCode == null) return;
       final country = Iso3166Country.values.firstWhereOrNull((c) => c.alpha2.toLowerCase() == regionCode);
       if (country != null) {
         _selectedCountry = country;
         _controller.text = phoneUtil.getNationalSignificantNumber(phoneNumber);
       }
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.maybeLocaleOf(context);
+    if (locale == _lastLocale) return;
+    _lastLocale = locale;
+    // Force a rebuild when the locale changes, so that the suggestions builder is always up to
+    // date with the current language
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _lastLocale = locale;
+      });
+      if (_controller.text.isEmpty) {
+        final country = Iso3166Country.values.firstWhereOrNull((c) => c.alpha2 == locale?.countryCode);
+        if (country != null) {
+          setState(() {
+            _selectedCountry = country;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -88,7 +118,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
           onFormatFinished: (value) {
             final String? e164Result = _getE164Number(value, _selectedCountry);
             onPhoneNumberChanged?.call(
-              PhoneNumberInputs(
+              PhoneNumberState(
                 rawText: value,
                 e164: e164Result,
                 regionCode: '+${_selectedCountry.phoneCode}',
@@ -97,11 +127,9 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
           },
         ),
       ],
-      decoration: InputDecoration(
-        labelText: widget.labelText,
+      decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         hintText: _selectedCountry.examplePhoneNumberWithoutTrunk(),
-        errorText: widget.errorText,
-        errorMaxLines: widget.errorMaxLines,
+        errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
         prefixIcon: SearchAnchor(
           key: PhoneNumberFormField.countrySearchAnchorKey,
           shrinkWrap: true,
@@ -125,7 +153,6 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
           ),
           suggestionsBuilder: (context, controller) {
             final results = textSearch.fastSearch(controller.text, limit: 12);
-            final locale = context.read<CountryLocalizations>();
             return [
               for (final result in results)
                 PhoneCodeTile(
@@ -138,10 +165,10 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
                       });
                       _controller.text = '';
                       widget.onPhoneNumberChanged?.call(
-                        PhoneNumberInputs(rawText: '', e164: null, regionCode: '+${result.phoneCode}'),
+                        PhoneNumberState(rawText: '', e164: null, regionCode: '+${result.phoneCode}'),
                       );
                     }
-                    controller.closeView(result.tr(locale));
+                    controller.closeView(result.tr(context));
                   },
                 ),
             ];
@@ -152,33 +179,44 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
   }
 }
 
+/// A form field widget for inputting international phone numbers with country code selection and validation.
 class const PhoneNumberFormField({
   super.key,
   this.focusNode,
-  this.labelText,
-  this.errorText,
-  this.errorMaxLines,
   this.initialValue,
+  this.decoration,
   this.onPhoneNumberChanged,
 }) extends StatelessWidget {
+  /// Creates a [PhoneNumberFormField].
+  this;
+
+  /// The [Key] for the country search anchor prefix icon button.
   static const Key countrySearchAnchorKey = Key('phoneNumberTextField_searchAnchor');
+
+  /// The [Key] for the phone number text input search/entry field.
   static const Key countrySearchBarKey = Key('phoneNumberTextField_searchBar');
+
+  /// Generates a [Key] for a country suggestion tile based on the country's alpha2 code.
   static Key countrySuggestionKey(Iso3166Country country) => Key(
     'phoneNumberTextField_country_${country.alpha2}'
   );
+
+  /// An optional [FocusNode] to control the focus of the text input.
   final FocusNode? focusNode;
-  final String? labelText;
-  final String? errorText;
-  final int? errorMaxLines;
-  final ValueChanged<PhoneNumberInputs>? onPhoneNumberChanged;
-  final PhoneNumberInputs? initialValue;
+
+  /// The decoration applied to the underlying [TextFormField].
+  final InputDecoration? decoration;
+
+  /// Callback invoked when the phone number input changes or country selection changes.
+  final ValueChanged<PhoneNumberState>? onPhoneNumberChanged;
+
+  /// An optional initial value to populate the field with.
+  final PhoneNumberState? initialValue;
   @override
   Widget build(BuildContext context) => CountriesProvider(child: _PhoneNumberField(
     focusNode: focusNode,
-    labelText: labelText,
-    errorText: errorText,
-    errorMaxLines: errorMaxLines,
     initialValue: initialValue,
+    decoration: decoration,
     onPhoneNumberChanged: onPhoneNumberChanged,
   ));
 }

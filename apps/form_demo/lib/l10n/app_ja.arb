@@ -1,0 +1,31 @@
+{
+  "@@locale": "ja",
+  "appTitle": "登録デモ",
+  "privacyNotice": "プライバシーに関するお知らせ：これはデモアプリです。ここに入力された情報は、保存、送信、共有されません。",
+  "dateOfBirthErrorRequired": "生年月日は必須です。",
+  "dateOfBirthErrorInvalid": "有効な生年月日を入力してください。",
+  "dateOfBirthErrorTooEarly": "生年月日は{min}以降である必要があります（フォームを送信するには18歳以上であることを申告する必要があります）。",
+  "@dateOfBirthErrorTooEarly": {
+    "placeholders": {
+      "min": { "type": "String", "example": "01/01/1899" }
+    }
+  },
+  "dateOfBirthErrorTooLate": "フォームを有効にするには18歳以上であることを申告する必要があります。{max}以前の日付を選択してください。",
+  "@dateOfBirthErrorTooLate": {
+    "placeholders": {
+      "max": { "type": "String", "example": "01/01/2020" }
+    }
+  },
+  "dateOfBirthLabel": "生年月日",
+  "nationalityErrorRequired": "国籍は必須です。",
+  "nationalityLabel": "国籍",
+  "phoneNumberErrorRequired": "電話番号は必須です。",
+  "phoneNumberErrorInvalid": "有効な電話番号を入力してください。",
+  "phoneNumberLabel": "電話番号",
+  "submitButton": "デモフォームを送信",
+  "formValidated": "フォームが検証されました！",
+  "dateOfBirthPrefix": "生年月日",
+  "nationalityPrefix": "国籍",
+  "phonePrefix": "電話",
+  "languageMenuTooltip": "言語"
+}

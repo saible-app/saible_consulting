@@ -156,6 +156,7 @@ linter:
     - prefer_typing_uninitialized_variables
     - prefer_void_to_null
     - provide_deprecation_message
+    - public_member_api_docs
     - recursive_getters
     - secure_pubspec_urls
     - sized_box_for_whitespace

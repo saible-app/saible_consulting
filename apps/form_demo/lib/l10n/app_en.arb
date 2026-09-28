@@ -1,0 +1,31 @@
+{
+  "@@locale": "en",
+  "appTitle": "Registration Demo",
+  "privacyNotice": "Privacy Notice: This is a demonstration app. None of the information entered here is stored, transmitted, or shared.",
+  "dateOfBirthErrorRequired": "Your date of birth is required.",
+  "dateOfBirthErrorInvalid": "A valid date of birth is required.",
+  "dateOfBirthErrorTooEarly": "Your date of birth cannot precede {min} (you have to claim to be over 18 to submit the form).",
+  "@dateOfBirthErrorTooEarly": {
+    "placeholders": {
+      "min": { "type": "String", "example": "01/01/1899" }
+    }
+  },
+  "dateOfBirthErrorTooLate": "You must claim to be over 18 to enable the form. Choose a date before {max}.",
+  "@dateOfBirthErrorTooLate": {
+    "placeholders": {
+      "max": { "type": "String", "example": "01/01/2020" }
+    }
+  },
+  "dateOfBirthLabel": "Date of Birth",
+  "nationalityErrorRequired": "Your nationality is required.",
+  "nationalityLabel": "Nationality",
+  "phoneNumberErrorRequired": "Your phone number is required.",
+  "phoneNumberErrorInvalid": "A valid phone number is required.",
+  "phoneNumberLabel": "Phone Number",
+  "submitButton": "Submit Demo Form",
+  "formValidated": "Form Validated!",
+  "dateOfBirthPrefix": "DoB",
+  "nationalityPrefix": "Nationality",
+  "phonePrefix": "Phone",
+  "languageMenuTooltip": "Language"
+}

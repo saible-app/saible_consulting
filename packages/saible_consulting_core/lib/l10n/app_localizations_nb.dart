@@ -1,0 +1,758 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Norwegian Bokmål (`nb`).
+class CountryLocalizationsNb extends CountryLocalizations {
+  CountryLocalizationsNb([String locale = 'nb']) : super(locale);
+
+  @override
+  String get country_AF => 'Afghanistan';
+
+  @override
+  String get country_AX => 'Åland';
+
+  @override
+  String get country_AL => 'Albania';
+
+  @override
+  String get country_DZ => 'Algerie';
+
+  @override
+  String get country_AS => 'Amerikansk Samoa';
+
+  @override
+  String get country_AD => 'Andorra';
+
+  @override
+  String get country_AO => 'Angola';
+
+  @override
+  String get country_AI => 'Anguilla';
+
+  @override
+  String get country_AQ => 'Antarktis';
+
+  @override
+  String get country_AG => 'Antigua og Barbuda';
+
+  @override
+  String get country_AR => 'Argentina';
+
+  @override
+  String get country_AM => 'Armenia';
+
+  @override
+  String get country_AW => 'Aruba';
+
+  @override
+  String get country_AU => 'Australia';
+
+  @override
+  String get country_AT => 'Østerrike';
+
+  @override
+  String get country_AZ => 'Aserbajdsjan';
+
+  @override
+  String get country_BS => 'Bahamas';
+
+  @override
+  String get country_BH => 'Bahrain';
+
+  @override
+  String get country_BD => 'Bangladesh';
+
+  @override
+  String get country_BB => 'Barbados';
+
+  @override
+  String get country_BY => 'Belarus';
+
+  @override
+  String get country_BE => 'Belgia';
+
+  @override
+  String get country_BZ => 'Belize';
+
+  @override
+  String get country_BJ => 'Benin';
+
+  @override
+  String get country_BM => 'Bermuda';
+
+  @override
+  String get country_BT => 'Bhutan';
+
+  @override
+  String get country_BO => 'Bolivia';
+
+  @override
+  String get country_BQ => 'Karibisk Nederland';
+
+  @override
+  String get country_BA => 'Bosnia-Hercegovina';
+
+  @override
+  String get country_BW => 'Botswana';
+
+  @override
+  String get country_BV => 'Bouvetøya';
+
+  @override
+  String get country_BR => 'Brasil';
+
+  @override
+  String get country_IO => 'Det britiske territoriet i Indiahavet';
+
+  @override
+  String get country_BN => 'Brunei';
+
+  @override
+  String get country_BG => 'Bulgaria';
+
+  @override
+  String get country_BF => 'Burkina Faso';
+
+  @override
+  String get country_BI => 'Burundi';
+
+  @override
+  String get country_CV => 'Kapp Verde';
+
+  @override
+  String get country_KH => 'Kambodsja';
+
+  @override
+  String get country_CM => 'Kamerun';
+
+  @override
+  String get country_CA => 'Canada';
+
+  @override
+  String get country_KY => 'Caymanøyene';
+
+  @override
+  String get country_CF => 'Den sentralafrikanske republikk';
+
+  @override
+  String get country_TD => 'Tsjad';
+
+  @override
+  String get country_CL => 'Chile';
+
+  @override
+  String get country_CN => 'Kina';
+
+  @override
+  String get country_CX => 'Christmasøya';
+
+  @override
+  String get country_CC => 'Kokosøyene';
+
+  @override
+  String get country_CO => 'Colombia';
+
+  @override
+  String get country_KM => 'Komorene';
+
+  @override
+  String get country_CD => 'Kongo';
+
+  @override
+  String get country_CG => 'Kongo-Brazzaville';
+
+  @override
+  String get country_CK => 'Cookøyene';
+
+  @override
+  String get country_CR => 'Costa Rica';
+
+  @override
+  String get country_CI => 'Elfenbenskysten';
+
+  @override
+  String get country_HR => 'Kroatia';
+
+  @override
+  String get country_CU => 'Cuba';
+
+  @override
+  String get country_CW => 'Curaçao';
+
+  @override
+  String get country_CY => 'Kypros';
+
+  @override
+  String get country_CZ => 'Tsjekkia';
+
+  @override
+  String get country_DK => 'Danmark';
+
+  @override
+  String get country_DJ => 'Djibouti';
+
+  @override
+  String get country_DM => 'Dominica';
+
+  @override
+  String get country_DO => 'Den dominikanske republikk';
+
+  @override
+  String get country_EC => 'Ecuador';
+
+  @override
+  String get country_EG => 'Egypt';
+
+  @override
+  String get country_SV => 'El Salvador';
+
+  @override
+  String get country_GQ => 'Ekvatorial-Guinea';
+
+  @override
+  String get country_ER => 'Eritrea';
+
+  @override
+  String get country_EE => 'Estland';
+
+  @override
+  String get country_SZ => 'Eswatini';
+
+  @override
+  String get country_ET => 'Etiopia';
+
+  @override
+  String get country_FK => 'Falklandsøyene';
+
+  @override
+  String get country_FO => 'Færøyene';
+
+  @override
+  String get country_FJ => 'Fiji';
+
+  @override
+  String get country_FI => 'Finland';
+
+  @override
+  String get country_FR => 'Frankrike';
+
+  @override
+  String get country_GF => 'Fransk Guyana';
+
+  @override
+  String get country_PF => 'Fransk Polynesia';
+
+  @override
+  String get country_TF => 'De franske sørterritorier';
+
+  @override
+  String get country_GA => 'Gabon';
+
+  @override
+  String get country_GM => 'Gambia';
+
+  @override
+  String get country_GE => 'Georgia';
+
+  @override
+  String get country_DE => 'Tyskland';
+
+  @override
+  String get country_GH => 'Ghana';
+
+  @override
+  String get country_GI => 'Gibraltar';
+
+  @override
+  String get country_GR => 'Hellas';
+
+  @override
+  String get country_GL => 'Grønland';
+
+  @override
+  String get country_GD => 'Grenada';
+
+  @override
+  String get country_GP => 'Guadeloupe';
+
+  @override
+  String get country_GU => 'Guam';
+
+  @override
+  String get country_GT => 'Guatemala';
+
+  @override
+  String get country_GG => 'Guernsey';
+
+  @override
+  String get country_GN => 'Guinea';
+
+  @override
+  String get country_GW => 'Guinea-Bissau';
+
+  @override
+  String get country_GY => 'Guyana';
+
+  @override
+  String get country_HT => 'Haiti';
+
+  @override
+  String get country_HM => 'Heard- og McDonaldøyene';
+
+  @override
+  String get country_VA => 'Vatikanstaten';
+
+  @override
+  String get country_HN => 'Honduras';
+
+  @override
+  String get country_HK => 'Hongkong SAR Kina';
+
+  @override
+  String get country_HU => 'Ungarn';
+
+  @override
+  String get country_IS => 'Island';
+
+  @override
+  String get country_IN => 'India';
+
+  @override
+  String get country_ID => 'Indonesia';
+
+  @override
+  String get country_IR => 'Iran';
+
+  @override
+  String get country_IQ => 'Irak';
+
+  @override
+  String get country_IE => 'Irland';
+
+  @override
+  String get country_IM => 'Man';
+
+  @override
+  String get country_IL => 'Israel';
+
+  @override
+  String get country_IT => 'Italia';
+
+  @override
+  String get country_JM => 'Jamaica';
+
+  @override
+  String get country_JP => 'Japan';
+
+  @override
+  String get country_JE => 'Jersey';
+
+  @override
+  String get country_JO => 'Jordan';
+
+  @override
+  String get country_KZ => 'Kasakhstan';
+
+  @override
+  String get country_KE => 'Kenya';
+
+  @override
+  String get country_KI => 'Kiribati';
+
+  @override
+  String get country_KP => 'Nord-Korea';
+
+  @override
+  String get country_KR => 'Sør-Korea';
+
+  @override
+  String get country_KW => 'Kuwait';
+
+  @override
+  String get country_KG => 'Kirgisistan';
+
+  @override
+  String get country_LA => 'Laos';
+
+  @override
+  String get country_LV => 'Latvia';
+
+  @override
+  String get country_LB => 'Libanon';
+
+  @override
+  String get country_LS => 'Lesotho';
+
+  @override
+  String get country_LR => 'Liberia';
+
+  @override
+  String get country_LY => 'Libya';
+
+  @override
+  String get country_LI => 'Liechtenstein';
+
+  @override
+  String get country_LT => 'Litauen';
+
+  @override
+  String get country_LU => 'Luxemburg';
+
+  @override
+  String get country_MO => 'Macao SAR Kina';
+
+  @override
+  String get country_MG => 'Madagaskar';
+
+  @override
+  String get country_MW => 'Malawi';
+
+  @override
+  String get country_MY => 'Malaysia';
+
+  @override
+  String get country_MV => 'Maldivene';
+
+  @override
+  String get country_ML => 'Mali';
+
+  @override
+  String get country_MT => 'Malta';
+
+  @override
+  String get country_MH => 'Marshalløyene';
+
+  @override
+  String get country_MQ => 'Martinique';
+
+  @override
+  String get country_MR => 'Mauritania';
+
+  @override
+  String get country_MU => 'Mauritius';
+
+  @override
+  String get country_YT => 'Mayotte';
+
+  @override
+  String get country_MX => 'Mexico';
+
+  @override
+  String get country_FM => 'Mikronesiaføderasjonen';
+
+  @override
+  String get country_MD => 'Moldova';
+
+  @override
+  String get country_MC => 'Monaco';
+
+  @override
+  String get country_MN => 'Mongolia';
+
+  @override
+  String get country_ME => 'Montenegro';
+
+  @override
+  String get country_MS => 'Montserrat';
+
+  @override
+  String get country_MA => 'Marokko';
+
+  @override
+  String get country_MZ => 'Mosambik';
+
+  @override
+  String get country_MM => 'Myanmar (Burma)';
+
+  @override
+  String get country_NA => 'Namibia';
+
+  @override
+  String get country_NR => 'Nauru';
+
+  @override
+  String get country_NP => 'Nepal';
+
+  @override
+  String get country_NL => 'Nederland';
+
+  @override
+  String get country_NC => 'Ny-Caledonia';
+
+  @override
+  String get country_NZ => 'New Zealand';
+
+  @override
+  String get country_NI => 'Nicaragua';
+
+  @override
+  String get country_NE => 'Niger';
+
+  @override
+  String get country_NG => 'Nigeria';
+
+  @override
+  String get country_NU => 'Niue';
+
+  @override
+  String get country_NF => 'Norfolkøya';
+
+  @override
+  String get country_MK => 'Nord-Makedonia';
+
+  @override
+  String get country_MP => 'Nord-Marianene';
+
+  @override
+  String get country_NO => 'Norge';
+
+  @override
+  String get country_OM => 'Oman';
+
+  @override
+  String get country_PK => 'Pakistan';
+
+  @override
+  String get country_PW => 'Palau';
+
+  @override
+  String get country_PS => 'Det palestinske området';
+
+  @override
+  String get country_PA => 'Panama';
+
+  @override
+  String get country_PG => 'Papua Ny-Guinea';
+
+  @override
+  String get country_PY => 'Paraguay';
+
+  @override
+  String get country_PE => 'Peru';
+
+  @override
+  String get country_PH => 'Filippinene';
+
+  @override
+  String get country_PN => 'Pitcairnøyene';
+
+  @override
+  String get country_PL => 'Polen';
+
+  @override
+  String get country_PT => 'Portugal';
+
+  @override
+  String get country_PR => 'Puerto Rico';
+
+  @override
+  String get country_QA => 'Qatar';
+
+  @override
+  String get country_RE => 'Réunion';
+
+  @override
+  String get country_RO => 'Romania';
+
+  @override
+  String get country_RU => 'Russland';
+
+  @override
+  String get country_RW => 'Rwanda';
+
+  @override
+  String get country_BL => 'Saint-Barthélemy';
+
+  @override
+  String get country_SH => 'St. Helena';
+
+  @override
+  String get country_KN => 'Saint Kitts og Nevis';
+
+  @override
+  String get country_LC => 'St. Lucia';
+
+  @override
+  String get country_MF => 'Saint-Martin';
+
+  @override
+  String get country_PM => 'Saint-Pierre-et-Miquelon';
+
+  @override
+  String get country_VC => 'St. Vincent og Grenadinene';
+
+  @override
+  String get country_WS => 'Samoa';
+
+  @override
+  String get country_SM => 'San Marino';
+
+  @override
+  String get country_ST => 'São Tomé og Príncipe';
+
+  @override
+  String get country_SA => 'Saudi-Arabia';
+
+  @override
+  String get country_SN => 'Senegal';
+
+  @override
+  String get country_RS => 'Serbia';
+
+  @override
+  String get country_SC => 'Seychellene';
+
+  @override
+  String get country_SL => 'Sierra Leone';
+
+  @override
+  String get country_SG => 'Singapore';
+
+  @override
+  String get country_SX => 'Sint Maarten';
+
+  @override
+  String get country_SK => 'Slovakia';
+
+  @override
+  String get country_SI => 'Slovenia';
+
+  @override
+  String get country_SB => 'Salomonøyene';
+
+  @override
+  String get country_SO => 'Somalia';
+
+  @override
+  String get country_ZA => 'Sør-Afrika';
+
+  @override
+  String get country_GS => 'Sør-Georgia og Sør-Sandwichøyene';
+
+  @override
+  String get country_SS => 'Sør-Sudan';
+
+  @override
+  String get country_ES => 'Spania';
+
+  @override
+  String get country_LK => 'Sri Lanka';
+
+  @override
+  String get country_SD => 'Sudan';
+
+  @override
+  String get country_SR => 'Surinam';
+
+  @override
+  String get country_SJ => 'Svalbard og Jan Mayen';
+
+  @override
+  String get country_SE => 'Sverige';
+
+  @override
+  String get country_CH => 'Sveits';
+
+  @override
+  String get country_SY => 'Syria';
+
+  @override
+  String get country_TW => 'Taiwan';
+
+  @override
+  String get country_TJ => 'Tadsjikistan';
+
+  @override
+  String get country_TZ => 'Tanzania';
+
+  @override
+  String get country_TH => 'Thailand';
+
+  @override
+  String get country_TL => 'Øst-Timor';
+
+  @override
+  String get country_TG => 'Togo';
+
+  @override
+  String get country_TK => 'Tokelau';
+
+  @override
+  String get country_TO => 'Tonga';
+
+  @override
+  String get country_TT => 'Trinidad og Tobago';
+
+  @override
+  String get country_TN => 'Tunisia';
+
+  @override
+  String get country_TR => 'Tyrkia';
+
+  @override
+  String get country_TM => 'Turkmenistan';
+
+  @override
+  String get country_TC => 'Turks- og Caicosøyene';
+
+  @override
+  String get country_TV => 'Tuvalu';
+
+  @override
+  String get country_UG => 'Uganda';
+
+  @override
+  String get country_UA => 'Ukraina';
+
+  @override
+  String get country_AE => 'De forente arabiske emirater';
+
+  @override
+  String get country_GB => 'Storbritannia';
+
+  @override
+  String get country_US => 'USA';
+
+  @override
+  String get country_UM => 'USAs ytre øyer';
+
+  @override
+  String get country_UY => 'Uruguay';
+
+  @override
+  String get country_UZ => 'Usbekistan';
+
+  @override
+  String get country_VU => 'Vanuatu';
+
+  @override
+  String get country_VE => 'Venezuela';
+
+  @override
+  String get country_VN => 'Vietnam';
+
+  @override
+  String get country_VG => 'De britiske jomfruøyene';
+
+  @override
+  String get country_VI => 'De amerikanske jomfruøyene';
+
+  @override
+  String get country_WF => 'Wallis og Futuna';
+
+  @override
+  String get country_EH => 'Vest-Sahara';
+
+  @override
+  String get country_YE => 'Jemen';
+
+  @override
+  String get country_ZM => 'Zambia';
+
+  @override
+  String get country_ZW => 'Zimbabwe';
+}
