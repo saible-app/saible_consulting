@@ -30,13 +30,12 @@ class const _Provider({required this.child}) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = context.watch<CountryLocalizations>();
-    final countries = [...Iso3166Country.values]..sort((x, y) => x.tr(locale).compareTo(y.tr(locale)));
+    final countries = [...Iso3166Country.values]..sort((x, y) => x.tr(context).compareTo(y.tr(context)));
     return Provider<Countries>.value(
       value: (
         countries: countries,
-        searchTerms: countries.map((e) => TextSearchItem.fromTerms(e, e.searchTerms(locale))).toList(),
-        phoneSearchTerms: countries.map((e) => TextSearchItem.fromTerms(e, e.phoneSearchTerms(locale))).toList(),
+        searchTerms: countries.map((e) => TextSearchItem.fromTerms(e, e.searchTerms(context))).toList(),
+        phoneSearchTerms: countries.map((e) => TextSearchItem.fromTerms(e, e.phoneSearchTerms(context))).toList(),
       ),
       child: child,
     );

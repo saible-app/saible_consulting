@@ -31,7 +31,7 @@ void main() {
 
   test('Iso3166Country enum tr function looks up translations via CountryLocalizations', () async {
     final enLocalizations = await CountryLocalizations.delegate.load(const Locale('en', 'GB'));
-    expect(Iso3166Country.unitedKingdom.tr(enLocalizations), 'United Kingdom');
+    expect(Iso3166Country.unitedKingdom.tr(context), 'United Kingdom');
     expect(Iso3166Country.afghanistan.tr(enLocalizations), 'Afghanistan');
 
     final cyLocalizations = await CountryLocalizations.delegate.load(const Locale('cy'));

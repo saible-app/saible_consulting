@@ -16,7 +16,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:saible_consulting_core/application/text_search_item.dart';
 import 'package:saible_consulting_core/domain/iso3166_countries.dart';
-import 'package:saible_consulting_core/l10n/app_localizations.dart';
 import 'package:saible_consulting_core/presentation/countries_provider.dart';
 import 'package:saible_consulting_core/presentation/nation_tile.dart';
 
@@ -45,9 +44,8 @@ class _CountryPickerState() extends State<_CountryPicker> {
     super.initState();
     controller = SearchController();
     final initial = widget.initial;
-    final locale = context.read<CountryLocalizations>();
     if (initial != null) {
-      controller.text = initial.tr(locale);
+      controller.text = initial.tr(context);
       chosenCountry = widget.initial;
     }
   }
@@ -85,12 +83,10 @@ class _CountryPickerState() extends State<_CountryPicker> {
         ),
       ),
       viewOnClose: () {
-        final locale = context.read<CountryLocalizations>();
-        controller.text = chosenCountry?.tr(locale) ?? '';
+        controller.text = chosenCountry?.tr(context) ?? '';
       },
       suggestionsBuilder: (context, controller) {
         final results = textSearch.fastSearch(controller.text, limit: 12);
-        final locale = context.read<CountryLocalizations>();
         return [
           for (final result in results)
             NationTile(
@@ -98,7 +94,7 @@ class _CountryPickerState() extends State<_CountryPicker> {
               country: result,
               onTap: () {
                 setState(() { chosenCountry = result; });
-                controller.closeView(result.tr(locale));
+                controller.closeView(result.tr(context));
                 widget.onCountryPicked(result);
               },
             ),

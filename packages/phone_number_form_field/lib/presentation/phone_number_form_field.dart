@@ -128,7 +128,6 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
           ),
           suggestionsBuilder: (context, controller) {
             final results = textSearch.fastSearch(controller.text, limit: 12);
-            final locale = context.read<CountryLocalizations>();
             return [
               for (final result in results)
                 PhoneCodeTile(
@@ -144,7 +143,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
                         PhoneNumberState(rawText: '', e164: null, regionCode: '+${result.phoneCode}'),
                       );
                     }
-                    controller.closeView(result.tr(locale));
+                    controller.closeView(result.tr(context));
                   },
                 ),
             ];
