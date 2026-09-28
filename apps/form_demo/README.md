@@ -27,7 +27,7 @@ The application presents a user registration form implementing clean architectur
 4. **Dynamic Language Switcher**:
    - Seamlessly switch between English (UK), French, German, Welsh, English (US), and Japanese on the fly.
    - Fully translates form labels, hint formats, errors, buttons, and country names in real time.
-   - Country names draw on the 39-language `CountryLocalizations` catalogue in `saible_consulting_core`; no locale provider or lookup wiring is needed, as translations resolve directly from the active `BuildContext`.
+   - Country names draw on the 39-language `CountryLocalizations` catalogue in `saible_consulting_core`, wired up through `SaibleLocalizations.localizationsDelegates` (country strings plus `material_ui`'s Material, Cupertino and Widgets delegates); no locale provider or lookup wiring is needed, as translations resolve directly from the active `BuildContext`.
 5. **State Management & Architecture**:
    - State managed with `flutter_bloc` (`RegistrationFormBloc`) and `formz` (`FormzInput` models for each field).
    - Reactive submit button enabled only when all fields satisfy validation rules.

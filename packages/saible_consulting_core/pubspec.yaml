@@ -18,6 +18,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Required by the generated `l10n/app_localizations.dart`, which imports
+  # `flutter_localizations` for its legacy `localizationsDelegates` list
+  # (`GlobalMaterialLocalizations`, `GlobalCupertinoLocalizations` and
+  # `GlobalWidgetsLocalizations`). Apps on `material_ui` should spread
+  # `SaibleLocalizations.localizationsDelegates` into `MaterialApp` instead and
+  # can ignore that generated list entirely.
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.3

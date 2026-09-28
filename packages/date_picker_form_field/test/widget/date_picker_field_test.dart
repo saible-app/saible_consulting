@@ -17,6 +17,7 @@ import 'package:date_picker_form_field/presentation/date_picker_form_field.dart'
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 const usLocale = Locale('en', 'US');
 
@@ -59,7 +60,7 @@ void main() {
         Locale('pt', 'BR'),
         Locale('ru', 'RU'),
       ],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      localizationsDelegates: SaibleLocalizations.localizationsDelegates,
       home: Scaffold(
         body: Center(
           child: Form(

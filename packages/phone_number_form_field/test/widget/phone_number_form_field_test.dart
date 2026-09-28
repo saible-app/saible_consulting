@@ -35,8 +35,8 @@ void main() {
     final saibleLoc = lookupCountryLocalizations(locale);
     return MaterialApp(
       locale: locale,
-      supportedLocales: CountryLocalizations.supportedLocales,
-      localizationsDelegates: CountryLocalizations.localizationsDelegates,
+      supportedLocales: SaibleLocalizations.supportedLocales,
+      localizationsDelegates: SaibleLocalizations.localizationsDelegates,
       builder: (context, child) => Provider<CountryLocalizations>.value(
         value: saibleLoc,
         child: child,
