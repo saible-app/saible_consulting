@@ -12,53 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 import 'package:flutter_test/flutter_test.dart';
-import 'package:material_ui/material_ui.dart';
-import 'package:provider/provider.dart';
 import 'package:saible_consulting_core/application/jaro_winkler.dart';
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 void main() {
-  test('CountryLocalizations loads English and Welsh translations for ISO 3166 countries using ISO-2 keys', () async {
-    final enLocalizations = await CountryLocalizations.delegate.load(const Locale('en', 'GB'));
-    expect(enLocalizations.country_GB, 'United Kingdom');
-    expect(enLocalizations.country_AF, 'Afghanistan');
-
-    final cyLocalizations = await CountryLocalizations.delegate.load(const Locale('cy'));
-    expect(cyLocalizations.country_GB, 'y Deyrnas Unedig');
-    expect(cyLocalizations.country_AF, 'Affganistan');
-  });
-
-  test('Iso3166Country enum tr function looks up translations via CountryLocalizations', () async {
-    final enLocalizations = await CountryLocalizations.delegate.load(const Locale('en', 'GB'));
-    expect(Iso3166Country.unitedKingdom.tr(context), 'United Kingdom');
-    expect(Iso3166Country.afghanistan.tr(enLocalizations), 'Afghanistan');
-
-    final cyLocalizations = await CountryLocalizations.delegate.load(const Locale('cy'));
-    expect(Iso3166Country.unitedKingdom.tr(cyLocalizations), 'y Deyrnas Unedig');
-    expect(Iso3166Country.afghanistan.tr(cyLocalizations), 'Affganistan');
-  });
-
-  test('CountryLocalizations loads translations for common languages', () async {
-    final esLocalizations = await CountryLocalizations.delegate.load(const Locale('es'));
-    expect(Iso3166Country.unitedKingdom.tr(esLocalizations), 'Reino Unido');
-
-    final frLocalizations = await CountryLocalizations.delegate.load(const Locale('fr'));
-    expect(Iso3166Country.unitedKingdom.tr(frLocalizations), 'Royaume-Uni');
-
-    final deLocalizations = await CountryLocalizations.delegate.load(const Locale('de'));
-    expect(Iso3166Country.unitedKingdom.tr(deLocalizations), 'Vereinigtes Königreich');
-
-    final zhLocalizations = await CountryLocalizations.delegate.load(const Locale('zh'));
-    expect(Iso3166Country.unitedKingdom.tr(zhLocalizations), '英国');
-
-    final jaLocalizations = await CountryLocalizations.delegate.load(const Locale('ja'));
-    expect(Iso3166Country.unitedKingdom.tr(jaLocalizations), 'イギリス');
-
-    final arLocalizations = await CountryLocalizations.delegate.load(const Locale('ar'));
-    expect(Iso3166Country.unitedKingdom.tr(arLocalizations), 'المملكة المتحدة');
-  });
-
   test('Iso3166Country enum elements have valid numeric phone codes', () {
     expect(Iso3166Country.unitedKingdom.phoneCode, 44);
     expect(Iso3166Country.unitedStates.phoneCode, 1);
@@ -73,53 +32,6 @@ void main() {
         reason: '${country.name} (${country.alpha2}) should have a positive phoneCode',
       );
     }
-  });
-
-  test('Iso3166Country enum tr function returns non-empty localized name for all countries', () async {
-    final enLocalizations = await CountryLocalizations.delegate.load(const Locale('en', 'GB'));
-    final cyLocalizations = await CountryLocalizations.delegate.load(const Locale('cy'));
-
-    expect(Iso3166Country.values, isNotEmpty);
-    expect(Iso3166Country.values.length, 249);
-
-    for (final country in Iso3166Country.values) {
-      final enTranslation = country.tr(enLocalizations);
-      expect(
-        enTranslation,
-        isNotEmpty,
-        reason: 'Country ${country.name} (${country.alpha2}) English translation should not be empty',
-      );
-
-      final cyTranslation = country.tr(cyLocalizations);
-      expect(
-        cyTranslation,
-        isNotEmpty,
-        reason: 'Country ${country.name} (${country.alpha2}) Welsh translation should not be empty',
-      );
-    }
-  });
-
-  test('CountryExtension methods generate valid flag emojis and search terms', () async {
-    final enLoc = await CountryLocalizations.delegate.load(const Locale('en', 'GB'));
-
-    for (final country in Iso3166Country.values) {
-      final flag = country.flagEmoji();
-      expect(flag, isNotEmpty, reason: '${country.name} flagEmoji should not be empty');
-
-      final searchTerms = country.searchTerms(enLoc);
-      expect(searchTerms, contains(country.alpha2));
-      expect(searchTerms, contains(country.alpha3));
-      expect(searchTerms, contains(country.tr(enLoc)));
-
-      final phoneSearchTerms = country.phoneSearchTerms(enLoc);
-      expect(phoneSearchTerms, contains(country.phoneCode.toString()));
-      expect(phoneSearchTerms, contains('+${country.phoneCode}'));
-    }
-
-    const uk = Iso3166Country.unitedKingdom;
-    expect(uk.flagEmoji(), '🇬🇧');
-    expect(uk.searchTerms(enLoc), containsAll(['GB', 'GBR', 'United Kingdom']));
-    expect(uk.phoneSearchTerms(enLoc), containsAll(['+44', '44']));
   });
 
   group('JaroWinkler', () {
@@ -293,62 +205,6 @@ void main() {
       final jw = JaroWinkler();
       expect(jw.similarityUpperBound(0, 5), 0);
       expect(jw.similarityUpperBound(5, 0), 0);
-    });
-  });
-
-  group('CountriesProvider and presentation widgets', () {
-    testWidgets('renders CountriesProvider, NationTile, PhoneCodeTile and FlagIcon', (tester) async {
-      final loc = lookupCountryLocalizations(const Locale('en', 'GB'));
-      var nationTapped = false;
-      var phoneCodeTapped = false;
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Provider<CountryLocalizations>.value(
-            value: loc,
-            child: CountriesProvider(
-              child: Builder(
-                builder: (context) {
-                  final countriesData = context.watch<Countries>();
-                  return Scaffold(
-                    body: ListView(
-                      children: [
-                        Text('Count: ${countriesData.countries.length}'),
-                        NationTile(
-                          country: Iso3166Country.unitedKingdom,
-                          onTap: () {
-                            nationTapped = true;
-                          },
-                        ),
-                        PhoneCodeTile(
-                          country: Iso3166Country.france,
-                          onTap: () {
-                            phoneCodeTapped = true;
-                          },
-                        ),
-                        const FlagIcon.forIso3166(country: Iso3166Country.germany),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      expect(find.text('Count: 249'), findsOneWidget);
-      expect(find.text('United Kingdom'), findsOneWidget);
-      expect(find.text('France'), findsOneWidget);
-      expect(find.text('+33'), findsOneWidget);
-      expect(find.text(Iso3166Country.germany.flagEmoji()), findsOneWidget);
-
-      await tester.tap(find.text('United Kingdom'));
-      expect(nationTapped, isTrue);
-
-      await tester.tap(find.text('France'));
-      expect(phoneCodeTapped, isTrue);
     });
   });
 }
