@@ -79,4 +79,4 @@ melos exec -- "dart format ."
 
 ## License
 
-This repository is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This repository is licensed under the Apache License, Version 2.0 (ASLv2). See [LICENSE](LICENSE) for details.
