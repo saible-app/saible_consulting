@@ -18,3 +18,4 @@ export 'domain/iso3166_countries.dart';
 export 'l10n/app_localizations.dart';
 export 'presentation/countries_provider.dart';
 export 'presentation/nation_tile.dart';
+export 'presentation/saible_localizations.dart';

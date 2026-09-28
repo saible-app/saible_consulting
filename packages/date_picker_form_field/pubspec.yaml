@@ -1,5 +1,5 @@
 name: date_picker_form_field
-description: "A form field that includes a date picker, and can be edited manually"
+description: "Locale-aware date form field with a calendar picker and typed manual entry in the local date format"
 version: 0.1.0
 repository: https://github.com/saible-app/saible_consulting
 issue_tracker: https://github.com/saible-app/saible_consulting/issues

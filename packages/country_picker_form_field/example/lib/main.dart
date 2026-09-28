@@ -19,15 +19,16 @@ import 'package:saible_consulting_core/saible_consulting_core.dart';
 /// Runs the `country_picker_form_field` example application.
 void main() => runApp(const CountryPickerExampleApp());
 
-/// Root widget, configured with the `saible_consulting_core` localizations.
+/// Root widget, configured with the `saible_consulting_core` localizations,
+/// including `material_ui`'s Material, Cupertino and Widgets delegates.
 class const CountryPickerExampleApp({super.key}) extends StatelessWidget {
   /// Creates a [CountryPickerExampleApp].
   this;
 
   @override
   Widget build(BuildContext context) => const MaterialApp(
-    supportedLocales: CountryLocalizations.supportedLocales,
-    localizationsDelegates: CountryLocalizations.localizationsDelegates,
+    supportedLocales: SaibleLocalizations.supportedLocales,
+    localizationsDelegates: SaibleLocalizations.localizationsDelegates,
     home: CountryPickerExamplePage(),
   );
 }

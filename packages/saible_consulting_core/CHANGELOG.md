@@ -7,6 +7,11 @@
 * **Localizations for 40 locales** (39 languages, including both `en` and `en-GB`),
   published through `CountryLocalizations.supportedLocales` and
   `CountryLocalizations.localizationsDelegates` for direct use in `MaterialApp`.
+* **`material_ui` localization plumbing**: `SaibleLocalizations.localizationsDelegates`
+  pairs the country delegate with `material_ui`'s `GlobalMaterialLocalizations.delegates`,
+  so Material-owned strings (dialog buttons, text selection toolbars) stay localized
+  alongside country names; `SaibleLocalizations.supportedLocales` mirrors
+  `CountryLocalizations.supportedLocales`.
 * **Fuzzy search**: `JaroWinkler` similarity with upper-bound pruning, plus the
   `TextSearch`/`TextSearchItem` in-memory engines (`search` and bounded top-`k`
   `fastSearch`) for typo-tolerant, jank-free filtering.

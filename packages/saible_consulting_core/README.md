@@ -16,6 +16,9 @@ Shared core domain models, high-performance fuzzy search, localization delegates
   - **Zero-Allocation Tokenization**: Search terms precompute lowercased, stripped, and word-split representations up front, keeping UI typing completely jank-free.
 - **Timezone-Safe Date Arithmetic**:
   - `DateOperations` (`dateOnly()`, `addDays()`, `addYears()`) manipulates calendar year, month, and day components directly rather than naive duration addition, completely eliminating Daylight Saving Time (DST) timezone shift bugs.
+- **`material_ui` Localization Plumbing (`SaibleLocalizations`)**:
+  - `SaibleLocalizations.localizationsDelegates` pairs `CountryLocalizations.delegate` with `material_ui`'s `GlobalMaterialLocalizations.delegates`, so country names *and* Material-owned strings (dialog buttons, text selection toolbars) resolve in the same locales.
+  - `material_ui` widgets never read the legacy `package:flutter_localizations` delegates that `CountryLocalizations.localizationsDelegates` bundles, so `SaibleLocalizations` is the list to spread into `MaterialApp` in a `material_ui` app.
 - **Lean Dependency Footprint & Enterprise Quality**:
   - Lightweight, modular architecture with zero bloat.
   - Exceptionally high test coverage (>99% lines and branches) ensuring rock-solid stability in production environments.
@@ -29,6 +32,7 @@ Shared core domain models, high-performance fuzzy search, localization delegates
 - **In-Memory Text Search Engine (`TextSearch` & `TextSearchItem`)**: Typo-tolerant, multi-term matching with prefix incentives and word-boundary handling.
 - **Calendar & Date Utilities (`DateOperations` & `DateCollection`)**: Safe date math and collection aggregations (`max()`).
 - **Presentation Primitives**: `CountriesProvider` for reactive caching, `FlagIcon.forIso3166`, `NationTile`, and `PhoneCodeTile`.
+- **`material_ui` Localization Wiring (`SaibleLocalizations`)**: a ready-made delegate list and supported locales for `material_ui` apps - country strings plus the Material, Cupertino and Widgets delegates.
 
 ---
 
@@ -110,7 +114,7 @@ print(dates.max()); // nextWeek
 ### 4. Localization Setup for Widgets
 
 Country names resolve synchronously from the ambient `BuildContext`, so there is
-no provider, cache, or lookup call to wire up. Simply add the standard
+no provider, cache, or lookup call to wire up. Simply add the
 `saible_consulting_core` delegates and supported locales to your `MaterialApp`:
 
 ```dart
@@ -123,13 +127,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      supportedLocales: CountryLocalizations.supportedLocales,
-      localizationsDelegates: CountryLocalizations.localizationsDelegates,
+      supportedLocales: SaibleLocalizations.supportedLocales,
+      localizationsDelegates: SaibleLocalizations.localizationsDelegates,
       home: MyHomeScreen(),
     );
   }
 }
 ```
+
+`SaibleLocalizations.localizationsDelegates` is `CountryLocalizations.delegate`
+plus `material_ui`'s `GlobalMaterialLocalizations.delegates`: the country names
+in 40 locales together with the Material, Cupertino and Widgets strings that
+`material_ui` widgets look up (dialog buttons, text selection toolbars) - the
+combination `material_ui` recommends for an app that needs those strings. The
+generated `CountryLocalizations.localizationsDelegates` pairs the country names
+with the *legacy* `package:flutter_localizations` delegates instead
+(`GlobalMaterialLocalizations.delegate`, `GlobalCupertinoLocalizations.delegate`,
+`GlobalWidgetsLocalizations.delegate`), which `material_ui` widgets never query:
+use it only while part of your app still builds with
+`package:flutter/material.dart`. Both lists expose the same 40
+`supportedLocales`.
 
 `Iso3166Country.tr(context)` (along with `searchTerms(context)` and
 `phoneSearchTerms(context)`) reads the active locale directly via
@@ -144,6 +161,59 @@ tests safe.
 > `MaterialApp` (as above) lets Flutter's locale resolution select the nearest
 > supported match (e.g. `pt_BR` → `pt`), so this is only reachable if you call
 > the lookup directly with an unsupported locale.
+
+### 5. Migrating from `package:flutter/material.dart`
+
+`material_ui` is the Material library that used to ship inside
+`package:flutter/material.dart`; its bundled data-driven fix rewrites the imports
+for you:
+
+```sh
+dart fix --apply --code=migrate_design_widgets
+```
+
+Wherever a dependency or subtree still imports `package:flutter/material.dart`,
+`MaterialUiCompatibilityBridge` bridges `ThemeData` and `MaterialLocalizations`
+for it, so legacy widgets keep resolving `Theme.of(context)` and
+`MaterialLocalizations.of(context)`. Wrap the app through `MaterialApp.builder`:
+
+```dart
+import 'package:material_ui/material_ui.dart';
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    builder: (context, child) => MaterialUiCompatibilityBridge(child: child!),
+    home: const MyScreen(),
+  );
+}
+```
+
+...or wrap the individual legacy subtree with the same widget. The bridge is a
+temporary migration aid (deprecated in `material_ui` 1.5.0 and scheduled for
+removal in a future release), so migrate the legacy dependency rather than
+shipping it long term.
+
+---
+
+## How this compares
+
+Country data on pub.dev usually arrives bundled inside a picker widget, without a
+standalone search API. Metrics as of 28 September 2026:
+
+| Package | Likes | Downloads | Latest | Trade-offs |
+| --- | --: | --: | --- | --- |
+| [`country_picker`](https://pub.dev/packages/country_picker) | 466 | 149k | 2.0.28 (Jun 2026) | Its country model and localized names are tied to the bottom-sheet picker, with no standalone fuzzy search over the data. |
+| [`country_code_picker`](https://pub.dev/packages/country_code_picker) | 930 | 102k | 3.4.1 (Oct 2025) | i18n for 70 languages and flag images, but the data lives behind the selector widget: no ISO-3/dial-code API and no reusable search engine. |
+| [`flutter_country_picker`](https://pub.dev/packages/flutter_country_picker) | 24 | 57 | 0.1.6 (Dec 2019) | Abandoned: no release since 2019. |
+
+Use `saible_consulting_core` when you want the country data and the search engine
+on their own - `Iso3166Country` values with `tr(context)` names in 40 locales,
+and `TextSearch` for any list you like - rather than as a side effect of a picker
+UI. The same primitives back `country_picker_form_field`,
+`date_picker_form_field` and `phone_number_form_field`.
 
 ---
 

@@ -26,6 +26,9 @@ void main() {
     Iso3166Country? initial,
     String? hintText,
     FocusNode? focusNode,
+    GlobalKey<FormState>? formKey,
+    String? Function(Iso3166Country? country)? validator,
+    void Function(Iso3166Country? country)? onSaved,
   }) {
     final saibleLoc = lookupCountryLocalizations(locale);
     return MaterialApp(
@@ -41,14 +44,19 @@ void main() {
       ),
       home: Scaffold(
         body: Center(
-          child: CountryPickerFormField(
-            decoration: InputDecoration(
-              labelText: labelText,
-              hintText: hintText,
+          child: Form(
+            key: formKey,
+            child: CountryPickerFormField(
+              decoration: InputDecoration(
+                labelText: labelText,
+                hintText: hintText,
+              ),
+              onCountryPicked: onCountryPicked,
+              initial: initial,
+              focusNode: focusNode,
+              validator: validator,
+              onSaved: onSaved,
             ),
-            onCountryPicked: onCountryPicked,
-            initial: initial,
-            focusNode: focusNode,
           ),
         ),
       ),
@@ -237,5 +245,41 @@ void main() {
       expect(find.byType(NationTile), findsWidgets);
     });
 
+    testWidgets('validator and onSaved integrate with the enclosing Form', (tester) async {
+      final formKey = GlobalKey<FormState>();
+      Iso3166Country? savedCountry;
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Nationality',
+          formKey: formKey,
+          onCountryPicked: (_) {},
+          validator: (country) => country == null ? 'Select a country' : null,
+          onSaved: (country) => savedCountry = country,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Nothing selected yet, so the validator rejects the field.
+      expect(formKey.currentState!.validate(), isFalse);
+      await tester.pumpAndSettle();
+      expect(find.text('Select a country'), findsOneWidget);
+
+      // Pick France from the suggestions view.
+      await tester.tap(find.byKey(CountryPickerFormField.countrySearchBarKey));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).last, 'France');
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('countryPicker_country_${Iso3166Country.france.alpha2}')));
+      await tester.pumpAndSettle();
+
+      expect(formKey.currentState!.validate(), isTrue);
+      await tester.pumpAndSettle();
+      expect(find.text('Select a country'), findsNothing);
+
+      // Saving the form hands the chosen country, not the search text, to onSaved.
+      formKey.currentState!.save();
+      expect(savedCountry, Iso3166Country.france);
+    });
   });
 }

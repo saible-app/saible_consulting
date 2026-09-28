@@ -15,6 +15,7 @@
 import 'package:date_picker_form_field/date_picker_form_field.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 /// Runs the `date_picker_form_field` example application.
 ///
@@ -26,14 +27,18 @@ Future<void> main() async {
   runApp(const DatePickerExampleApp());
 }
 
-/// Root widget of the example.
+/// Root widget of the example, configured with the `saible_consulting_core`
+/// localizations so that typed input follows the resolved app locale.
 class const DatePickerExampleApp({super.key}) extends StatelessWidget {
   /// Creates a [DatePickerExampleApp].
   this;
 
   @override
-  Widget build(BuildContext context) =>
-      const MaterialApp(home: DatePickerExamplePage());
+  Widget build(BuildContext context) => const MaterialApp(
+    supportedLocales: SaibleLocalizations.supportedLocales,
+    localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+    home: DatePickerExamplePage(),
+  );
 }
 
 /// A form page that captures a date of birth.

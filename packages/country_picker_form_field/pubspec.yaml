@@ -1,5 +1,5 @@
 name: country_picker_form_field
-description: "A searchable country selector form field with fuzzy search, flag emojis and multi-lingual translations"
+description: "Searchable country picker form field with fuzzy search over 249 countries, flag emojis and 39 languages"
 version: 0.1.0
 repository: https://github.com/saible-app/saible_consulting
 issue_tracker: https://github.com/saible-app/saible_consulting/issues

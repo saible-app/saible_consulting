@@ -28,6 +28,9 @@ void main() {
     int? errorMaxLines,
     PhoneNumberState? initialValue,
     ValueChanged<PhoneNumberState>? onPhoneNumberChanged,
+    GlobalKey<FormState>? formKey,
+    String? Function(PhoneNumberState state)? validator,
+    void Function(PhoneNumberState state)? onSaved,
   }) {
     final saibleLoc = lookupCountryLocalizations(locale);
     return MaterialApp(
@@ -40,15 +43,20 @@ void main() {
       ),
       home: Scaffold(
         body: Center(
-          child: PhoneNumberFormField(
-            focusNode: focusNode,
-            decoration: InputDecoration(
-              labelText: labelText,
-              errorText: errorText,
-              errorMaxLines: errorMaxLines,
+          child: Form(
+            key: formKey,
+            child: PhoneNumberFormField(
+              focusNode: focusNode,
+              decoration: InputDecoration(
+                labelText: labelText,
+                errorText: errorText,
+                errorMaxLines: errorMaxLines,
+              ),
+              initialValue: initialValue,
+              onPhoneNumberChanged: onPhoneNumberChanged,
+              validator: validator,
+              onSaved: onSaved,
             ),
-            initialValue: initialValue,
-            onPhoneNumberChanged: onPhoneNumberChanged,
           ),
         ),
       ),
@@ -273,6 +281,41 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(changedValues.last.e164, isNull);
+    });
+
+    testWidgets('validator and onSaved integrate with the enclosing Form', (tester) async {
+      final formKey = GlobalKey<FormState>();
+      PhoneNumberState? savedState;
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Mobile Phone',
+          formKey: formKey,
+          validator: (state) => state.isValid ? null : 'Enter a valid phone number',
+          onSaved: (state) => savedState = state,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // An empty field fails validation and surfaces the validator's message.
+      expect(formKey.currentState!.validate(), isFalse);
+      await tester.pumpAndSettle();
+      expect(find.text('Enter a valid phone number'), findsOneWidget);
+
+      // A complete UK number passes the same validator.
+      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '02079460123');
+      await tester.pumpAndSettle();
+
+      expect(formKey.currentState!.validate(), isTrue);
+      await tester.pumpAndSettle();
+      expect(find.text('Enter a valid phone number'), findsNothing);
+
+      // Saving the form hands the parsed state, not the raw text, to onSaved.
+      formKey.currentState!.save();
+      expect(savedState, isNotNull);
+      expect(savedState!.e164, '+442079460123');
+      expect(savedState!.regionCode, '+44');
+      expect(savedState!.rawText, isNotEmpty);
     });
   });
 }

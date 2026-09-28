@@ -40,6 +40,9 @@ void main() {
     void Function(String)? onFieldSubmitted,
     void Function()? onEditingComplete,
     bool passFirstLast = true,
+    GlobalKey<FormState>? formKey,
+    String? Function(DateTime? date)? validator,
+    void Function(DateTime? date)? onSaved,
   }) {
     final first = DateTime(1900);
     final last = DateTime(2100, 12, 31);
@@ -59,18 +62,23 @@ void main() {
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: Scaffold(
         body: Center(
-          child: DatePickerFormField(
-            initialDate: initialDate,
-            firstDate: passFirstLast ? (firstDate ?? first) : null,
-            lastDate: passFirstLast ? (lastDate ?? last) : null,
-            decoration: decoration ?? const InputDecoration(labelText: 'Date of Birth'),
-            pickerHelpText: pickerHelpText,
-            focusNode: focusNode,
-            onPickDate: onPickDate ?? (_) {},
-            onDateChanged: onDateChanged,
-            onEditText: onEditText ?? (_) {},
-            onFieldSubmitted: onFieldSubmitted,
-            onEditingComplete: onEditingComplete,
+          child: Form(
+            key: formKey,
+            child: DatePickerFormField(
+              initialDate: initialDate,
+              firstDate: passFirstLast ? (firstDate ?? first) : null,
+              lastDate: passFirstLast ? (lastDate ?? last) : null,
+              decoration: decoration ?? const InputDecoration(labelText: 'Date of Birth'),
+              pickerHelpText: pickerHelpText,
+              focusNode: focusNode,
+              onPickDate: onPickDate ?? (_) {},
+              onDateChanged: onDateChanged,
+              onEditText: onEditText ?? (_) {},
+              onFieldSubmitted: onFieldSubmitted,
+              onEditingComplete: onEditingComplete,
+              validator: validator,
+              onSaved: onSaved,
+            ),
           ),
         ),
       ),
@@ -470,6 +478,57 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(changedDate.parsedDate, selectedDate);
+    });
+
+    testWidgets('validator and onSaved integrate with the enclosing Form', (tester) async {
+      final formKey = GlobalKey<FormState>();
+      DateTime? savedDate;
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          formKey: formKey,
+          validator: (date) => date == null ? 'Enter a valid date' : null,
+          onSaved: (date) => savedDate = date,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // An empty field fails validation and surfaces the validator's message.
+      expect(formKey.currentState!.validate(), isFalse);
+      await tester.pumpAndSettle();
+      expect(find.text('Enter a valid date'), findsOneWidget);
+
+      // 15/11/1995 in the field's en-GB format.
+      await typeIntoDateField(tester, '15111995');
+      await tester.pumpAndSettle();
+
+      expect(formKey.currentState!.validate(), isTrue);
+      await tester.pumpAndSettle();
+      expect(find.text('Enter a valid date'), findsNothing);
+
+      // Saving the form hands the parsed DateTime, not the raw text, to onSaved.
+      formKey.currentState!.save();
+      expect(savedDate, DateTime(1995, 11, 15));
+    });
+
+    testWidgets('validator receives null for a syntactically invalid date', (tester) async {
+      final formKey = GlobalKey<FormState>();
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          formKey: formKey,
+          validator: (date) => date == null ? 'Enter a valid date' : null,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // 31/02/1999 is complete but not a real date.
+      await typeIntoDateField(tester, '31021999');
+      await tester.pumpAndSettle();
+
+      expect(formKey.currentState!.validate(), isFalse);
+      await tester.pumpAndSettle();
+      expect(find.text('Enter a valid date'), findsOneWidget);
     });
 
   });

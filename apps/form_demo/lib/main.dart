@@ -46,8 +46,7 @@ class _DemoAppState() extends State<DemoApp> {
     supportedLocales: AppLocalizations.supportedLocales,
     localizationsDelegates: const [
       ...AppLocalizations.localizationsDelegates,
-      ...CountryLocalizations.localizationsDelegates,
-      ...GlobalMaterialLocalizations.delegates,
+      ...SaibleLocalizations.localizationsDelegates,
     ],
     home: BlocProvider<RegistrationFormBloc>(
       create: (context) => RegistrationFormBloc(),

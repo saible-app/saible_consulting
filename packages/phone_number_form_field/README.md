@@ -33,7 +33,7 @@ An accessible, international phone number input field for Flutter applications f
 - **As-You-Type Phone Formatting**: Automatic national phone structure formatting.
 - **Trunk Code Normalization**: Automatically strips redundant domestic trunk zeros.
 - **E.164 Compliance Validation**: Instant access to formatted E.164 string and boolean validity checks (`state.isValid`).
-- **Flexible Form Integration**: Compatible with standard Flutter forms, `Formz`, and BLoC/Riverpod state managers.
+- **Flexible Form Integration**: Drop-in `Form` support through typed `validator` and `onSaved` callbacks that receive the parsed `PhoneNumberState`, alongside `onPhoneNumberChanged` for `Formz` and BLoC/Riverpod state managers.
 
 ---
 
@@ -53,19 +53,58 @@ dependencies:
 > constructs those arguments: it exports distinct types that are not assignable
 > to or from the copies exported by `package:flutter/material.dart`.
 
-Configure your `MaterialApp` with the `saible_consulting_core` localization
-delegates (no provider or lookup is required):
+### Localization setup
+
+Configure your `MaterialApp` with the localization plumbing from
+`saible_consulting_core` (no provider or lookup is required):
 
 ```dart
 import 'package:material_ui/material_ui.dart';
 import 'package:saible_consulting_core/saible_consulting_core.dart';
 
 MaterialApp(
-  supportedLocales: CountryLocalizations.supportedLocales,
-  localizationsDelegates: CountryLocalizations.localizationsDelegates,
+  supportedLocales: SaibleLocalizations.supportedLocales,
+  localizationsDelegates: SaibleLocalizations.localizationsDelegates,
   home: const MyPhoneFormPage(),
 );
 ```
+
+### Migrating from `package:flutter/material.dart`
+
+`material_ui` is the Material library that used to ship inside
+`package:flutter/material.dart`, so migration is mostly mechanical - the bundled
+data-driven fix rewrites the imports for you:
+
+```sh
+dart fix --apply --code=migrate_design_widgets
+```
+
+Two things then need attention. Import `package:material_ui/material_ui.dart`
+wherever you construct `material_ui` types (such as `InputDecoration`), as
+described above - and make sure the localization delegates come from
+`material_ui` too. `material_ui` widgets never read the legacy
+`GlobalMaterialLocalizations`, `GlobalCupertinoLocalizations` or
+`GlobalWidgetsLocalizations` classes from `package:flutter_localizations`, which
+is why `SaibleLocalizations.localizationsDelegates` (shown above) pairs the
+country names with `material_ui`'s own Material, Cupertino and Widgets
+delegates. Use the generated `CountryLocalizations.localizationsDelegates` only
+while parts of your app still build with `package:flutter/material.dart`.
+
+If a dependency or subtree still imports `package:flutter/material.dart`, use
+`MaterialUiCompatibilityBridge` to bridge `ThemeData` and
+`MaterialLocalizations` for it - app-wide through `MaterialApp.builder`, or
+around the individual subtree:
+
+```dart
+MaterialApp(
+  builder: (context, child) => MaterialUiCompatibilityBridge(child: child!),
+  home: const MyScreen(),
+);
+```
+
+The bridge is a temporary migration aid (deprecated in `material_ui` 1.5.0 and
+scheduled for removal in a future release), so migrate the legacy dependency
+rather than shipping it long term.
 
 ---
 
@@ -127,6 +166,38 @@ PhoneNumberFormField(
 );
 ```
 
+### Form Validation
+
+`validator` and `onSaved` plug the field into a `Form` and receive the parsed
+`PhoneNumberState`, so validation and submission work on the E.164 value and the
+selected dial code rather than on the raw text:
+
+```dart
+final formKey = GlobalKey<FormState>();
+PhoneNumberState? saved;
+
+Form(
+  key: formKey,
+  child: PhoneNumberFormField(
+    decoration: const InputDecoration(labelText: 'Phone Number'),
+    validator: (state) => state.isValid ? null : 'Enter a valid phone number',
+    onSaved: (state) => saved = state,
+  ),
+);
+
+if (formKey.currentState!.validate()) {
+  formKey.currentState!.save();
+  print(saved!.e164);       // e.g. "+442079460123"
+  print(saved!.regionCode); // e.g. "+44"
+}
+```
+
+The validator runs whenever the enclosing `Form` validates - through
+`FormState.validate()` or a form-level `AutovalidateMode`. `state.e164` is
+`null` until the number is complete and valid, so a single `state.isValid` check
+covers empty, partial and malformed input; inspect `state.rawText` instead when
+you want to distinguish "required" from "malformed".
+
 ---
 
 ## Testing
@@ -151,6 +222,24 @@ await tester.pumpAndSettle();
 await tester.tap(find.text('+44'));
 await tester.pumpAndSettle();
 ```
+
+---
+
+## How this compares
+
+Alternative pub.dev packages, with their like counts, 30-day downloads and
+latest releases as of 28 September 2026:
+
+| Package | Likes | Downloads | Latest | Trade-offs |
+| --- | --: | --: | --- | --- |
+| [`intl_phone_number_input`](https://pub.dev/packages/intl_phone_number_input) | 926 | 128k | 0.7.5 (Sep 2025) | The most-used option and also built on `dlibphonenumber`. Its `InternationalPhoneNumberInput` offers selector styles (dropdown, bottom sheet, dialog), but it asks you to assemble more of the field yourself, and its flags are image assets unless you opt into emoji. Published by an unverified uploader. |
+| [`intl_phone_field`](https://pub.dev/packages/intl_phone_field) | 782 | 119k | 3.2.0 (Jun 2023) | No release since 2023, so its validation rules are frozen rather than tracking current numbering plans. |
+| [`phone_number_field`](https://pub.dev/packages/phone_number_field) | 6 | 94 | 1.2.0 (Jul 2025) | Minimal: English-only country names and regex-based validation. |
+
+Pick `phone_number_form_field` when you want libphonenumber-grade parsing and an
+E.164 result from a single widget that drops straight into a `Form`, with an
+offline dial code picker that fuzzy-searches all 249 countries in 39 languages
+and renders Unicode flag emojis instead of bundling flag assets.
 
 ---
 

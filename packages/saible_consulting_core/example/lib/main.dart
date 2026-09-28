@@ -18,15 +18,16 @@ import 'package:saible_consulting_core/saible_consulting_core.dart';
 /// Runs the `saible_consulting_core` example application.
 void main() => runApp(const CoreExampleApp());
 
-/// Root widget, configured with the localizations that ship with the package.
+/// Root widget, configured with the package's `SaibleLocalizations`, which
+/// pairs the country strings with `material_ui`'s localization delegates.
 class const CoreExampleApp({super.key}) extends StatelessWidget {
   /// Creates a [CoreExampleApp].
   this;
 
   @override
   Widget build(BuildContext context) => const MaterialApp(
-    supportedLocales: CountryLocalizations.supportedLocales,
-    localizationsDelegates: CountryLocalizations.localizationsDelegates,
+    supportedLocales: SaibleLocalizations.supportedLocales,
+    localizationsDelegates: SaibleLocalizations.localizationsDelegates,
     home: CoreExamplePage(),
   );
 }

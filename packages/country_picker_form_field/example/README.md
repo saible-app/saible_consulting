@@ -7,9 +7,9 @@ Everything lives in [`lib/main.dart`](lib/main.dart):
 * `CountryPickerFormField` bound to an `Iso3166Country?` field in a
   `StatefulWidget`, with an `initial` selection and an `InputDecoration`
   (including `errorText`) that integrates with `Form` validation.
-* A `MaterialApp` wired to `CountryLocalizations.supportedLocales` and
-  `CountryLocalizations.localizationsDelegates`, so the country names and the
-  fuzzy search follow the active locale.
+* A `MaterialApp` wired to `SaibleLocalizations.supportedLocales` and
+  `SaibleLocalizations.localizationsDelegates`, so the country names, the fuzzy
+  search and `material_ui`'s own Material strings all follow the active locale.
 * The selected country rendered with its flag emoji (`flagEmoji()`) and its
   localized name (`tr(context)`).
 

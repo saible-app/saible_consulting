@@ -10,9 +10,10 @@ Everything lives in [`lib/main.dart`](lib/main.dart):
 * `onPhoneNumberChanged` receiving the latest `PhoneNumberState`, showing the
   parsed E.164 number (`e164`), the selected dial code (`regionCode`) and the
   `isValid` flag.
-* A `MaterialApp` wired to `CountryLocalizations.supportedLocales` and
-  `CountryLocalizations.localizationsDelegates`, so the dial code selector uses
-  localized country names.
+* A `MaterialApp` wired to `SaibleLocalizations.supportedLocales` and
+  `SaibleLocalizations.localizationsDelegates`, so the dial code selector uses
+  localized country names and `material_ui`'s own Material strings stay
+  localized too.
 
 The example deliberately has no `pubspec.yaml` of its own: it is analyzed and
 resolved with the dependencies of the package it ships inside. To run it, copy
