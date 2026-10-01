@@ -1,10 +1,25 @@
 # Form Demo Application (`form_demo`)
 
 A lightweight Flutter demonstration application showcasing the Saible Consulting form field package suite:
-- [`saible_consulting_core`](../../packages/saible_consulting_core)
-- [`date_picker_form_field`](../../packages/date_picker_form_field)
-- [`country_picker_form_field`](../../packages/country_picker_form_field)
-- [`phone_number_form_field`](../../packages/phone_number_form_field)
+- [`saible_consulting_core`](https://pub.dev/packages/saible_consulting_core) ([source](../../packages/saible_consulting_core))
+- [`date_picker_form_field`](https://pub.dev/packages/date_picker_form_field) ([source](../../packages/date_picker_form_field))
+- [`country_picker_form_field`](https://pub.dev/packages/country_picker_form_field) ([source](../../packages/country_picker_form_field))
+- [`phone_number_form_field`](https://pub.dev/packages/phone_number_form_field) ([source](../../packages/phone_number_form_field))
+
+<table>
+  <tr>
+    <th align="center">Date of Birth</th>
+    <th align="center">Nationality</th>
+    <th align="center">Phone Number</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="nationality" src="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="phone" src="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
 
 ---
 
@@ -13,8 +28,8 @@ A lightweight Flutter demonstration application showcasing the Saible Consulting
 The application presents a user registration form implementing clean architecture and enterprise form validation patterns:
 
 1. **Date of Birth (`DatePickerFormField`)**:
-   - Supports keyboard input formatted to the active locale (`DD/MM/YYYY`, `MM/DD/YYYY`, or `YYYY-MM-DD`).
-   - Integrated calendar popup dialog.
+   - Supports keyboard input formatted to the active locale (`DD/MM/YYYY`, `MM/DD/YYYY`, or `YYYY-MM-DD`) with immediate typed separator entry (`/`, `.`, `-`) and automatic single-digit padding.
+   - Adaptive platform calendar popup (Material `DatePickerDialog` on Android/desktop, Cupertino modal date picker on iOS/macOS).
    - Comprehensive validation checks: required, invalid date, date before minimum boundary (1900-01-01), and underage restriction (minimum age 18).
 2. **Nationality (`CountryPickerFormField`)**:
    - Searchable country dropdown covering 249 ISO 3166-1 countries.

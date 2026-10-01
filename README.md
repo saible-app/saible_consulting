@@ -1,6 +1,22 @@
+
 # Saible Consulting Monorepo
 
 A modular collection of enterprise-grade Flutter packages and form field widgets developed by Saible Consulting, alongside a comprehensive interactive demonstration application.
+
+<table>
+  <tr>
+    <th align="center">Date of Birth</th>
+    <th align="center">Nationality</th>
+    <th align="center">Phone Number</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="nationality" src="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="phone" src="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
 
 ---
 
@@ -8,13 +24,13 @@ A modular collection of enterprise-grade Flutter packages and form field widgets
 
 This repository is organized as a Melos-managed Flutter/Dart workspace:
 
-| Package / App | Path | Description |
-|---|---|---|
-| [`saible_consulting_core`](packages/saible_consulting_core) | `packages/saible_consulting_core` | ISO 3166-1 country data (249 countries), multi-lingual localizations across 39 languages, Jaro-Winkler fuzzy search, date utilities, and UI tile primitives. |
-| [`country_picker_form_field`](packages/country_picker_form_field) | `packages/country_picker_form_field` | Searchable country selector form field with fuzzy search, flag emojis, and multi-lingual translations. |
-| [`date_picker_form_field`](packages/date_picker_form_field) | `packages/date_picker_form_field` | Locale-aware date input field supporting both as-you-type formatting and calendar dialog selection. |
-| [`phone_number_form_field`](packages/phone_number_form_field) | `packages/phone_number_form_field` | International telephone input field with searchable dial code prefix selector, as-you-type formatting, and E.164 validation. |
-| [`form_demo`](apps/form_demo) | `apps/form_demo` | Production-ready reference application demonstrating form integration, `flutter_bloc`, `formz` validation, and real-time language switching. |
+| Package / App | Path | Pub.dev | Description |
+|---|---|---|---|
+| [`saible_consulting_core`](packages/saible_consulting_core) | `packages/saible_consulting_core` | [![pub package](https://img.shields.io/pub/v/saible_consulting_core.svg)](https://pub.dev/packages/saible_consulting_core) | ISO 3166-1 country data (249 countries), multi-lingual localizations across 39 languages, Jaro-Winkler fuzzy search, date utilities, and UI tile primitives. |
+| [`country_picker_form_field`](packages/country_picker_form_field) | `packages/country_picker_form_field` | [![pub package](https://img.shields.io/pub/v/country_picker_form_field.svg)](https://pub.dev/packages/country_picker_form_field) | Searchable country selector form field with fuzzy search, flag emojis, and multi-lingual translations. |
+| [`date_picker_form_field`](packages/date_picker_form_field) | `packages/date_picker_form_field` | [![pub package](https://img.shields.io/pub/v/date_picker_form_field.svg)](https://pub.dev/packages/date_picker_form_field) | Locale-aware date input field supporting keyboard entry with typed separators and adaptive platform date picking (Material & Cupertino). |
+| [`phone_number_form_field`](packages/phone_number_form_field) | `packages/phone_number_form_field` | [![pub package](https://img.shields.io/pub/v/phone_number_form_field.svg)](https://pub.dev/packages/phone_number_form_field) | International telephone input field with searchable dial code prefix selector, as-you-type formatting, and E.164 validation. |
+| [`form_demo`](apps/form_demo) | `apps/form_demo` | *N/A (App)* | Production-ready reference application demonstrating form integration, `flutter_bloc`, `formz` validation, and real-time language switching. |
 
 ---
 

@@ -1,3 +1,9 @@
+## 0.2.0
+
+* Bumped version to `0.2.0` across the Saible Consulting package suite.
+* Validated and confirmed compatibility with `material_ui` 1.5.0 and `cupertino_ui` 1.1.1.
+* Updated documentation with standard pub.dev package badges and references.
+
 ## 0.1.0
 
 * Initial release.

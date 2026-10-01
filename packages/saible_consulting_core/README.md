@@ -1,6 +1,8 @@
 # saible_consulting_core
 
-Shared core domain models, high-performance fuzzy search, localization delegates, and UI components for the Saible Consulting Flutter packages suite (`country_picker_form_field`, `date_picker_form_field`, `phone_number_form_field`, and `form_demo`).
+[![pub package](https://img.shields.io/pub/v/saible_consulting_core.svg)](https://pub.dev/packages/saible_consulting_core)
+
+Shared core domain models, high-performance fuzzy search, localization delegates, and UI components for the Saible Consulting Flutter packages suite ([`country_picker_form_field`](https://pub.dev/packages/country_picker_form_field), [`date_picker_form_field`](https://pub.dev/packages/date_picker_form_field), [`phone_number_form_field`](https://pub.dev/packages/phone_number_form_field), and `form_demo`).
 
 ---
 
@@ -42,7 +44,7 @@ Add `saible_consulting_core` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  saible_consulting_core: ^0.1.0
+  saible_consulting_core: ^0.2.0
 ```
 
 Import the package in your Dart code:
@@ -201,7 +203,7 @@ shipping it long term.
 ## How this compares
 
 Country data on pub.dev usually arrives bundled inside a picker widget, without a
-standalone search API. Metrics as of 28 September 2026:
+standalone search API. Metrics as of 1 October 2026:
 
 | Package | Likes | Downloads | Latest | Trade-offs |
 | --- | --: | --: | --- | --- |
@@ -212,8 +214,8 @@ standalone search API. Metrics as of 28 September 2026:
 Use `saible_consulting_core` when you want the country data and the search engine
 on their own - `Iso3166Country` values with `tr(context)` names in 40 locales,
 and `TextSearch` for any list you like - rather than as a side effect of a picker
-UI. The same primitives back `country_picker_form_field`,
-`date_picker_form_field` and `phone_number_form_field`.
+UI. The same primitives back [`country_picker_form_field`](https://pub.dev/packages/country_picker_form_field),
+[`date_picker_form_field`](https://pub.dev/packages/date_picker_form_field) and [`phone_number_form_field`](https://pub.dev/packages/phone_number_form_field).
 
 ---
 

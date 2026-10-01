@@ -1,3 +1,10 @@
+## 0.2.0
+
+* Bumped version to `0.2.0` aligned with the Saible Consulting package suite.
+* Updated dependency constraint to `saible_consulting_core: ^0.2.0`.
+* Verified compatibility with `material_ui` 1.5.0.
+* Updated documentation with standard pub.dev package badges and demonstration media.
+
 ## 0.1.0
 
 * Initial release.

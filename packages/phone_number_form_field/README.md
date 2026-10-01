@@ -1,8 +1,21 @@
 # phone_number_form_field
 
+[![pub package](https://img.shields.io/pub/v/phone_number_form_field.svg)](https://pub.dev/packages/phone_number_form_field)
+
 An accessible, international phone number input field for Flutter applications featuring intelligent country dial-code selection, as-you-type formatting, and rigorous international E.164 compliance validation.
 
 `PhoneNumberFormField` delivers an enterprise-grade phone input experience by uniting an interactive calling-code prefix selector with continuous formatting and parsing powered by Google's authoritative `libphonenumber` metadata.
+
+<table>
+  <tr>
+    <th align="center">Phone Number</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><video id="phone" src="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="50%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
 
 ---
 
@@ -39,12 +52,12 @@ An accessible, international phone number input field for Flutter applications f
 
 ## Getting Started
 
-Add `phone_number_form_field` and `saible_consulting_core` to your `pubspec.yaml`:
+Add `phone_number_form_field` and [`saible_consulting_core`](https://pub.dev/packages/saible_consulting_core) to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  phone_number_form_field: ^0.1.0
-  saible_consulting_core: ^0.1.0
+  phone_number_form_field: ^0.2.0
+  saible_consulting_core: ^0.2.0
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter
@@ -228,7 +241,7 @@ await tester.pumpAndSettle();
 ## How this compares
 
 Alternative pub.dev packages, with their like counts, 30-day downloads and
-latest releases as of 28 September 2026:
+latest releases as of 1 October 2026:
 
 | Package | Likes | Downloads | Latest | Trade-offs |
 | --- | --: | --: | --- | --- |

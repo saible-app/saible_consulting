@@ -175,6 +175,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(DatePickerDialog), findsOneWidget);
 
+      // Navigate to previous month to ensure day 15 is within range regardless of current date
+      await tester.tap(find.byIcon(Icons.chevron_left));
+      await tester.pumpAndSettle();
+
       // Select day 15 in the calendar
       await tester.tap(find.text('15').first);
       await tester.pumpAndSettle();

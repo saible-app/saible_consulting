@@ -1,26 +1,43 @@
 # date_picker_form_field
 
+[![pub package](https://img.shields.io/pub/v/date_picker_form_field.svg)](https://pub.dev/packages/date_picker_form_field)
+
 An accessible, locale-adaptive date input field for Flutter that bridges keyboard data entry with an intuitive graphical calendar picker.
 
-`DatePickerFormField` solves the classic user experience dilemma between typing dates quickly and choosing dates from a calendar. It dynamically formats input as the user types according to the active locale's natural date pattern (e.g. `DD/MM/YYYY`, `MM/DD/YYYY`, or `YYYY-MM-DD`), while offering seamless popup calendar selection.
+`DatePickerFormField` solves the classic user experience dilemma between typing dates quickly and choosing dates from a calendar. It dynamically formats input as the user types according to the active locale's natural date pattern (e.g. `DD/MM/YYYY`, `MM/DD/YYYY`, or `YYYY-MM-DD`), supports direct keyboard entry of date separators (`/`, `.`, `-`), and offers seamless adaptive popup calendar selection (Material and Cupertino).
+
+<table>
+  <tr>
+    <th align="center">Date of Birth</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="50%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
 
 ---
 
 ## Key Architectural Strengths
 
-- **Dynamic, Locale-Adaptive Masking (`DateInputFormatter`)**:
+- **Dynamic, Locale-Adaptive Masking with Typed Separator Support (`DateInputFormatter`)**:
   - Unlike rigid fixed-mask formatters, `DateInputFormatter` inspects `DateFormat.yMd` for the active locale at runtime to determine the true localized ordering of Day, Month, and Year as well as the regional separator (`/`, `-`, `.`).
+  - Users can type numbers continuously or type separators directly from their keyboard; typed separators show immediately without waiting for subsequent digits, and single-digit day or month entries followed by a separator are automatically zero-padded (`03/`).
   - Automatically matches and adjusts placeholder hints (e.g. `DD/MM/YYYY` in the UK, `MM/DD/YYYY` in the US, `YYYY-MM-DD` in Canada/Japan).
 - **Intelligent Cursor & Separator Navigation**:
   - Purpose-built editing logic handles typing, digit insertions, and backspacing across separators gracefully: backspacing over a separator removes the preceding digit cleanly without breaking cursor placement or trapping user focus.
+- **Adaptive Platform Date Picking (`AdaptiveDatePickerProvider`)**:
+  - Automatically chooses the native design idiom for the current platform: Cupertino date picker in a modal popup on iOS and macOS, and Material `DatePickerDialog` on Android and desktop platforms.
+  - Pluggable layer of indirection: inject a custom `pickerProvider` directly into `DatePickerFormField` or provide an `AdaptiveDatePickerProvider` higher in the widget tree.
 - **Unified Dual-Mode Workflow**:
-  - Users can either type the digits directly or tap the calendar icon to select from a native `DatePickerDialog`.
+  - Users can either type digits directly (with or without separators) or tap the calendar icon to select from the platform picker.
   - Date choices in either mode keep the text field and validation state perfectly synchronized.
 - **Validation-Ready State Contract**:
   - The `onDateChanged` callback provides a structured `DateInputValue(rawText: ..., parsedDate: ...)`.
   - `parsedDate` evaluates to `null` if the date is incomplete, syntactically invalid (e.g. February 30th), or outside the allowable `firstDate` and `lastDate` boundaries, enabling instant integration with `Formz` or Flutter `Form` validation.
 - **Enterprise Reliability & Testability**:
-  - Provides exported static keys (`textInputKey`, `launchDatePickerKey`, `switchToEntryModeKey`) for deterministic end-to-end testing.
+  - Provides exported static keys (`textInputKey`, `launchDatePickerKey`) for deterministic end-to-end testing.
   - Backed by comprehensive test suites with >99% code coverage.
 
 ---
@@ -28,6 +45,8 @@ An accessible, locale-adaptive date input field for Flutter that bridges keyboar
 ## Features
 
 - **Locale-Aware Formatting**: Dynamically formats date components based on the user's regional preferences.
+- **Typed Separator Entry**: Direct keyboard typing of date separators (`/`, `.`, `-`) with instant feedback and auto-padding for single digits.
+- **Adaptive Platform Picking**: Seamless Cupertino picker on iOS/macOS and Material date picker dialog on Android/desktop, plus support for custom `AdaptiveDatePickerProvider`s.
 - **Dual Input Modes**: Fluid keyboard entry alongside standard graphical calendar picking.
 - **Strict Range Clamping**: Enforces configurable `firstDate` and `lastDate` boundaries.
 - **Clean Event Lifecycle**: Dedicated callbacks for `onDateChanged`, `onPickDate`, `onEditText`, `onFieldSubmitted`, and `onEditingComplete`.
@@ -41,7 +60,7 @@ Add `date_picker_form_field` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  date_picker_form_field: ^0.1.0
+  date_picker_form_field: ^0.2.0
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter
@@ -178,6 +197,23 @@ TextFormField(
 );
 ```
 
+### Adaptive Date Picker & Custom Providers
+
+By default, `DatePickerFormField` automatically adapts to the host platform, displaying a Cupertino date picker in a modal popup on iOS and macOS, and a Material date picker dialog on Android, Linux, and Windows.
+
+To override the platform default or plug in a custom date picker implementation, supply a custom `pickerProvider`:
+
+```dart
+import 'package:date_picker_form_field/date_picker_form_field.dart';
+
+DatePickerFormField(
+  decoration: const InputDecoration(labelText: 'Birth Date'),
+  // Explicitly select Cupertino, Material, or a custom AdaptiveDatePickerProvider:
+  pickerProvider: CupertinoDatePickerProvider(),
+  onPickDate: (date) => print('Picked: $date'),
+)
+```
+
 ### Form Validation
 
 `validator` and `onSaved` plug the field into a `Form` and receive the parsed
@@ -218,16 +254,15 @@ the calendar dialog.
 
 - `DatePickerFormField.textInputKey`: Key for the date `TextFormField`.
 - `DatePickerFormField.launchDatePickerKey`: Key for the calendar picker launcher icon button.
-- `DatePickerFormField.switchToEntryModeKey`: Key for entry mode toggling in dialogs.
 
 Example widget test:
 
 ```dart
-// Type a date
-await tester.enterText(find.byKey(DatePickerFormField.textInputKey), '15061995');
+// Type a date (with or without separators)
+await tester.enterText(find.byKey(DatePickerFormField.textInputKey), '15/06/1995');
 await tester.pumpAndSettle();
 
-// Or tap the calendar icon
+// Or tap the calendar icon to open the adaptive picker
 await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
 await tester.pumpAndSettle();
 ```
@@ -237,17 +272,18 @@ await tester.pumpAndSettle();
 ## How this compares
 
 Alternative pub.dev packages, with their like counts, 30-day downloads and
-latest releases as of 28 September 2026:
+latest releases as of 1 October 2026:
 
 | Package | Likes | Downloads | Latest | Trade-offs |
 | --- | --: | --: | --- | --- |
-| [`date_field`](https://pub.dev/packages/date_field) | 139 | 905 | 7.0.0 (Sep 2026) | A well-maintained `DateTimeFormField` wrapping the platform pickers (Material and Cupertino) with date, time or date-and-time modes. Its value always comes from a picker dialog: there is no keyboard-first entry and no locale-driven input mask, and it depends on `cupertino_ui` as well as `material_ui`. |
-| Hand-rolled `TextFormField` + `showDatePicker` | - | - | - | Zero extra dependencies, but you implement locale masking, separator and backspace handling, parsing, range clamping and the validation contract yourself. |
+| [`date_field`](https://pub.dev/packages/date_field) | 139 | 905 | 7.0.0 (Sep 2026) | A well-maintained `DateTimeFormField` wrapping platform pickers (Material and Cupertino) with date, time or date-and-time modes. However, its value always comes from a picker dialog or sheet: there is no keyboard-first entry, no typed separator input, and no locale-driven input mask. |
+| Hand-rolled `TextFormField` + `showDatePicker` | - | - | - | Zero extra dependencies, but you implement adaptive platform indirection, locale masking, keyboard separator entry and backspacing, parsing, range clamping and the validation contract yourself. |
 
-Pick `date_picker_form_field` when you want `DD/MM/YYYY`-style typed entry driven
-by the active locale *and* the calendar dialog in the same field, with the
-parsed `DateTime` (or `null`) handed to your `Form` through `validator` and
-`onSaved`.
+Pick `date_picker_form_field` when you want `DD/MM/YYYY`-style keyboard entry driven
+by the active locale with typed separator support *and* adaptive platform calendar
+pickers (Material on Android/desktop, Cupertino on iOS/macOS, or custom providers)
+in the same field, with the parsed `DateTime` (or `null`) handed to your `Form`
+through `validator` and `onSaved`.
 
 ---
 
