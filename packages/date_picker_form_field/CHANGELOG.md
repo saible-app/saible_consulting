@@ -1,3 +1,17 @@
+## 0.2.0
+
+* **Adaptive platform picker**: introduced `AdaptiveDatePickerProvider` with
+  `CupertinoDatePickerProvider` (Cupertino date picker in a modal popup on iOS and macOS)
+  and `MaterialDatePickerProvider` (`DatePickerDialog` on Android, Linux, and Windows).
+* **Custom provider injection**: added `pickerProvider` parameter to `DatePickerFormField`
+  to allow supplying custom date picker implementations or overriding the platform default.
+* **Direct separator keyboard typing**: `DateInputFormatter` now supports typing separators
+  directly (`/`, `.`, `-`, `,`, space) with immediate display feedback, and automatically
+  pads single-digit day or month entries with a leading zero (e.g. `3/` becomes `03/`).
+* **Cleaned up testing keys**: removed obsolete `DatePickerFormField.switchToEntryModeKey`
+  as the field now defaults directly to keyboard entry.
+* **Updated dependencies**: added `cupertino_ui: ^1.1.1` and `provider: ^6.1.5+1`.
+
 ## 0.1.0
 
 * Initial release.
