@@ -6,6 +6,17 @@ An accessible, high-performance country picker form field for Flutter applicatio
 
 `CountryPickerFormField` embeds directly into Flutter forms as a first-class form component. Powered by the Material 3 `SearchAnchor` pattern, it provides a fluid search experience that responds in real time across mobile, tablet, desktop, and web platforms.
 
+<table>
+  <tr>
+    <th align="center">Nationality</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><video id="nationality" src="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="50%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
+
 ---
 
 ## Key Architectural Strengths

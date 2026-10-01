@@ -1,15 +1,24 @@
 
-https://github.com/user-attachments/assets/6e913f84-66f9-40b1-bfa5-0a4491008033
 # Saible Consulting Monorepo
 
 A modular collection of enterprise-grade Flutter packages and form field widgets developed by Saible Consulting, alongside a comprehensive interactive demonstration application.
 
----
+<table>
+  <tr>
+    <th align="center">Date of Birth</th>
+    <th align="center">Nationality</th>
+    <th align="center">Phone Number</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="nationality" src="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="phone" src="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
 
-<video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" autoplay loop muted playsinline></video>
-<video id="nationality" src="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440" autoplay loop muted playsinline></video>
-<video id="phone" src="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b" autoplay loop muted playsinline></video>
-<video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" autoplay loop muted playsinline></video>
+---
 
 ## Workspace Structure
 

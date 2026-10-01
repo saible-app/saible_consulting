@@ -6,6 +6,21 @@ A lightweight Flutter demonstration application showcasing the Saible Consulting
 - [`country_picker_form_field`](https://pub.dev/packages/country_picker_form_field) ([source](../../packages/country_picker_form_field))
 - [`phone_number_form_field`](https://pub.dev/packages/phone_number_form_field) ([source](../../packages/phone_number_form_field))
 
+<table>
+  <tr>
+    <th align="center">Date of Birth</th>
+    <th align="center">Nationality</th>
+    <th align="center">Phone Number</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="nationality" src="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="phone" src="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="25%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
+
 ---
 
 ## What This Demo Demonstrates

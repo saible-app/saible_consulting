@@ -6,6 +6,17 @@ An accessible, locale-adaptive date input field for Flutter that bridges keyboar
 
 `DatePickerFormField` solves the classic user experience dilemma between typing dates quickly and choosing dates from a calendar. It dynamically formats input as the user types according to the active locale's natural date pattern (e.g. `DD/MM/YYYY`, `MM/DD/YYYY`, or `YYYY-MM-DD`), supports direct keyboard entry of date separators (`/`, `.`, `-`), and offers seamless adaptive popup calendar selection (Material and Cupertino).
 
+<table>
+  <tr>
+    <th align="center">Date of Birth</th>
+    <th align="center">Language Switcher</th>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="50%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+  </tr>
+</table>
+
 ---
 
 ## Key Architectural Strengths
