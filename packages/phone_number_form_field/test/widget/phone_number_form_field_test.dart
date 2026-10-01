@@ -34,6 +34,7 @@ void main() {
   }) {
     final saibleLoc = lookupCountryLocalizations(locale);
     return MaterialApp(
+      theme: ThemeData(splashFactory: InkRipple.splashFactory),
       locale: locale,
       supportedLocales: SaibleLocalizations.supportedLocales,
       localizationsDelegates: SaibleLocalizations.localizationsDelegates,

@@ -148,6 +148,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
           locale: const Locale('en', 'GB'),
           localizationsDelegates: const [CountryLocalizations.delegate],
           supportedLocales: CountryLocalizations.supportedLocales,

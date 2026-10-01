@@ -118,7 +118,12 @@ class SaibleTheme({
   /// Builds a [ThemeData] based on the given [colorScheme] with Saible typography and widgets.
   ThemeData theme(ColorScheme colorScheme) {
     // 1. Generate M3 base theme with appropriate ColorScheme and default metrics
-    final baseTheme = ThemeData(useMaterial3: true, brightness: colorScheme.brightness, colorScheme: colorScheme);
+    final baseTheme = ThemeData(
+      useMaterial3: true,
+      brightness: colorScheme.brightness,
+      colorScheme: colorScheme,
+      splashFactory: InkRipple.splashFactory,
+    );
 
     // 2. Build custom typography onto the base Material 3 TextTheme
     final customTextTheme = _createSaibleTextTheme(baseTheme.textTheme);
