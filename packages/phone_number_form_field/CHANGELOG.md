@@ -1,3 +1,8 @@
+## 0.2.1
+
+* Updated README with clickable video preview thumbnails linking to demonstration recordings, compatible with pub.dev and GitHub markdown rendering.
+* Bumped `saible_consulting_core` dependency constraint to `^0.2.1`.
+
 ## 0.2.0
 
 * Bumped version to `0.2.0` aligned with the Saible Consulting package suite.
