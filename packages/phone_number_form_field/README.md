@@ -12,8 +12,8 @@ An accessible, international phone number input field for Flutter applications f
     <th align="center">Language Switcher</th>
   </tr>
   <tr>
-    <td align="center" width="50%"><video id="phone" src="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b" width="100%" autoplay loop muted playsinline></video></td>
-    <td align="center" width="50%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="50%"><a href="https://github.com/user-attachments/assets/ddd343e0-60fb-4984-b33e-4331375b668b"><img src="https://raw.githubusercontent.com/saible-app/saible_consulting/main/doc/images/phone_thumbnail.png" alt="Phone Number demo" width="100%"/></a></td>
+    <td align="center" width="50%"><a href="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d"><img src="https://raw.githubusercontent.com/saible-app/saible_consulting/main/doc/images/language_thumbnail.png" alt="Language Switcher demo" width="100%"/></a></td>
   </tr>
 </table>
 
@@ -56,8 +56,8 @@ Add `phone_number_form_field` and [`saible_consulting_core`](https://pub.dev/pac
 
 ```yaml
 dependencies:
-  phone_number_form_field: ^0.2.0
-  saible_consulting_core: ^0.2.0
+  phone_number_form_field: ^0.2.1
+  saible_consulting_core: ^0.2.1
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter

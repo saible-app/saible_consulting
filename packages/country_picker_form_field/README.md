@@ -12,8 +12,8 @@ An accessible, high-performance country picker form field for Flutter applicatio
     <th align="center">Language Switcher</th>
   </tr>
   <tr>
-    <td align="center" width="50%"><video id="nationality" src="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440" width="100%" autoplay loop muted playsinline></video></td>
-    <td align="center" width="50%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="50%"><a href="https://github.com/user-attachments/assets/0f48cd3b-9714-479f-83dd-a06edd763440"><img src="https://raw.githubusercontent.com/saible-app/saible_consulting/main/doc/images/nationality_thumbnail.png" alt="Nationality demo" width="100%"/></a></td>
+    <td align="center" width="50%"><a href="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d"><img src="https://raw.githubusercontent.com/saible-app/saible_consulting/main/doc/images/language_thumbnail.png" alt="Language Switcher demo" width="100%"/></a></td>
   </tr>
 </table>
 
@@ -54,8 +54,8 @@ Add `country_picker_form_field` and [`saible_consulting_core`](https://pub.dev/p
 
 ```yaml
 dependencies:
-  country_picker_form_field: ^0.2.0
-  saible_consulting_core: ^0.2.0
+  country_picker_form_field: ^0.2.1
+  saible_consulting_core: ^0.2.1
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter

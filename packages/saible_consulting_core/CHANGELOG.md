@@ -1,3 +1,8 @@
+## 0.2.1
+
+* Bumped version to `0.2.1` across the Saible Consulting package suite.
+* Updated documentation with clickable video preview thumbnails across the monorepo packages.
+
 ## 0.2.0
 
 * Bumped version to `0.2.0` across the Saible Consulting package suite.

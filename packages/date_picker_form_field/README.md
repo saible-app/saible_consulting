@@ -12,8 +12,8 @@ An accessible, locale-adaptive date input field for Flutter that bridges keyboar
     <th align="center">Language Switcher</th>
   </tr>
   <tr>
-    <td align="center" width="50%"><video id="dob" src="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db" width="100%" autoplay loop muted playsinline></video></td>
-    <td align="center" width="50%"><video id="language" src="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d" width="100%" autoplay loop muted playsinline></video></td>
+    <td align="center" width="50%"><a href="https://github.com/user-attachments/assets/1e3d969f-0c3d-4a97-a98e-c641134e75db"><img src="https://raw.githubusercontent.com/saible-app/saible_consulting/main/doc/images/dob_thumbnail.png" alt="Date of Birth demo" width="100%"/></a></td>
+    <td align="center" width="50%"><a href="https://github.com/user-attachments/assets/8b2d14bc-45e1-4e6a-a1a5-6182a36e986d"><img src="https://raw.githubusercontent.com/saible-app/saible_consulting/main/doc/images/language_thumbnail.png" alt="Language Switcher demo" width="100%"/></a></td>
   </tr>
 </table>
 
@@ -60,7 +60,7 @@ Add `date_picker_form_field` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  date_picker_form_field: ^0.2.0
+  date_picker_form_field: ^0.2.1
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter
