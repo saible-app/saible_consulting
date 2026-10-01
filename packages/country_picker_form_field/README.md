@@ -1,5 +1,7 @@
 # country_picker_form_field
 
+[![pub package](https://img.shields.io/pub/v/country_picker_form_field.svg)](https://pub.dev/packages/country_picker_form_field)
+
 An accessible, high-performance country picker form field for Flutter applications with integrated fuzzy search, native flag emojis, and multi-lingual localization.
 
 `CountryPickerFormField` embeds directly into Flutter forms as a first-class form component. Powered by the Material 3 `SearchAnchor` pattern, it provides a fluid search experience that responds in real time across mobile, tablet, desktop, and web platforms.
@@ -37,12 +39,12 @@ An accessible, high-performance country picker form field for Flutter applicatio
 
 ## Getting Started
 
-Add `country_picker_form_field` and `saible_consulting_core` to your `pubspec.yaml`:
+Add `country_picker_form_field` and [`saible_consulting_core`](https://pub.dev/packages/saible_consulting_core) to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  country_picker_form_field: ^0.1.0
-  saible_consulting_core: ^0.1.0
+  country_picker_form_field: ^0.2.0
+  saible_consulting_core: ^0.2.0
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter
@@ -213,7 +215,7 @@ await tester.pumpAndSettle();
 ## How this compares
 
 Alternative pub.dev packages, with their like counts, 30-day downloads and
-latest releases as of 28 September 2026:
+latest releases as of 1 October 2026:
 
 | Package | Likes | Downloads | Latest | Trade-offs |
 | --- | --: | --: | --- | --- |

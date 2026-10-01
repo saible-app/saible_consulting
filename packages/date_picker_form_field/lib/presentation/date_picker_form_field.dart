@@ -12,10 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:date_picker_form_field/presentation/adaptive_date_picker_provider.dart';
+import 'package:date_picker_form_field/presentation/cupertino_date_picker_provider.dart';
 import 'package:date_picker_form_field/presentation/date_input_formatter.dart';
+import 'package:date_picker_form_field/presentation/material_date_picker_provider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 /// The current state of a date input field, containing the parsed `parsedDate`
 /// (or `null` if invalid, incomplete, or out of range) and the `rawText` as typed.
@@ -24,10 +28,10 @@ typedef DateInputValue = ({
   String rawText,
 });
 
-/// The default earliest allowable date for [DatePickerFormField], January 1, 1900.
+/// The default earliest allowable date for [_DatePickerFormField], January 1, 1900.
 final defaultFirstDate = DateTime(1900);
 
-/// The default latest allowable date for [DatePickerFormField], December 31, 2099.
+/// The default latest allowable date for [_DatePickerFormField], December 31, 2099.
 final defaultLastDate = DateTime(2099, 12, 31);
 
 Future<DateTime?> _chooseDate(
@@ -40,14 +44,12 @@ Future<DateTime?> _chooseDate(
   void Function(DateTime)? onPickDate,
   void Function(DateInputValue)? onDateChanged,
   String? pickerHelpText,
-) async => await showDatePicker(
+) async => await context.read<AdaptiveDatePickerProvider>().show(
   context: context,
   helpText: pickerHelpText,
   initialDate: initialDate,
   firstDate: firstDate,
   lastDate: lastDate,
-  switchToInputEntryModeIcon: const Icon(Icons.edit, key: DatePickerFormField.switchToEntryModeKey),
-  keyboardType: TextInputType.datetime,
 ).then((date) {
   if (date == null || !context.mounted) return null;
   controller.text = dateFormat.format(date);
@@ -58,8 +60,7 @@ Future<DateTime?> _chooseDate(
 });
 
 /// A form field widget for selecting or typing dates with calendar picker integration.
-class const DatePickerFormField({
-  super.key,
+class const _DatePickerFormField({
   this.initialDate,
   this.firstDate,
   this.lastDate,
@@ -74,76 +75,25 @@ class const DatePickerFormField({
   this.validator,
   this.onSaved,
 }) extends StatefulWidget {
-  /// The [Key] for switching to text input entry mode within the date picker dialog.
-  static const switchToEntryModeKey = Key('datePickerTextField_switchToEntryMode');
-
-  /// The [Key] for the text input field.
-  static const textInputKey = Key('datePickerTextField_textInput');
-
-  /// The [Key] for the suffix icon button that launches the date picker dialog.
-  static const launchDatePickerKey = Key('datePickerTextField_launchDatePicker');
-
-  /// Creates a [DatePickerFormField].
-  this;
-
-  /// The initial date displayed and selected in the field.
   final DateTime? initialDate;
-
-  /// The earliest selectable date (defaults to [defaultFirstDate]).
   final DateTime? firstDate;
-
-  /// The latest selectable date (defaults to [defaultLastDate]).
   final DateTime? lastDate;
-
-  /// The decoration applied to the underlying [TextFormField].
   final InputDecoration? decoration;
-
-  /// Optional help text displayed in the date picker dialog header.
   final String? pickerHelpText;
-
-  /// An optional [FocusNode] to control the focus of the input field.
   final FocusNode? focusNode;
-
-  /// Callback invoked when a date is selected from the calendar dialog.
   final void Function(DateTime)? onPickDate;
-
-  /// Callback invoked when the date value changes, firing the parsed [DateTime]
-  /// if valid or `null` if the input is invalid, incomplete, or out of range.
   final void Function(DateInputValue)? onDateChanged;
-
-  /// Callback invoked when the user edits text directly in the field.
   final void Function(String)? onEditText;
-
-  /// Callback invoked when the user indicates they are done editing (e.g. presses Enter/Submit).
   final void Function(String)? onFieldSubmitted;
-
-  /// Callback invoked when editing is complete on the text field.
   final void Function()? onEditingComplete;
-
-  /// Validates the parsed date whenever the enclosing [Form] validates, e.g.
-  /// through `Form.validate()` or a form-level [AutovalidateMode]. The value is
-  /// the parsed [DateTime], or `null` while the input is empty, incomplete or
-  /// invalid (e.g. `31/02/1999`, or a date outside [firstDate] and [lastDate]).
-  /// Return `null` when the date is acceptable.
-  ///
-  /// ```dart
-  /// DatePickerFormField(
-  ///   decoration: const InputDecoration(labelText: 'Date of Birth'),
-  ///   validator: (date) => date == null ? 'Enter a valid date' : null,
-  ///   onSaved: (date) => _dateOfBirth = date,
-  /// )
-  /// ```
   final String? Function(DateTime? date)? validator;
-
-  /// Callback invoked with the parsed date (or `null`) when the enclosing
-  /// [Form] saves, i.e. through `Form.save()`.
   final void Function(DateTime? date)? onSaved;
 
   @override
-  State<DatePickerFormField> createState() => _DatePickerFormFieldState();
+  State<_DatePickerFormField> createState() => _DatePickerFormFieldState();
 }
 
-class _DatePickerFormFieldState() extends State<DatePickerFormField> {
+class _DatePickerFormFieldState() extends State<_DatePickerFormField> {
   late final TextEditingController controller;
   Locale? _lastLocale;
   DateTime? currentDate;
@@ -252,7 +202,7 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
     );
   }
 
-  /// The date the picker dialog opens on: [DatePickerFormField.initialDate]
+  /// The date the picker dialog opens on: [_DatePickerFormField.initialDate]
   /// when given, otherwise today, clamped into the selectable window so a
   /// last date in the past (e.g. a date-of-birth field) cannot trip the
   /// picker's range assertion.
@@ -263,5 +213,114 @@ class _DatePickerFormFieldState() extends State<DatePickerFormField> {
     if (proposed.isBefore(first)) return first;
     if (proposed.isAfter(last)) return last;
     return proposed;
+  }
+}
+
+/// A form field widget for selecting or typing dates with calendar picker integration.
+class const DatePickerFormField({
+  super.key,
+  this.initialDate,
+  this.firstDate,
+  this.lastDate,
+  this.decoration,
+  this.onPickDate,
+  this.onDateChanged,
+  this.onEditText,
+  this.onFieldSubmitted,
+  this.onEditingComplete,
+  this.focusNode,
+  this.pickerHelpText,
+  this.validator,
+  this.onSaved,
+  this.pickerProvider,
+}) extends StatelessWidget {
+  /// The [Key] for the text input field.
+  static const textInputKey = Key('datePickerTextField_textInput');
+
+  /// The [Key] for the suffix icon button that launches the date picker dialog.
+  static const launchDatePickerKey = Key('datePickerTextField_launchDatePicker');
+
+  /// Creates a [DatePickerFormField].
+  this;
+
+  /// The initial date displayed and selected in the field.
+  final DateTime? initialDate;
+
+  /// The earliest selectable date (defaults to [defaultFirstDate]).
+  final DateTime? firstDate;
+
+  /// The latest selectable date (defaults to [defaultLastDate]).
+  final DateTime? lastDate;
+
+  /// The decoration applied to the underlying [TextFormField].
+  final InputDecoration? decoration;
+
+  /// Optional help text displayed in the date picker dialog header.
+  final String? pickerHelpText;
+
+  /// An optional [FocusNode] to control the focus of the input field.
+  final FocusNode? focusNode;
+
+  /// Callback invoked when a date is selected from the calendar dialog.
+  final void Function(DateTime)? onPickDate;
+
+  /// Callback invoked when the date value changes, firing the parsed [DateTime]
+  /// if valid or `null` if the input is invalid, incomplete, or out of range.
+  final void Function(DateInputValue)? onDateChanged;
+
+  /// Callback invoked when the user edits text directly in the field.
+  final void Function(String)? onEditText;
+
+  /// Callback invoked when the user indicates they are done editing (e.g. presses Enter/Submit).
+  final void Function(String)? onFieldSubmitted;
+
+  /// Callback invoked when editing is complete on the text field.
+  final void Function()? onEditingComplete;
+  /// Validates the parsed date whenever the enclosing [Form] validates, e.g.
+  /// through `Form.validate()` or a form-level [AutovalidateMode]. The value is
+  /// the parsed [DateTime], or `null` while the input is empty, incomplete or
+  /// invalid (e.g. `31/02/1999`, or a date outside [firstDate] and [lastDate]).
+  /// Return `null` when the date is acceptable.
+  ///
+  /// ```dart
+  /// DatePickerFormField(
+  ///   decoration: const InputDecoration(labelText: 'Date of Birth'),
+  ///   validator: (date) => date == null ? 'Enter a valid date' : null,
+  ///   onSaved: (date) => _dateOfBirth = date,
+  /// )
+  /// ```
+  final String? Function(DateTime? date)? validator;
+
+  /// Callback invoked with the parsed date (or `null`) when the enclosing
+  /// [Form] saves, i.e. through `Form.save()`.
+  final void Function(DateTime? date)? onSaved;
+
+  /// An optional custom [AdaptiveDatePickerProvider] to override the platform default.
+  final AdaptiveDatePickerProvider? pickerProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
+    return Provider<AdaptiveDatePickerProvider>.value(
+      value: pickerProvider ?? switch (platform) {
+        TargetPlatform.iOS || TargetPlatform.macOS => CupertinoDatePickerProvider(),
+        _ => MaterialDatePickerProvider(),
+      },
+      child: _DatePickerFormField(
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate,
+        decoration: decoration,
+        onPickDate: onPickDate,
+        onDateChanged: onDateChanged,
+        onEditText: onEditText,
+        onFieldSubmitted: onFieldSubmitted,
+        onEditingComplete: onEditingComplete,
+        focusNode: focusNode,
+        pickerHelpText: pickerHelpText,
+        validator: validator,
+        onSaved: onSaved,
+      ),
+    );
   }
 }

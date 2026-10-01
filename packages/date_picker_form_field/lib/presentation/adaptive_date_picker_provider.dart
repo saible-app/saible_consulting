@@ -12,8 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'presentation/adaptive_date_picker_provider.dart';
-export 'presentation/cupertino_date_picker_provider.dart';
-export 'presentation/date_input_formatter.dart';
-export 'presentation/date_picker_form_field.dart';
-export 'presentation/material_date_picker_provider.dart';
+import 'package:flutter/widgets.dart';
+
+/// A date picker provider that uses Cupertino styling in MacOS and iOS platforms, and Material styling in others
+abstract class const AdaptiveDatePickerProvider() {
+  /// Creates an [AdaptiveDatePickerProvider].
+  this;
+
+  /// 
+  Future<DateTime?> show({
+    required BuildContext context,
+    String? helpText,
+    DateTime? initialDate,
+    required DateTime firstDate,
+    required DateTime lastDate,
+  });
+}

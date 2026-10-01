@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:date_picker_form_field/presentation/date_picker_form_field.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:date_picker_form_field/date_picker_form_field.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -29,6 +30,8 @@ void main() {
 
   Widget buildTestWidget({
     Locale locale = const Locale('en', 'GB'),
+    TargetPlatform platform = TargetPlatform.android,
+    AdaptiveDatePickerProvider? pickerProvider,
     DateTime? initialDate,
     DateTime? firstDate,
     DateTime? lastDate,
@@ -48,6 +51,10 @@ void main() {
     final first = DateTime(1900);
     final last = DateTime(2100, 12, 31);
     return MaterialApp(
+      theme: ThemeData(
+        platform: platform,
+        splashFactory: InkRipple.splashFactory,
+      ),
       locale: locale,
       supportedLocales: const [
         Locale('en', 'GB'),
@@ -79,6 +86,7 @@ void main() {
               onEditingComplete: onEditingComplete,
               validator: validator,
               onSaved: onSaved,
+              pickerProvider: pickerProvider,
             ),
           ),
         ),
@@ -89,6 +97,8 @@ void main() {
   Future<void> pumpDatePicker(
     WidgetTester tester, {
     Locale locale = const Locale('en', 'GB'),
+    TargetPlatform platform = TargetPlatform.android,
+    AdaptiveDatePickerProvider? pickerProvider,
     DateTime? initialDate,
     DateTime? firstDate,
     DateTime? lastDate,
@@ -105,6 +115,8 @@ void main() {
     await tester.pumpWidget(
       buildTestWidget(
         locale: locale,
+        platform: platform,
+        pickerProvider: pickerProvider,
         initialDate: initialDate,
         firstDate: firstDate,
         lastDate: lastDate,
@@ -267,6 +279,124 @@ void main() {
     }
   });
 
+  group('DateInputFormatter - Typing Separators Directly', () {
+    test('shows separator when typed after completing day in en_GB', () {
+      final formatter = DateInputFormatter();
+      final val1 = formatter.formatEditUpdate(
+        TextEditingValue.empty,
+        const TextEditingValue(text: '31', selection: TextSelection.collapsed(offset: 2)),
+      );
+      expect(val1.text, '31');
+
+      final val2 = formatter.formatEditUpdate(
+        val1,
+        const TextEditingValue(text: '31/', selection: TextSelection.collapsed(offset: 3)),
+      );
+      expect(val2.text, '31/');
+      expect(val2.selection.baseOffset, 3);
+    });
+
+    test('pads single digit day when separator is typed in en_GB', () {
+      final formatter = DateInputFormatter();
+      final val = formatter.formatEditUpdate(
+        const TextEditingValue(text: '3', selection: TextSelection.collapsed(offset: 1)),
+        const TextEditingValue(text: '3/', selection: TextSelection.collapsed(offset: 2)),
+      );
+      expect(val.text, '03/');
+      expect(val.selection.baseOffset, 3);
+    });
+
+    test('pads single digit month when separator is typed in en_GB', () {
+      final formatter = DateInputFormatter();
+      final val = formatter.formatEditUpdate(
+        const TextEditingValue(text: '03/5', selection: TextSelection.collapsed(offset: 4)),
+        const TextEditingValue(text: '03/5/', selection: TextSelection.collapsed(offset: 5)),
+      );
+      expect(val.text, '03/05/');
+      expect(val.selection.baseOffset, 6);
+    });
+
+    test('normalizes typed slash to locale dot separator in de_DE', () {
+      final formatter = DateInputFormatter(locale: 'de_DE');
+      final val = formatter.formatEditUpdate(
+        const TextEditingValue(text: '31', selection: TextSelection.collapsed(offset: 2)),
+        const TextEditingValue(text: '31/', selection: TextSelection.collapsed(offset: 3)),
+      );
+      expect(val.text, '31.');
+    });
+
+    test('ignores leading separator on empty input', () {
+      final formatter = DateInputFormatter();
+      final val = formatter.formatEditUpdate(
+        TextEditingValue.empty,
+        const TextEditingValue(text: '/', selection: TextSelection.collapsed(offset: 1)),
+      );
+      expect(val.text, '');
+    });
+
+    test('ignores duplicate consecutive separators', () {
+      final formatter = DateInputFormatter();
+      final val = formatter.formatEditUpdate(
+        const TextEditingValue(text: '31/', selection: TextSelection.collapsed(offset: 3)),
+        const TextEditingValue(text: '31//', selection: TextSelection.collapsed(offset: 4)),
+      );
+      expect(val.text, '31/');
+    });
+
+    test('does not add trailing separator after final year segment', () {
+      final formatter = DateInputFormatter();
+      final val = formatter.formatEditUpdate(
+        const TextEditingValue(text: '31/10/1999', selection: TextSelection.collapsed(offset: 10)),
+        const TextEditingValue(text: '31/10/1999/', selection: TextSelection.collapsed(offset: 11)),
+      );
+      expect(val.text, '31/10/1999');
+    });
+
+    test('shows separator when typed in year-first locale (ja_JP)', () {
+      final formatter = DateInputFormatter(locale: 'ja_JP');
+      final val = formatter.formatEditUpdate(
+        const TextEditingValue(text: '1999', selection: TextSelection.collapsed(offset: 4)),
+        const TextEditingValue(text: '1999/', selection: TextSelection.collapsed(offset: 5)),
+      );
+      expect(val.text, '1999/');
+    });
+  });
+
+  group('DatePickerFormField - Typing Separators via Widget Input', () {
+    testWidgets('shows separator immediately when typed after day', (tester) async {
+      await pumpDatePicker(tester);
+      final text = await typeIntoDateField(tester, '31/');
+      expect(text, '31/');
+    });
+
+    testWidgets('formats complete date when separators are typed by user', (tester) async {
+      await pumpDatePicker(tester);
+      final text = await typeIntoDateField(tester, '31/10/1999');
+      expect(text, '31/10/1999');
+    });
+
+    testWidgets('allows backspacing a typed separator', (tester) async {
+      await pumpDatePicker(tester);
+      await typeIntoDateField(tester, '31/');
+      verifyEditableText(tester, '31/');
+
+      final backspaced = await backspaceInDateField(tester);
+      expect(backspaced, '31');
+    });
+
+    testWidgets('pads single digit day and month when typed with separator', (tester) async {
+      await pumpDatePicker(tester);
+      final text = await typeIntoDateField(tester, '3/5/2026');
+      expect(text, '03/05/2026');
+    });
+
+    testWidgets('shows dot separator in German locale when typed', (tester) async {
+      await pumpDatePicker(tester, locale: const Locale('de', 'DE'));
+      final text = await typeIntoDateField(tester, '31.');
+      expect(text, '31.');
+    });
+  });
+
   group('DatePickerFormField - Callbacks and User Interactions', () {
     testWidgets('calls onEditText when user types text', (tester) async {
       final edits = <String>[];
@@ -340,7 +470,6 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(DatePickerDialog), findsOneWidget);
-      expect(find.byKey(DatePickerFormField.switchToEntryModeKey), findsOneWidget);
 
       final okButton = find.byType(TextButton).last;
       await tester.tap(okButton);
@@ -533,4 +662,325 @@ void main() {
     });
 
   });
+
+  group('AdaptiveDatePickerProvider - Material Implementation', () {
+    testWidgets('MaterialDatePickerProvider opens DatePickerDialog and returns chosen date on confirm', (tester) async {
+      DateTime? result;
+      final provider = MaterialDatePickerProvider();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await provider.show(
+                    context: context,
+                    helpText: 'Select Date',
+                    initialDate: DateTime(2000, 1, 15),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+                },
+                child: const Text('Open Material Picker'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Material Picker'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+      expect(find.text('Select Date'), findsOneWidget);
+
+      final okButton = find.byType(TextButton).last;
+      await tester.tap(okButton);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DatePickerDialog), findsNothing);
+      expect(result, DateTime(2000, 1, 15));
+    });
+
+    testWidgets('MaterialDatePickerProvider returns null when DatePickerDialog is cancelled', (tester) async {
+      DateTime? result = DateTime(2000);
+      final provider = MaterialDatePickerProvider();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await provider.show(
+                    context: context,
+                    initialDate: DateTime(2000, 1, 15),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+                },
+                child: const Text('Open Material Picker'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Material Picker'));
+      await tester.pumpAndSettle();
+
+      final cancelButton = find.byType(TextButton).first;
+      await tester.tap(cancelButton);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DatePickerDialog), findsNothing);
+      expect(result, isNull);
+    });
+  });
+
+  group('AdaptiveDatePickerProvider - Cupertino Implementation', () {
+    testWidgets('CupertinoDatePickerProvider opens Cupertino modal popup and returns selected date on change', (tester) async {
+      DateTime? result;
+      final provider = CupertinoDatePickerProvider();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await provider.show(
+                    context: context,
+                    initialDate: DateTime(2000, 1, 15),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+                },
+                child: const Text('Open Cupertino Picker'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Cupertino Picker'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsOneWidget);
+
+      final newDate = DateTime(2005, 6, 20);
+      tester.widget<CupertinoDatePicker>(find.byType(CupertinoDatePicker)).onDateTimeChanged(newDate);
+
+      Navigator.of(tester.element(find.byType(CupertinoDatePicker))).pop();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsNothing);
+      expect(result, newDate);
+    });
+
+    testWidgets('CupertinoDatePickerProvider returns null when dismissed without date change', (tester) async {
+      DateTime? result = DateTime(2000);
+      final provider = CupertinoDatePickerProvider();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await provider.show(
+                    context: context,
+                    initialDate: DateTime(2000, 1, 15),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+                },
+                child: const Text('Open Cupertino Picker'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Cupertino Picker'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsOneWidget);
+
+      Navigator.of(tester.element(find.byType(CupertinoDatePicker))).pop();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsNothing);
+      expect(result, isNull);
+    });
+  });
+
+  group('DatePickerFormField - Adaptive Platform Indirection', () {
+    testWidgets('uses MaterialDatePickerProvider (DatePickerDialog) on Android', (tester) async {
+      await pumpDatePicker(
+        tester,
+        initialDate: DateTime(1999, 10, 31),
+      );
+
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+      expect(find.byType(CupertinoDatePicker), findsNothing);
+
+      final cancelButton = find.byType(TextButton).first;
+      await tester.tap(cancelButton);
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('uses CupertinoDatePickerProvider (CupertinoDatePicker) on iOS', (tester) async {
+      await pumpDatePicker(
+        tester,
+        platform: TargetPlatform.iOS,
+        initialDate: DateTime(1999, 10, 31),
+      );
+
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsOneWidget);
+      expect(find.byType(DatePickerDialog), findsNothing);
+
+      Navigator.of(tester.element(find.byType(CupertinoDatePicker))).pop();
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('uses CupertinoDatePickerProvider (CupertinoDatePicker) on macOS', (tester) async {
+      await pumpDatePicker(
+        tester,
+        platform: TargetPlatform.macOS,
+        initialDate: DateTime(1999, 10, 31),
+      );
+
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsOneWidget);
+      expect(find.byType(DatePickerDialog), findsNothing);
+
+      Navigator.of(tester.element(find.byType(CupertinoDatePicker))).pop();
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('selecting date in Cupertino mode updates field text and invokes callbacks', (tester) async {
+      DateTime? pickedDate;
+      DateInputValue? changedDate;
+      await pumpDatePicker(
+        tester,
+        platform: TargetPlatform.iOS,
+        initialDate: DateTime(1999, 10, 31),
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100, 12, 31),
+        onPickDate: (d) => pickedDate = d,
+        onDateChanged: (v) => changedDate = v,
+      );
+
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsOneWidget);
+
+      final selectedDate = DateTime(2003, 4, 18);
+      tester.widget<CupertinoDatePicker>(find.byType(CupertinoDatePicker)).onDateTimeChanged(selectedDate);
+
+      Navigator.of(tester.element(find.byType(CupertinoDatePicker))).pop();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsNothing);
+      expect(pickedDate, selectedDate);
+      expect(changedDate?.parsedDate, selectedDate);
+      verifyEditableText(tester, '18/04/2003');
+    });
+
+    testWidgets('delegates to injected pickerProvider when provided', (tester) async {
+      final selectedDate = DateTime(2018, 9, 21);
+      final mockProvider = _TestAdaptiveDatePickerProvider(selectedDate);
+      DateTime? pickedDate;
+      DateInputValue? changedDate;
+
+      await pumpDatePicker(
+        tester,
+        platform: TargetPlatform.iOS,
+        pickerProvider: mockProvider,
+        initialDate: DateTime(2000),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2050),
+        pickerHelpText: 'Help me choose',
+        onPickDate: (d) => pickedDate = d,
+        onDateChanged: (v) => changedDate = v,
+      );
+
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(mockProvider.showCalled, isTrue);
+      expect(mockProvider.lastHelpText, 'Help me choose');
+      expect(mockProvider.lastInitialDate, DateTime(2000));
+      expect(mockProvider.lastFirstDate, DateTime(1950));
+      expect(mockProvider.lastLastDate, DateTime(2050));
+
+      expect(pickedDate, selectedDate);
+      expect(changedDate?.parsedDate, selectedDate);
+      verifyEditableText(tester, '21/09/2018');
+    });
+
+    testWidgets('injected pickerProvider returning null leaves text unchanged', (tester) async {
+      final mockProvider = _TestAdaptiveDatePickerProvider();
+      DateTime? pickedDate;
+      DateInputValue? changedDate;
+
+      await pumpDatePicker(
+        tester,
+        pickerProvider: mockProvider,
+        initialDate: DateTime(2000),
+        onPickDate: (d) => pickedDate = d,
+        onDateChanged: (v) => changedDate = v,
+      );
+
+      await tester.tap(find.byKey(DatePickerFormField.launchDatePickerKey));
+      await tester.pumpAndSettle();
+
+      expect(mockProvider.showCalled, isTrue);
+      expect(pickedDate, isNull);
+      expect(changedDate, isNull);
+      verifyEditableText(tester, '01/01/2000');
+    });
+  });
+}
+
+final class _TestAdaptiveDatePickerProvider([this.result]) implements AdaptiveDatePickerProvider {
+  this;
+
+  final DateTime? result;
+  bool showCalled = false;
+  String? lastHelpText;
+  DateTime? lastInitialDate;
+  DateTime? lastFirstDate;
+  DateTime? lastLastDate;
+
+  @override
+  Future<DateTime?> show({
+    required BuildContext context,
+    String? helpText,
+    DateTime? initialDate,
+    required DateTime firstDate,
+    required DateTime lastDate,
+  }) async {
+    showCalled = true;
+    lastHelpText = helpText;
+    lastInitialDate = initialDate;
+    lastFirstDate = firstDate;
+    lastLastDate = lastDate;
+    return result;
+  }
 }

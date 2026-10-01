@@ -73,6 +73,11 @@ class DateInputFormatter({this.locale = 'en_GB'}) extends TextInputFormatter {
     return _DatePattern(parts: parts, separator: separator);
   }
 
+  bool _isSeparator(String char) {
+    if (char == _pattern.separator) return true;
+    return char == '/' || char == '.' || char == '-' || char == ' ' || char == ',';
+  }
+
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     // Gracefully handle backspacing over separators
@@ -89,28 +94,54 @@ class DateInputFormatter({this.locale = 'en_GB'}) extends TextInputFormatter {
       );
     }
 
-    // Extract raw numbers
-    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
     final buffer = StringBuffer();
+    int partIdx = 0;
+    final currentPartDigits = StringBuffer();
 
-    int digitIdx = 0;
-    for (int i = 0; i < _pattern.parts.length; i++) {
-      final part = _pattern.parts[i];
-      final maxDigits = part == _DatePart.year ? 4 : 2;
-
-      for (int j = 0; j < maxDigits; j++) {
-        if (digitIdx < digits.length) {
-          buffer.write(digits[digitIdx]);
-          digitIdx++;
-        } else {
-          break;
-        }
+    void commitCurrentPart({required bool addSeparator}) {
+      if (currentPartDigits.isEmpty) return;
+      final part = _pattern.parts[partIdx];
+      String digits = currentPartDigits.toString();
+      // If user explicitly typed a separator after a single digit for day or month, pad to 2 digits.
+      if (addSeparator && digits.length == 1 && (part == _DatePart.day || part == _DatePart.month)) {
+        digits = '0$digits';
       }
-
-      // Add separator if user keeps typing for the next segment
-      if (digitIdx < digits.length && i < _pattern.parts.length - 1) {
+      buffer.write(digits);
+      if (addSeparator && partIdx < _pattern.parts.length - 1) {
         buffer.write(_pattern.separator);
       }
+      currentPartDigits.clear();
+      partIdx++;
+    }
+
+    for (int i = 0; i < newValue.text.length; i++) {
+      if (partIdx >= _pattern.parts.length) {
+        break;
+      }
+      final char = newValue.text[i];
+      final isDigit = char.codeUnitAt(0) >= 48 && char.codeUnitAt(0) <= 57;
+
+      if (isDigit) {
+        final part = _pattern.parts[partIdx];
+        final maxDigits = part == _DatePart.year ? 4 : 2;
+
+        if (currentPartDigits.length == maxDigits) {
+          commitCurrentPart(addSeparator: true);
+          if (partIdx < _pattern.parts.length) {
+            currentPartDigits.write(char);
+          }
+        } else {
+          currentPartDigits.write(char);
+        }
+      } else if (_isSeparator(char)) {
+        if (currentPartDigits.isNotEmpty) {
+          commitCurrentPart(addSeparator: true);
+        }
+      }
+    }
+
+    if (currentPartDigits.isNotEmpty && partIdx < _pattern.parts.length) {
+      commitCurrentPart(addSeparator: false);
     }
 
     final formatted = buffer.toString();
