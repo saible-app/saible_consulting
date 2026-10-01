@@ -23,6 +23,12 @@ final class CupertinoDatePickerProvider() extends AdaptiveDatePickerProvider {
 
   /// Creates a [CupertinoDatePickerProvider]
   this;
+
+  /// The [Key] for the cancel button in the Cupertino date picker toolbar.
+  static const cancelButtonKey = Key('cupertinoDatePicker_cancelButton');
+
+  /// The [Key] for the done button in the Cupertino date picker toolbar.
+  static const doneButtonKey = Key('cupertinoDatePicker_doneButton');
   
   @override
   Future<DateTime?> show({
@@ -33,18 +39,78 @@ final class CupertinoDatePickerProvider() extends AdaptiveDatePickerProvider {
     required DateTime lastDate,
   }) async {
     DateTime? dateTime;
-    await showCupertinoModalPopup(
-      context: context, 
-      builder: (context) => SafeArea(
-        top: false,
-        child: CupertinoDatePicker(
-          mode: CupertinoDatePickerMode.date,
-          initialDateTime: initialDate,
-          minimumDate: firstDate,
-          maximumDate: lastDate,
-          onDateTimeChanged: (d) => dateTime = d,
-        ),
-      ),
+    await showCupertinoModalPopup<void>(
+      context: context,
+      builder: (popupContext) {
+        final backgroundColor = CupertinoColors.systemBackground.resolveFrom(popupContext);
+        final cupertinoLocalizations = Localizations.of<CupertinoLocalizations>(popupContext, CupertinoLocalizations);
+        final cancelText = cupertinoLocalizations?.cancelButtonLabel ?? 'Cancel';
+        return ColoredBox(
+          color: backgroundColor,
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: CupertinoColors.secondarySystemBackground.resolveFrom(popupContext),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: CupertinoColors.separator.resolveFrom(popupContext),
+                        width: 0,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CupertinoButton(
+                        key: cancelButtonKey,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        onPressed: () {
+                          dateTime = null;
+                          Navigator.of(popupContext).pop();
+                        },
+                        child: Text(cancelText),
+                      ),
+                      if (helpText != null && helpText.isNotEmpty)
+                        Expanded(
+                          child: Text(
+                            helpText,
+                            textAlign: TextAlign.center,
+                            style: CupertinoTheme.of(popupContext).textTheme.navTitleTextStyle,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      CupertinoButton(
+                        key: doneButtonKey,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        onPressed: () {
+                          dateTime ??= initialDate ?? DateTime.now();
+                          Navigator.of(popupContext).pop();
+                        },
+                        child: const Text('Done'),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 216,
+                  child: CupertinoDatePicker(
+                    backgroundColor: backgroundColor,
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: initialDate,
+                    minimumDate: firstDate,
+                    maximumDate: lastDate,
+                    onDateTimeChanged: (d) => dateTime = d,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
     return dateTime;
   }

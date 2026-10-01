@@ -818,6 +818,83 @@ void main() {
       expect(find.byType(CupertinoDatePicker), findsNothing);
       expect(result, isNull);
     });
+    testWidgets('CupertinoDatePickerProvider dismisses and returns null when Cancel button is tapped', (tester) async {
+      DateTime? result = DateTime(2000);
+      final provider = CupertinoDatePickerProvider();
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await provider.show(
+                    context: context,
+                    helpText: 'Select Date',
+                    initialDate: DateTime(2000, 1, 15),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+                },
+                child: const Text('Open Cupertino Picker'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Cupertino Picker'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsOneWidget);
+      expect(find.text('Select Date'), findsOneWidget);
+      expect(find.byKey(CupertinoDatePickerProvider.cancelButtonKey), findsOneWidget);
+
+      await tester.tap(find.byKey(CupertinoDatePickerProvider.cancelButtonKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsNothing);
+      expect(result, isNull);
+    });
+
+    testWidgets('CupertinoDatePickerProvider dismisses and returns date when Done button is tapped', (tester) async {
+      DateTime? result;
+      final initial = DateTime(2000, 1, 15);
+      final provider = CupertinoDatePickerProvider();
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () async {
+                  result = await provider.show(
+                    context: context,
+                    initialDate: initial,
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  );
+                },
+                child: const Text('Open Cupertino Picker'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Open Cupertino Picker'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsOneWidget);
+      expect(find.byKey(CupertinoDatePickerProvider.doneButtonKey), findsOneWidget);
+
+      await tester.tap(find.byKey(CupertinoDatePickerProvider.doneButtonKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CupertinoDatePicker), findsNothing);
+      expect(result, initial);
+    });
+
   });
 
   group('DatePickerFormField - Adaptive Platform Indirection', () {
