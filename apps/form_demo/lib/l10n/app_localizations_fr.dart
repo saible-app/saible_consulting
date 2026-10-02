@@ -29,7 +29,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'Vous devez déclarer avoir plus de 18 ans pour activer le formulaire. Choisissez une date antérieure au $max.';
+    return 'Vous devez déclarer avoir plus de 18 ans pour activer le formulaire. Choisissez une date égale ou antérieure au $max.';
   }
 
   @override

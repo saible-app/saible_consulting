@@ -29,7 +29,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'You must claim to be over 18 to enable the form. Choose a date before $max.';
+    return 'You must claim to be over 18 to enable the form. Choose a date on or before $max.';
   }
 
   @override
@@ -93,7 +93,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'You must claim to be over 18 to enable the form. Choose a date before $max.';
+    return 'You must claim to be over 18 to enable the form. Choose a date on or before $max.';
   }
 
   @override
