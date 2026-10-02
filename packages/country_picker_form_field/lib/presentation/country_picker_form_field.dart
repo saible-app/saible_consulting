@@ -132,7 +132,7 @@ class _CountryPickerState() extends State<_CountryPicker> {
 /// A form field widget that allows selecting a country using a searchable view.
 class const CountryPickerFormField({
   super.key,
-  required this.decoration,
+  this.decoration,
   required this.onCountryPicked,
   this.initial,
   this.focusNode,
