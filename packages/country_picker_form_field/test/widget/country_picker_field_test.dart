@@ -77,6 +77,33 @@ void main() {
       expect(find.byIcon(Icons.language), findsOneWidget);
       expect(find.byType(FlagIcon), findsNothing);
     });
+    testWidgets('renders properly when decoration is omitted', (tester) async {
+      final saibleLoc = lookupCountryLocalizations(const Locale('en', 'GB'));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
+          supportedLocales: SaibleLocalizations.supportedLocales,
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          builder: (context, child) => Provider<CountryLocalizations>.value(
+            value: saibleLoc,
+            child: child,
+          ),
+          home: Scaffold(
+            body: Center(
+              child: CountryPickerFormField(
+                onCountryPicked: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CountryPickerFormField), findsOneWidget);
+      expect(find.byIcon(Icons.language), findsOneWidget);
+    });
+
+
 
     testWidgets('renders initial country name and flag icon when initial country is provided', (tester) async {
       await tester.pumpWidget(

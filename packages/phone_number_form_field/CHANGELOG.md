@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Bumped `saible_consulting_core` dependency constraint to `^0.2.3`.
+
 ## 0.2.2
 
 * Bumped `saible_consulting_core` dependency constraint to `^0.2.2`.
