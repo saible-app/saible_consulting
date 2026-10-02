@@ -1,3 +1,8 @@
+## 0.2.3
+
+* Made `decoration` parameter optional in `CountryPickerFormField`.
+* Bumped `saible_consulting_core` dependency constraint to `^0.2.3`.
+
 ## 0.2.2
 
 * Bumped `saible_consulting_core` dependency constraint to `^0.2.2`.
