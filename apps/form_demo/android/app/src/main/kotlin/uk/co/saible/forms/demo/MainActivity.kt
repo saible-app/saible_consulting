@@ -1,4 +1,4 @@
-package uk.co.saible.form_demo
+package uk.co.saible.forms.demo
 
 import io.flutter.embedding.android.FlutterActivity
 

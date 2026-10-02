@@ -10,7 +10,7 @@
       "min": { "type": "String", "example": "01/01/1899" }
     }
   },
-  "dateOfBirthErrorTooLate": "Sie müssen angeben, über 18 Jahre alt zu sein, um das Formular zu aktivieren. Wählen Sie ein Datum vor dem {max}.",
+  "dateOfBirthErrorTooLate": "Sie müssen angeben, über 18 Jahre alt zu sein, um das Formular zu aktivieren. Wählen Sie ein Datum am oder vor dem {max}.",
   "@dateOfBirthErrorTooLate": {
     "placeholders": {
       "max": { "type": "String", "example": "01/01/2020" }

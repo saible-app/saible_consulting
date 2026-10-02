@@ -29,7 +29,7 @@ class AppLocalizationsCy extends AppLocalizations {
 
   @override
   String dateOfBirthErrorTooLate(String max) {
-    return 'Mae\'n rhaid i chi honni eich bod dros 18 oed i alluogi\'r ffurflen. Dewiswch ddyddiad cyn $max.';
+    return 'Mae\'n rhaid i chi honni eich bod dros 18 oed i alluogi\'r ffurflen. Dewiswch ddyddiad ar neu cyn $max.';
   }
 
   @override

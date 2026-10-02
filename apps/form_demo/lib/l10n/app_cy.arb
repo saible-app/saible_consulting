@@ -10,7 +10,7 @@
       "min": { "type": "String", "example": "01/01/1899" }
     }
   },
-  "dateOfBirthErrorTooLate": "Mae'n rhaid i chi honni eich bod dros 18 oed i alluogi'r ffurflen. Dewiswch ddyddiad cyn {max}.",
+  "dateOfBirthErrorTooLate": "Mae'n rhaid i chi honni eich bod dros 18 oed i alluogi'r ffurflen. Dewiswch ddyddiad ar neu cyn {max}.",
   "@dateOfBirthErrorTooLate": {
     "placeholders": {
       "max": { "type": "String", "example": "01/01/2020" }
