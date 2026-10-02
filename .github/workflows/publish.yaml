@@ -11,7 +11,7 @@ concurrency:
 
 permissions:
   id-token: write # Required for pub.dev OIDC authentication
-  contents: read
+  contents: write # Required for creating git tags and GitHub Releases
 
 jobs:
   publish:
@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -34,6 +36,11 @@ jobs:
 
       - name: Bootstrap Monorepo Dependencies
         run: melos bootstrap
+
+      - name: Configure Git Author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Static Code Analysis
         run: melos exec -- dart analyze .
@@ -58,5 +65,42 @@ jobs:
       - name: Dry-Run Publication Validation
         run: melos publish --dry-run --no-published --no-private --yes
 
+      - name: Record Existing Tags
+        run: git tag -l | sort > /tmp/existing_tags.txt
+
       - name: Publish Packages to Pub.dev
-        run: melos publish --no-dry-run --no-published --no-private --yes --no-git-tag-version
+        run: melos publish --no-dry-run --no-published --no-private --yes --git-tag-version
+
+      - name: Create GitHub Tags and Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag -l | sort > /tmp/all_tags.txt
+          NEW_TAGS=$(comm -13 /tmp/existing_tags.txt /tmp/all_tags.txt)
+
+          if [ -n "$NEW_TAGS" ]; then
+            echo "Pushing newly created tags to GitHub..."
+            git push origin --tags
+
+            for TAG in $NEW_TAGS; do
+              echo "Creating GitHub Release for $TAG..."
+              PKG_NAME="${TAG%-v*}"
+              PKG_VER="${TAG##*-v}"
+              CHANGELOG_PATH="packages/$PKG_NAME/CHANGELOG.md"
+              NOTES=""
+              if [ -f "$CHANGELOG_PATH" ]; then
+                NOTES=$(python3 -c "import sys, re; path, ver = sys.argv[1], sys.argv[2]; c = open(path).read(); m = re.search(rf'##\s+{re.escape(ver)}\s*\n(.*?)(?=\n##\s+|\Z)', c, re.DOTALL); print(m.group(1).strip() if m else '')" "$CHANGELOG_PATH" "$PKG_VER")
+              fi
+
+              if gh release view "$TAG" >/dev/null 2>&1; then
+                echo "Release for $TAG already exists, skipping."
+              elif [ -n "$NOTES" ]; then
+                gh release create "$TAG" --title "$PKG_NAME v$PKG_VER" --notes "$NOTES"
+              else
+                gh release create "$TAG" --title "$PKG_NAME v$PKG_VER" --generate-notes
+              fi
+            done
+          else
+            echo "No new package tags were created; skipping release creation."
+          fi
+
