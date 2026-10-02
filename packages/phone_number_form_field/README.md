@@ -56,8 +56,8 @@ Add `phone_number_form_field` and [`saible_consulting_core`](https://pub.dev/pac
 
 ```yaml
 dependencies:
-  phone_number_form_field: ^0.2.1
-  saible_consulting_core: ^0.2.1
+  phone_number_form_field: ^0.2.2
+  saible_consulting_core: ^0.2.2
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter
