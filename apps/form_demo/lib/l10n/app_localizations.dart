@@ -135,7 +135,7 @@ abstract class AppLocalizations {
   /// No description provided for @dateOfBirthErrorTooLate.
   ///
   /// In en_GB, this message translates to:
-  /// **'You must claim to be over 18 to enable the form. Choose a date before {max}.'**
+  /// **'You must claim to be over 18 to enable the form. Choose a date on or before {max}.'**
   String dateOfBirthErrorTooLate(String max);
 
   /// No description provided for @dateOfBirthLabel.

@@ -10,7 +10,7 @@
       "min": { "type": "String", "example": "01/01/1899" }
     }
   },
-  "dateOfBirthErrorTooLate": "You must claim to be over 18 to enable the form. Choose a date before {max}.",
+  "dateOfBirthErrorTooLate": "You must claim to be over 18 to enable the form. Choose a date on or before {max}.",
   "@dateOfBirthErrorTooLate": {
     "placeholders": {
       "max": { "type": "String", "example": "01/01/2020" }
