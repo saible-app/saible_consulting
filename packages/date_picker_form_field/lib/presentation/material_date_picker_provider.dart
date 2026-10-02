@@ -35,5 +35,6 @@ final class MaterialDatePickerProvider() extends AdaptiveDatePickerProvider {
     initialDate: initialDate,
     firstDate: firstDate,
     lastDate: lastDate,
+    initialEntryMode: DatePickerEntryMode.calendarOnly,
   );
 }

@@ -1,3 +1,7 @@
+## 0.2.2
+
+* Bumped version to `0.2.2` across the Saible Consulting package suite.
+
 ## 0.2.1
 
 * Bumped version to `0.2.1` across the Saible Consulting package suite.

@@ -823,6 +823,7 @@ void main() {
       final provider = CupertinoDatePickerProvider();
       await tester.pumpWidget(
         MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
           localizationsDelegates: SaibleLocalizations.localizationsDelegates,
           home: Scaffold(
             body: Builder(
@@ -863,6 +864,7 @@ void main() {
       final provider = CupertinoDatePickerProvider();
       await tester.pumpWidget(
         MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
           localizationsDelegates: SaibleLocalizations.localizationsDelegates,
           home: Scaffold(
             body: Builder(
