@@ -2,16 +2,17 @@ name: Publish to Pub.dev
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    tags:
+      - '*-v[0-9]+.[0-9]+.[0-9]+*'
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
 
 concurrency:
-  group: publish-pub-dev
+  group: publish-pub-dev-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
   id-token: write # Required for pub.dev OIDC authentication
-  contents: write # Required for creating git tags and GitHub Releases
+  contents: write # Required for creating GitHub Releases
 
 jobs:
   publish:
@@ -37,11 +38,6 @@ jobs:
       - name: Bootstrap Monorepo Dependencies
         run: melos bootstrap
 
-      - name: Configure Git Author
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Static Code Analysis
         run: melos exec -- dart analyze .
 
@@ -62,45 +58,54 @@ jobs:
           PUB_DEV_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_TOKEN || secrets.PUB_DEV_TOKEN }}
           PUB_DEV_CREDENTIALS: ${{ secrets.PUB_DEV_CREDENTIALS }}
 
-      - name: Dry-Run Publication Validation
-        run: melos publish --dry-run --no-published --no-private --yes
+      - name: Publish to Pub.dev
+        run: |
+          TAG="${{ github.ref_name }}"
+          echo "Triggered by tag: $TAG"
 
-      - name: Record Existing Tags
-        run: git tag -l | sort > /tmp/existing_tags.txt
+          if [[ "$TAG" == *"-v"* ]]; then
+            PKG_NAME="${TAG%-v*}"
+            echo "Publishing package: $PKG_NAME"
+            melos publish --scope="$PKG_NAME" --no-dry-run --yes --no-git-tag-version
+          else
+            echo "Publishing all unpublished packages in dependency order"
+            melos publish --no-dry-run --no-published --no-private --yes --no-git-tag-version
+          fi
 
-      - name: Publish Packages to Pub.dev
-        run: melos publish --no-dry-run --no-published --no-private --yes --git-tag-version
-
-      - name: Create GitHub Tags and Releases
+      - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git tag -l | sort > /tmp/all_tags.txt
-          NEW_TAGS=$(comm -13 /tmp/existing_tags.txt /tmp/all_tags.txt)
+          TAG="${{ github.ref_name }}"
+          echo "Processing GitHub Release for tag: $TAG"
 
-          if [ -n "$NEW_TAGS" ]; then
-            echo "Pushing newly created tags to GitHub..."
-            git push origin --tags
+          if [[ "$TAG" == *"-v"* ]]; then
+            PKG_NAME="${TAG%-v*}"
+            PKG_VER="${TAG##*-v}"
+            CHANGELOG_PATH="packages/$PKG_NAME/CHANGELOG.md"
+            NOTES=""
+            if [ -f "$CHANGELOG_PATH" ]; then
+              NOTES=$(python3 -c "import sys, re; path, ver = sys.argv[1], sys.argv[2]; c = open(path).read(); m = re.search(rf'##\s+{re.escape(ver)}\s*\n(.*?)(?=\n##\s+|\Z)', c, re.DOTALL); print(m.group(1).strip() if m else '')" "$CHANGELOG_PATH" "$PKG_VER")
+            fi
 
-            for TAG in $NEW_TAGS; do
-              echo "Creating GitHub Release for $TAG..."
-              PKG_NAME="${TAG%-v*}"
-              PKG_VER="${TAG##*-v}"
-              CHANGELOG_PATH="packages/$PKG_NAME/CHANGELOG.md"
-              NOTES=""
-              if [ -f "$CHANGELOG_PATH" ]; then
-                NOTES=$(python3 -c "import sys, re; path, ver = sys.argv[1], sys.argv[2]; c = open(path).read(); m = re.search(rf'##\s+{re.escape(ver)}\s*\n(.*?)(?=\n##\s+|\Z)', c, re.DOTALL); print(m.group(1).strip() if m else '')" "$CHANGELOG_PATH" "$PKG_VER")
-              fi
+            if gh release view "$TAG" >/dev/null 2>&1; then
+              echo "Release for $TAG already exists, skipping."
+            elif [ -n "$NOTES" ]; then
+              gh release create "$TAG" --title "$PKG_NAME v$PKG_VER" --notes "$NOTES"
+            else
+              gh release create "$TAG" --title "$PKG_NAME v$PKG_VER" --generate-notes
+            fi
+          elif [[ "$TAG" == v* ]]; then
+            VER="${TAG#v}"
+            NOTES=$(python3 -c "import glob, os, sys, re; ver = sys.argv[1]; all_notes = [f'### {os.path.basename(os.path.dirname(p))}\n\n' + m.group(1).strip() for p in sorted(glob.glob('packages/*/CHANGELOG.md')) for m in [re.search(rf'##\s+{re.escape(ver)}\s*\n(.*?)(?=\n##\s+|\Z)', open(p).read(), re.DOTALL)] if m and m.group(1).strip()]; print('\n\n'.join(all_notes))" "$VER")
 
-              if gh release view "$TAG" >/dev/null 2>&1; then
-                echo "Release for $TAG already exists, skipping."
-              elif [ -n "$NOTES" ]; then
-                gh release create "$TAG" --title "$PKG_NAME v$PKG_VER" --notes "$NOTES"
-              else
-                gh release create "$TAG" --title "$PKG_NAME v$PKG_VER" --generate-notes
-              fi
-            done
-          else
-            echo "No new package tags were created; skipping release creation."
+            if gh release view "$TAG" >/dev/null 2>&1; then
+              echo "Release for $TAG already exists, skipping."
+            elif [ -n "$NOTES" ]; then
+              gh release create "$TAG" --title "Release v$VER" --notes "$NOTES"
+            else
+              gh release create "$TAG" --title "Release v$VER" --generate-notes
+            fi
           fi
+
 
