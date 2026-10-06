@@ -50,7 +50,7 @@ void main() {
       expect(find.byKey(CountryPickerFormField.countrySearchBarKey), findsOneWidget);
 
       expect(find.text('Phone Number'), findsOneWidget);
-      expect(find.byKey(PhoneNumberFormField.countrySearchBarKey), findsOneWidget);
+      expect(find.byKey(PhoneNumberFormField.textInputKey), findsOneWidget);
       expect(find.text('+44'), findsOneWidget);
 
       // Submit Button is disabled initially
@@ -222,7 +222,7 @@ void main() {
       await tester.pumpWidget(const DemoApp());
       await tester.pumpAndSettle();
 
-      final phoneField = find.byKey(PhoneNumberFormField.countrySearchBarKey);
+      final phoneField = find.byKey(PhoneNumberFormField.textInputKey);
 
       // Incomplete phone number triggers invalid error
       await tester.enterText(phoneField, '123');
@@ -292,7 +292,7 @@ void main() {
       expect(submitButton.onPressed, isNull);
 
       // 3. Enter valid phone number: 020 7946 0123
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '02079460123');
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '02079460123');
       await tester.pumpAndSettle();
 
       // Submit button is now enabled!

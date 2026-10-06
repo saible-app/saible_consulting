@@ -15,13 +15,13 @@
 import 'dart:async';
 
 import 'package:cupertino_ui/cupertino_ui.dart';
-import 'package:date_picker_form_field/presentation/adaptive_date_picker_provider.dart';
+import 'package:date_picker_form_field/presentation/adaptive_date_picker.dart';
 
 /// Shows a date picker using the Cupertino UI library. This is primarily for Apple-supported platforms,
 /// confirming to their native UI date-picking implementation.
-final class CupertinoDatePickerProvider() extends AdaptiveDatePickerProvider {
+final class AdaptiveCupertinoDatePicker() extends AdaptiveDatePicker {
 
-  /// Creates a [CupertinoDatePickerProvider]
+  /// Creates a [AdaptiveCupertinoDatePicker]
   this;
 
   /// The [Key] for the cancel button in the Cupertino date picker toolbar.

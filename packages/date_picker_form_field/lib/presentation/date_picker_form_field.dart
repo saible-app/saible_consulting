@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:date_picker_form_field/presentation/adaptive_date_picker.dart';
 import 'package:date_picker_form_field/presentation/adaptive_date_picker_provider.dart';
-import 'package:date_picker_form_field/presentation/cupertino_date_picker_provider.dart';
 import 'package:date_picker_form_field/presentation/date_input_formatter.dart';
-import 'package:date_picker_form_field/presentation/material_date_picker_provider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
@@ -44,7 +43,7 @@ Future<DateTime?> _chooseDate(
   void Function(DateTime)? onPickDate,
   void Function(DateInputValue)? onDateChanged,
   String? pickerHelpText,
-) async => await context.read<AdaptiveDatePickerProvider>().show(
+) async => await context.read<AdaptiveDatePicker>().show(
   context: context,
   helpText: pickerHelpText,
   initialDate: initialDate,
@@ -173,9 +172,9 @@ class _DatePickerFormFieldState() extends State<_DatePickerFormField> {
       onSaved: (_) => widget.onSaved?.call(currentDate),
       controller: controller,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
-        hintText: inputFormatter.hintText,
+        hintText: widget.decoration?.hintText ?? inputFormatter.hintText,
         errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
-        suffixIcon: IconButton(
+        suffixIcon: widget.decoration?.suffixIcon ?? IconButton(
           key: DatePickerFormField.launchDatePickerKey,
           icon: const Icon(Icons.calendar_month),
           onPressed: () async {
@@ -232,7 +231,7 @@ class const DatePickerFormField({
   this.pickerHelpText,
   this.validator,
   this.onSaved,
-  this.pickerProvider,
+  this.datePicker,
 }) extends StatelessWidget {
   /// The [Key] for the text input field.
   static const textInputKey = Key('datePickerTextField_textInput');
@@ -253,6 +252,12 @@ class const DatePickerFormField({
   final DateTime? lastDate;
 
   /// The decoration applied to the underlying [TextFormField].
+  /// 
+  /// This allows you to apply rich features to the field, such as floating labels, borders,
+  /// and error handling. Be aware that, by default, we provide a locale-aware DD/MM/YYYY-formatted
+  /// hint, and a suffix that can be used to open an adaptive date picker control. You can override
+  /// these built-in features by including your own hint or suffix in the [decoration] field, but
+  /// you will lose the default behaviour provided by the package. 
   final InputDecoration? decoration;
 
   /// Optional help text displayed in the date picker dialog header.
@@ -295,32 +300,26 @@ class const DatePickerFormField({
   /// [Form] saves, i.e. through `Form.save()`.
   final void Function(DateTime? date)? onSaved;
 
-  /// An optional custom [AdaptiveDatePickerProvider] to override the platform default.
-  final AdaptiveDatePickerProvider? pickerProvider;
+  /// An optional custom [AdaptiveDatePicker] to override the platform default.
+  final AdaptiveDatePicker? datePicker;
 
   @override
-  Widget build(BuildContext context) {
-    final platform = Theme.of(context).platform;
-    return Provider<AdaptiveDatePickerProvider>.value(
-      value: pickerProvider ?? switch (platform) {
-        TargetPlatform.iOS || TargetPlatform.macOS => CupertinoDatePickerProvider(),
-        _ => MaterialDatePickerProvider(),
-      },
-      child: _DatePickerFormField(
-        initialDate: initialDate,
-        firstDate: firstDate,
-        lastDate: lastDate,
-        decoration: decoration,
-        onPickDate: onPickDate,
-        onDateChanged: onDateChanged,
-        onEditText: onEditText,
-        onFieldSubmitted: onFieldSubmitted,
-        onEditingComplete: onEditingComplete,
-        focusNode: focusNode,
-        pickerHelpText: pickerHelpText,
-        validator: validator,
-        onSaved: onSaved,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AdaptiveDatePickerProvider(
+    datePicker: datePicker,
+    child: _DatePickerFormField(
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      decoration: decoration,
+      onPickDate: onPickDate,
+      onDateChanged: onDateChanged,
+      onEditText: onEditText,
+      onFieldSubmitted: onFieldSubmitted,
+      onEditingComplete: onEditingComplete,
+      focusNode: focusNode,
+      pickerHelpText: pickerHelpText,
+      validator: validator,
+      onSaved: onSaved,
+    ),
+  );
 }

@@ -31,6 +31,8 @@ void main() {
     GlobalKey<FormState>? formKey,
     String? Function(PhoneNumberState state)? validator,
     void Function(PhoneNumberState state)? onSaved,
+    String? hintText,
+
   }) {
     final saibleLoc = lookupCountryLocalizations(locale);
     return MaterialApp(
@@ -51,6 +53,8 @@ void main() {
               decoration: InputDecoration(
                 labelText: labelText,
                 errorText: errorText,
+                hintText: hintText,
+
                 errorMaxLines: errorMaxLines,
               ),
               initialValue: initialValue,
@@ -76,11 +80,23 @@ void main() {
       expect(find.text(Iso3166Country.unitedKingdom.flagEmoji()), findsOneWidget);
       expect(find.byIcon(Icons.arrow_drop_down), findsOneWidget);
 
-      final searchBarFinder = find.byKey(PhoneNumberFormField.countrySearchBarKey);
+      final searchBarFinder = find.byKey(PhoneNumberFormField.textInputKey);
       expect(searchBarFinder, findsOneWidget);
       final textFormField = tester.widget<TextFormField>(searchBarFinder);
       expect(textFormField.controller?.text, isEmpty);
     });
+    testWidgets('allows overriding hintText via decoration', (tester) async {
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Phone',
+          hintText: 'Custom Phone Hint',
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Custom Phone Hint'), findsOneWidget);
+    });
+
 
     testWidgets('displays errorText and uses focusNode', (tester) async {
       final focusNode = FocusNode();
@@ -96,7 +112,7 @@ void main() {
       expect(find.text('Invalid phone number'), findsOneWidget);
       expect(focusNode.hasFocus, isFalse);
 
-      await tester.tap(find.byKey(PhoneNumberFormField.countrySearchBarKey));
+      await tester.tap(find.byKey(PhoneNumberFormField.textInputKey));
       await tester.pump();
       expect(focusNode.hasFocus, isTrue);
 
@@ -123,7 +139,7 @@ void main() {
       expect(find.text(Iso3166Country.unitedKingdom.flagEmoji()), findsOneWidget);
 
       final textFormField = tester.widget<TextFormField>(
-        find.byKey(PhoneNumberFormField.countrySearchBarKey),
+        find.byKey(PhoneNumberFormField.textInputKey),
       );
       expect(textFormField.controller?.text, isNotEmpty);
     });
@@ -160,7 +176,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Enter official Ofcom drama dummy number: 020 7946 0123
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '02079460123');
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '02079460123');
       await tester.pumpAndSettle();
 
       expect(changedValues, isNotEmpty);
@@ -182,13 +198,13 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '123');
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '123');
       await tester.pumpAndSettle();
 
       expect(changedValues.last.e164, isNull);
       expect(changedValues.last.isValid, isFalse);
 
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '');
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '');
       await tester.pumpAndSettle();
 
       expect(changedValues.last.isEmpty, isTrue);
@@ -219,7 +235,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Enter dummy number under UK
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '02079460123');
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '02079460123');
       await tester.pumpAndSettle();
       expect(latestValue?.e164, '+442079460123');
 
@@ -242,7 +258,7 @@ void main() {
       expect(find.text(Iso3166Country.france.flagEmoji()), findsOneWidget);
 
       final textFormField = tester.widget<TextFormField>(
-        find.byKey(PhoneNumberFormField.countrySearchBarKey),
+        find.byKey(PhoneNumberFormField.textInputKey),
       );
       expect(textFormField.controller?.text, isEmpty);
       expect(latestValue?.rawText, isEmpty);
@@ -278,7 +294,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Enter text that could trigger parsing exceptions
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '+++');
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '+++');
       await tester.pumpAndSettle();
 
       expect(changedValues.last.e164, isNull);
@@ -304,7 +320,7 @@ void main() {
       expect(find.text('Enter a valid phone number'), findsOneWidget);
 
       // A complete UK number passes the same validator.
-      await tester.enterText(find.byKey(PhoneNumberFormField.countrySearchBarKey), '02079460123');
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '02079460123');
       await tester.pumpAndSettle();
 
       expect(formKey.currentState!.validate(), isTrue);
@@ -318,5 +334,33 @@ void main() {
       expect(savedState!.regionCode, '+44');
       expect(savedState!.rawText, isNotEmpty);
     });
+    
+    test('throws AssertionError if prefix is provided in decoration', () {
+      expect(
+        () => PhoneNumberFormField(
+          decoration: const InputDecoration(prefix: Text('+1')),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('throws AssertionError if prefixIcon is provided in decoration', () {
+      expect(
+        () => PhoneNumberFormField(
+          decoration: const InputDecoration(prefixIcon: Icon(Icons.phone)),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('throws AssertionError if prefixText is provided in decoration', () {
+      expect(
+        () => PhoneNumberFormField(
+          decoration: const InputDecoration(prefixText: '+1'),
+        ),
+        throwsAssertionError,
+      );
+    });
+
   });
 }

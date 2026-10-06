@@ -1,3 +1,12 @@
+## 1.0.0
+
+* Bumped version to `1.0.0` for official stable release.
+* Added runtime validation check asserting that `decoration` does not specify `prefix`, `prefixIcon`, or `prefixText`, ensuring calling-code prefix selector integrity.
+* Allowed overriding `hintText` via `decoration` without interfering with dial code prefix selector.
+* Updated `material_ui` dependency constraint to `^1.5.0` and `dlibphonenumber` to `^1.1.73`.
+* Bumped `saible_consulting_core` dependency constraint to `^1.0.0`.
+
+
 ## 0.2.3
 
 * Bumped `saible_consulting_core` dependency constraint to `^0.2.3`.

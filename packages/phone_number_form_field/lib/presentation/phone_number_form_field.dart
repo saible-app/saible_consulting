@@ -120,7 +120,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
     // are stable for the current locale.
     final textSearch = TextSearch(searchTerms);
     return TextFormField(
-      key: PhoneNumberFormField.countrySearchBarKey,
+      key: PhoneNumberFormField.textInputKey,
       focusNode: widget.focusNode,
       controller: _controller,
       keyboardType: TextInputType.phone,
@@ -135,7 +135,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
       validator: (_) => widget.validator?.call(_stateFor(_controller.text)),
       onSaved: (_) => widget.onSaved?.call(_stateFor(_controller.text)),
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
-        hintText: _selectedCountry.examplePhoneNumberWithoutTrunk(),
+        hintText: widget.decoration?.hintText ?? _selectedCountry.examplePhoneNumberWithoutTrunk(),
         errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
         prefixIcon: SearchAnchor(
           key: PhoneNumberFormField.countrySearchAnchorKey,
@@ -185,7 +185,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
 }
 
 /// A form field widget for inputting international phone numbers with country code selection and validation.
-class const PhoneNumberFormField({
+class PhoneNumberFormField({
   super.key,
   this.focusNode,
   this.initialValue,
@@ -195,13 +195,21 @@ class const PhoneNumberFormField({
   this.onSaved,
 }) extends StatelessWidget {
   /// Creates a [PhoneNumberFormField].
-  this;
+  this {
+    final prefix = decoration?.prefix;
+    final prefixIcon = decoration?.prefixIcon;
+    final prefixText = decoration?.prefixText;
+    assert(
+      prefix == null && prefixIcon == null && prefixText == null,
+      'PhoneNumberFormField cannot specify any prefix in decoration as it uses an interactive prefix dial code.',
+    );
+  }
 
   /// The [Key] for the country search anchor prefix icon button.
   static const Key countrySearchAnchorKey = Key('phoneNumberTextField_searchAnchor');
 
   /// The [Key] for the phone number text input search/entry field.
-  static const Key countrySearchBarKey = Key('phoneNumberTextField_searchBar');
+  static const textInputKey = Key('phoneNumberTextField_textInput');
 
   /// Generates a [Key] for a country suggestion tile based on the country's alpha2 code.
   static Key countrySuggestionKey(Iso3166Country country) => Key(
@@ -212,6 +220,13 @@ class const PhoneNumberFormField({
   final FocusNode? focusNode;
 
   /// The decoration applied to the underlying [TextFormField].
+  /// 
+  /// This allows you to apply rich features to the field, such as floating labels, borders,
+  /// and error handling. However, a runtime assertion will be thrown if you provide a prefix,
+  /// as the prefix is used to provide the mandatory international number code.
+  /// 
+  /// If you provide a hint, you will lose the locale-aware phone number masking feature provided
+  /// by this package. 
   final InputDecoration? decoration;
 
   /// Callback invoked when the phone number input changes or country selection changes.

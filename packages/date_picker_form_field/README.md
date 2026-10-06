@@ -29,7 +29,7 @@ An accessible, locale-adaptive date input field for Flutter that bridges keyboar
   - Purpose-built editing logic handles typing, digit insertions, and backspacing across separators gracefully: backspacing over a separator removes the preceding digit cleanly without breaking cursor placement or trapping user focus.
 - **Adaptive Platform Date Picking (`AdaptiveDatePickerProvider`)**:
   - Automatically chooses the native design idiom for the current platform: Cupertino date picker in a modal popup on iOS and macOS, and Material `DatePickerDialog` on Android and desktop platforms.
-  - Pluggable layer of indirection: inject a custom `pickerProvider` directly into `DatePickerFormField` or provide an `AdaptiveDatePickerProvider` higher in the widget tree.
+  - Pluggable layer of indirection: inject a custom `datePicker` directly into `DatePickerFormField` or provide an `AdaptiveDatePickerProvider` higher in the widget tree.
 - **Unified Dual-Mode Workflow**:
   - Users can either type digits directly (with or without separators) or tap the calendar icon to select from the platform picker.
   - Date choices in either mode keep the text field and validation state perfectly synchronized.
@@ -60,7 +60,7 @@ Add `date_picker_form_field` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  date_picker_form_field: ^0.2.3
+  date_picker_form_field: ^1.0.0
 ```
 
 > **UI library:** this package is built on `material_ui`, the official Flutter
@@ -197,21 +197,56 @@ TextFormField(
 );
 ```
 
-### Adaptive Date Picker & Custom Providers
+### Adaptive Date Picker & Custom Implementation
 
 By default, `DatePickerFormField` automatically adapts to the host platform, displaying a Cupertino date picker in a modal popup on iOS and macOS, and a Material date picker dialog on Android, Linux, and Windows.
 
-To override the platform default or plug in a custom date picker implementation, supply a custom `pickerProvider`:
+To override the platform default or plug in a custom date picker implementation, supply a custom `AdaptiveDatePicker` via `datePicker`:
 
 ```dart
 import 'package:date_picker_form_field/date_picker_form_field.dart';
 
 DatePickerFormField(
   decoration: const InputDecoration(labelText: 'Birth Date'),
-  // Explicitly select Cupertino, Material, or a custom AdaptiveDatePickerProvider:
-  pickerProvider: CupertinoDatePickerProvider(),
+  // Explicitly select AdaptiveCupertinoDatePicker, AdaptiveMaterialDatePicker, or a custom AdaptiveDatePicker:
+  datePicker: AdaptiveCupertinoDatePicker(),
   onPickDate: (date) => print('Picked: $date'),
 )
+```
+
+### Standalone `AdaptiveDatePicker` Usage
+
+We have you covered if you want an adaptive date picker outside the context of a form field:
+
+```dart
+import 'package:material_ui/material_ui.dart';
+import 'package:date_picker_form_field/date_picker_form_field.dart';
+
+class _DatePickerButton extends StatelessWidget {
+  const _DatePickerButton();
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+    icon: const Icon(Icons.calendar_month),
+    onPressed: () async {
+      final date = await context.read<AdaptiveDatePicker>().show(
+        context: context,
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100),
+      );
+      debugPrint('$date');
+    },
+  );  
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget();
+
+  @override
+  Widget build(BuildContext context) => AdaptiveDatePickerProvider(
+    child: const _DatePickerButton(),
+  );  
+}
 ```
 
 ### Form Validation
@@ -239,6 +274,26 @@ if (formKey.currentState!.validate()) {
   formKey.currentState!.save();
   print(dateOfBirth); // e.g. "1995-06-15 00:00:00.000"
 }
+```
+
+### Input Decoration
+
+`DatePickerFormField` allows flexible `InputDecoration` customization. By default,
+it supplies a locale-aware hint (e.g. `DD/MM/YYYY`) and a calendar icon `suffixIcon`
+that launches the platform date picker. You can customize the field decoration or
+override the hint text and suffix icon:
+
+```dart
+DatePickerFormField(
+  firstDate: DateTime(1900),
+  lastDate: DateTime.now(),
+  decoration: InputDecoration(
+    labelText: 'Date of Birth',
+    hintText: 'Enter your birth date', // Overrides default date pattern hint
+    suffixIcon: Icon(Icons.event),      // Overrides default calendar launcher icon
+    border: const OutlineInputBorder(),
+  ),
+)
 ```
 
 The validator runs whenever the enclosing `Form` validates - through
