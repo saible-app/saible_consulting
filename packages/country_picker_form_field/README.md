@@ -203,6 +203,24 @@ The validator runs whenever the enclosing `Form` validates - through
 `FormState.validate()` or a form-level `AutovalidateMode`. While the field is
 still open, the same state can be driven reactively through `onCountryPicked`.
 
+### Input Decoration
+
+`CountryPickerFormField` supports full `InputDecoration` customization. It provides
+a default suffix icon displaying the selected country's flag emoji (or a globe icon
+when unselected). You can supply custom decorations or override the suffix icon:
+
+```dart
+CountryPickerFormField(
+  onCountryPicked: (country) {},
+  decoration: InputDecoration(
+    labelText: 'Nationality',
+    hintText: 'Select country',
+    suffixIcon: const Icon(Icons.arrow_drop_down), // Overrides the default flag suffix icon
+    border: const OutlineInputBorder(),
+  ),
+)
+```
+
 ---
 
 ## Testing

@@ -184,6 +184,22 @@ void main() {
       expect(find.text('Some error'), findsOneWidget);
       expect(find.text('DD/MM/YYYY'), findsOneWidget);
     });
+    testWidgets('allows overriding hintText and suffixIcon via decoration', (tester) async {
+      await pumpDatePicker(
+        tester,
+        decoration: const InputDecoration(
+          labelText: 'Date of Birth',
+          hintText: 'Custom Date Hint',
+          suffixIcon: Icon(Icons.event, key: Key('custom_date_suffix')),
+        ),
+      );
+
+      expect(find.text('Custom Date Hint'), findsOneWidget);
+      expect(find.text('DD/MM/YYYY'), findsNothing);
+      expect(find.byKey(const Key('custom_date_suffix')), findsOneWidget);
+      expect(find.byKey(DatePickerFormField.launchDatePickerKey), findsNothing);
+    });
+
 
     testWidgets('initializes empty when current date is null', (tester) async {
       await pumpDatePicker(tester);

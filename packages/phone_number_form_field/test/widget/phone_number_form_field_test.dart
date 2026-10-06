@@ -31,6 +31,8 @@ void main() {
     GlobalKey<FormState>? formKey,
     String? Function(PhoneNumberState state)? validator,
     void Function(PhoneNumberState state)? onSaved,
+    String? hintText,
+
   }) {
     final saibleLoc = lookupCountryLocalizations(locale);
     return MaterialApp(
@@ -51,6 +53,8 @@ void main() {
               decoration: InputDecoration(
                 labelText: labelText,
                 errorText: errorText,
+                hintText: hintText,
+
                 errorMaxLines: errorMaxLines,
               ),
               initialValue: initialValue,
@@ -81,6 +85,18 @@ void main() {
       final textFormField = tester.widget<TextFormField>(searchBarFinder);
       expect(textFormField.controller?.text, isEmpty);
     });
+    testWidgets('allows overriding hintText via decoration', (tester) async {
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Phone',
+          hintText: 'Custom Phone Hint',
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Custom Phone Hint'), findsOneWidget);
+    });
+
 
     testWidgets('displays errorText and uses focusNode', (tester) async {
       final focusNode = FocusNode();

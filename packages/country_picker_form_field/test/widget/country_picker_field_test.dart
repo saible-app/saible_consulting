@@ -103,6 +103,32 @@ void main() {
       expect(find.byIcon(Icons.language), findsOneWidget);
     });
 
+    testWidgets('allows overriding suffixIcon via decoration', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(splashFactory: InkRipple.splashFactory),
+          localizationsDelegates: SaibleLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Center(
+              child: CountryPickerFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Country',
+                  suffixIcon: Icon(Icons.arrow_drop_down, key: Key('custom_suffix')),
+                ),
+                initial: Iso3166Country.unitedKingdom,
+                onCountryPicked: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('custom_suffix')), findsOneWidget);
+      expect(find.byType(FlagIcon), findsNothing);
+      expect(find.byIcon(Icons.language), findsNothing);
+    });
+
 
 
     testWidgets('renders initial country name and flag icon when initial country is provided', (tester) async {
