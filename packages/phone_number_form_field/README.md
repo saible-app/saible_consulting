@@ -211,6 +211,30 @@ The validator runs whenever the enclosing `Form` validates - through
 covers empty, partial and malformed input; inspect `state.rawText` instead when
 you want to distinguish "required" from "malformed".
 
+### Input Decoration
+
+`PhoneNumberFormField` supports full `InputDecoration` customization (labels,
+helper text, error styling, borders, etc.). Because the interactive calling-code
+selector occupies the prefix area, specifying any prefix in `decoration` (`prefix`,
+`prefixIcon`, or `prefixText`) is disallowed and triggers a runtime assertion:
+
+```dart
+// Allowed:
+PhoneNumberFormField(
+  decoration: const InputDecoration(
+    labelText: 'Mobile Phone',
+    border: OutlineInputBorder(),
+  ),
+);
+
+// Throws an AssertionError at runtime:
+PhoneNumberFormField(
+  decoration: const InputDecoration(
+    prefixText: '+44', // Prohibited: prefix is managed by the country dial code selector
+  ),
+);
+```
+
 ---
 
 ## Testing
@@ -218,7 +242,7 @@ you want to distinguish "required" from "malformed".
 `PhoneNumberFormField` exposes stable testing keys for automation:
 
 - `PhoneNumberFormField.countrySearchAnchorKey`: Key for the prefix search anchor.
-- `PhoneNumberFormField.countrySearchBarKey`: Key for the phone number text entry field.
+- `PhoneNumberFormField.textInputKey`: Key for the phone number text entry field.
 - `PhoneNumberFormField.countrySuggestionKey(country)`: Generates a test key for a country's suggestion tile.
 
 Example widget test:
@@ -226,7 +250,7 @@ Example widget test:
 ```dart
 // Enter phone number
 await tester.enterText(
-  find.byKey(PhoneNumberFormField.countrySearchBarKey),
+  find.byKey(PhoneNumberFormField.textInputKey),
   '02079460123',
 );
 await tester.pumpAndSettle();

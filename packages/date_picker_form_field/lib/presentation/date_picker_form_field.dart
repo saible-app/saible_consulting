@@ -172,9 +172,9 @@ class _DatePickerFormFieldState() extends State<_DatePickerFormField> {
       onSaved: (_) => widget.onSaved?.call(currentDate),
       controller: controller,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
-        hintText: inputFormatter.hintText,
+        hintText: widget.decoration?.hintText ?? inputFormatter.hintText,
         errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
-        suffixIcon: IconButton(
+        suffixIcon: widget.decoration?.suffixIcon ?? IconButton(
           key: DatePickerFormField.launchDatePickerKey,
           icon: const Icon(Icons.calendar_month),
           onPressed: () async {
@@ -252,6 +252,12 @@ class const DatePickerFormField({
   final DateTime? lastDate;
 
   /// The decoration applied to the underlying [TextFormField].
+  /// 
+  /// This allows you to apply rich features to the field, such as floating labels, borders,
+  /// and error handling. Be aware that, by default, we provide a locale-aware DD/MM/YYYY-formatted
+  /// hint, and a suffix that can be used to open an adaptive date picker control. You can override
+  /// these built-in features by including your own hint or suffix in the [decoration] field, but
+  /// you will lose the default behaviour provided by the package. 
   final InputDecoration? decoration;
 
   /// Optional help text displayed in the date picker dialog header.
