@@ -31,7 +31,7 @@ void main() {
   Widget buildTestWidget({
     Locale locale = const Locale('en', 'GB'),
     TargetPlatform platform = TargetPlatform.android,
-    AdaptiveDatePickerProvider? pickerProvider,
+    AdaptiveDatePicker? pickerProvider,
     DateTime? initialDate,
     DateTime? firstDate,
     DateTime? lastDate,
@@ -86,7 +86,7 @@ void main() {
               onEditingComplete: onEditingComplete,
               validator: validator,
               onSaved: onSaved,
-              pickerProvider: pickerProvider,
+              datePicker: pickerProvider,
             ),
           ),
         ),
@@ -98,7 +98,7 @@ void main() {
     WidgetTester tester, {
     Locale locale = const Locale('en', 'GB'),
     TargetPlatform platform = TargetPlatform.android,
-    AdaptiveDatePickerProvider? pickerProvider,
+    AdaptiveDatePicker? pickerProvider,
     DateTime? initialDate,
     DateTime? firstDate,
     DateTime? lastDate,
@@ -666,7 +666,7 @@ void main() {
   group('AdaptiveDatePickerProvider - Material Implementation', () {
     testWidgets('MaterialDatePickerProvider opens DatePickerDialog and returns chosen date on confirm', (tester) async {
       DateTime? result;
-      final provider = MaterialDatePickerProvider();
+      final provider = AdaptiveMaterialDatePicker();
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(splashFactory: InkRipple.splashFactory),
@@ -706,7 +706,7 @@ void main() {
 
     testWidgets('MaterialDatePickerProvider returns null when DatePickerDialog is cancelled', (tester) async {
       DateTime? result = DateTime(2000);
-      final provider = MaterialDatePickerProvider();
+      final provider = AdaptiveMaterialDatePicker();
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(splashFactory: InkRipple.splashFactory),
@@ -744,7 +744,7 @@ void main() {
   group('AdaptiveDatePickerProvider - Cupertino Implementation', () {
     testWidgets('CupertinoDatePickerProvider opens Cupertino modal popup and returns selected date on change', (tester) async {
       DateTime? result;
-      final provider = CupertinoDatePickerProvider();
+      final provider = AdaptiveCupertinoDatePicker();
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(splashFactory: InkRipple.splashFactory),
@@ -784,7 +784,7 @@ void main() {
 
     testWidgets('CupertinoDatePickerProvider returns null when dismissed without date change', (tester) async {
       DateTime? result = DateTime(2000);
-      final provider = CupertinoDatePickerProvider();
+      final provider = AdaptiveCupertinoDatePicker();
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(splashFactory: InkRipple.splashFactory),
@@ -820,7 +820,7 @@ void main() {
     });
     testWidgets('CupertinoDatePickerProvider dismisses and returns null when Cancel button is tapped', (tester) async {
       DateTime? result = DateTime(2000);
-      final provider = CupertinoDatePickerProvider();
+      final provider = AdaptiveCupertinoDatePicker();
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(splashFactory: InkRipple.splashFactory),
@@ -849,9 +849,9 @@ void main() {
 
       expect(find.byType(CupertinoDatePicker), findsOneWidget);
       expect(find.text('Select Date'), findsOneWidget);
-      expect(find.byKey(CupertinoDatePickerProvider.cancelButtonKey), findsOneWidget);
+      expect(find.byKey(AdaptiveCupertinoDatePicker.cancelButtonKey), findsOneWidget);
 
-      await tester.tap(find.byKey(CupertinoDatePickerProvider.cancelButtonKey));
+      await tester.tap(find.byKey(AdaptiveCupertinoDatePicker.cancelButtonKey));
       await tester.pumpAndSettle();
 
       expect(find.byType(CupertinoDatePicker), findsNothing);
@@ -861,7 +861,7 @@ void main() {
     testWidgets('CupertinoDatePickerProvider dismisses and returns date when Done button is tapped', (tester) async {
       DateTime? result;
       final initial = DateTime(2000, 1, 15);
-      final provider = CupertinoDatePickerProvider();
+      final provider = AdaptiveCupertinoDatePicker();
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(splashFactory: InkRipple.splashFactory),
@@ -888,9 +888,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(CupertinoDatePicker), findsOneWidget);
-      expect(find.byKey(CupertinoDatePickerProvider.doneButtonKey), findsOneWidget);
+      expect(find.byKey(AdaptiveCupertinoDatePicker.doneButtonKey), findsOneWidget);
 
-      await tester.tap(find.byKey(CupertinoDatePickerProvider.doneButtonKey));
+      await tester.tap(find.byKey(AdaptiveCupertinoDatePicker.doneButtonKey));
       await tester.pumpAndSettle();
 
       expect(find.byType(CupertinoDatePicker), findsNothing);
@@ -1037,7 +1037,7 @@ void main() {
   });
 }
 
-final class _TestAdaptiveDatePickerProvider([this.result]) implements AdaptiveDatePickerProvider {
+final class _TestAdaptiveDatePickerProvider([this.result]) implements AdaptiveDatePicker {
   this;
 
   final DateTime? result;

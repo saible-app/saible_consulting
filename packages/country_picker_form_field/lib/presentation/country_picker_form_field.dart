@@ -20,6 +20,22 @@ import 'package:saible_consulting_core/domain/iso3166_countries.dart';
 import 'package:saible_consulting_core/presentation/countries_provider.dart';
 import 'package:saible_consulting_core/presentation/nation_tile.dart';
 
+class const _DefaultSuffix({
+  this.country
+}) extends StatelessWidget {
+  final Iso3166Country? country;
+
+  @override
+  Widget build(BuildContext context) {
+    final country = this.country;
+    if (country == null) return const Icon(Icons.language);
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: FlagIcon.forIso3166(country: country),
+    );
+  }
+}
+
 class const _CountryPicker({
   required this.onCountryPicked,
   this.initial,
@@ -83,7 +99,6 @@ class _CountryPickerState() extends State<_CountryPicker> {
     // Built once per rebuild (not per keystroke) since the search terms
     // are stable for the current locale.
     final textSearch = TextSearch(searchTerms);
-    final country = chosenCountry;
     return SearchAnchor(
       key: CountryPickerFormField.countrySearchAnchorKey,
       searchController: controller,
@@ -99,12 +114,7 @@ class _CountryPickerState() extends State<_CountryPicker> {
         onSaved: (_) => widget.onSaved?.call(chosenCountry),
         decoration: (widget.decoration ?? const InputDecoration()).copyWith(
           errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
-          suffixIcon: country == null
-            ? const Icon(Icons.language)
-            : Padding(
-                padding: const EdgeInsets.all(8),
-                child: FlagIcon.forIso3166(country: country),
-              ),
+          suffixIcon: widget.decoration?.suffixIcon ?? _DefaultSuffix(country: chosenCountry),
         ),
       ),
       viewOnClose: () {
@@ -149,6 +159,10 @@ class const CountryPickerFormField({
   this;
 
   /// The decoration applied to the underlying [TextFormField].
+  /// 
+  /// This offers rich customisation for your form input (e.g. labels, hints, error descriptions).
+  /// If you provide a suffix icon, that will override the default suffix icon we have provided,
+  /// but that won't break the underlying implementation.
   final InputDecoration? decoration;
 
   /// Callback invoked when a country is selected.

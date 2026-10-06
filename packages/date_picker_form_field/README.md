@@ -214,6 +214,33 @@ DatePickerFormField(
 )
 ```
 
+### Standalone `AdaptiveDatePicker` Usage
+
+We have you covered if you want an adaptive date picker outside the context of a form field:
+
+```dart
+import 'package:material_ui/material_ui.dart';
+import 'package:date_picker_form_field/date_picker_form_field.dart';
+
+class const _DatePickerButton() extends StatelessWigdet {
+  @override
+  Widget build(BuildContext context) => IconButton(
+    icon: Icon(Icons.calendar),
+    onPressed: () {
+      final date = context.read<AdaptiveDatePicker>().show*();
+      debugPrint(date);
+    }
+  );  
+}
+
+class const MyWidget() extends StatelssWidget {
+  @override
+  Widget build(BuildContext context) => AdaptiveDatePickerProvider(
+    child: const _DatePickerButton(),
+  );  
+}
+```
+
 ### Form Validation
 
 `validator` and `onSaved` plug the field into a `Form` and receive the parsed

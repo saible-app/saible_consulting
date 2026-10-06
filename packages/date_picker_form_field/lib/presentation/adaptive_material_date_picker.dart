@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:date_picker_form_field/presentation/adaptive_date_picker_provider.dart';
+import 'package:date_picker_form_field/presentation/adaptive_date_picker.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Shows a date picker using the Material UI library. This is primarily for Android and web platforms
 /// (other than Safari or a native iOS browser)
-final class MaterialDatePickerProvider() extends AdaptiveDatePickerProvider {
+final class AdaptiveMaterialDatePicker() extends AdaptiveDatePicker {
 
-  /// Creates a [MaterialDatePickerProvider]
+  /// Creates a [AdaptiveMaterialDatePicker]
   this;
 
   @override

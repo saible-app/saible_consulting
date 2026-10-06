@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:date_picker_form_field/presentation/adaptive_date_picker.dart';
 import 'package:date_picker_form_field/presentation/adaptive_date_picker_provider.dart';
-import 'package:date_picker_form_field/presentation/cupertino_date_picker_provider.dart';
 import 'package:date_picker_form_field/presentation/date_input_formatter.dart';
-import 'package:date_picker_form_field/presentation/material_date_picker_provider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
@@ -44,7 +43,7 @@ Future<DateTime?> _chooseDate(
   void Function(DateTime)? onPickDate,
   void Function(DateInputValue)? onDateChanged,
   String? pickerHelpText,
-) async => await context.read<AdaptiveDatePickerProvider>().show(
+) async => await context.read<AdaptiveDatePicker>().show(
   context: context,
   helpText: pickerHelpText,
   initialDate: initialDate,
@@ -232,7 +231,7 @@ class const DatePickerFormField({
   this.pickerHelpText,
   this.validator,
   this.onSaved,
-  this.pickerProvider,
+  this.datePicker,
 }) extends StatelessWidget {
   /// The [Key] for the text input field.
   static const textInputKey = Key('datePickerTextField_textInput');
@@ -295,32 +294,26 @@ class const DatePickerFormField({
   /// [Form] saves, i.e. through `Form.save()`.
   final void Function(DateTime? date)? onSaved;
 
-  /// An optional custom [AdaptiveDatePickerProvider] to override the platform default.
-  final AdaptiveDatePickerProvider? pickerProvider;
+  /// An optional custom [AdaptiveDatePicker] to override the platform default.
+  final AdaptiveDatePicker? datePicker;
 
   @override
-  Widget build(BuildContext context) {
-    final platform = Theme.of(context).platform;
-    return Provider<AdaptiveDatePickerProvider>.value(
-      value: pickerProvider ?? switch (platform) {
-        TargetPlatform.iOS || TargetPlatform.macOS => CupertinoDatePickerProvider(),
-        _ => MaterialDatePickerProvider(),
-      },
-      child: _DatePickerFormField(
-        initialDate: initialDate,
-        firstDate: firstDate,
-        lastDate: lastDate,
-        decoration: decoration,
-        onPickDate: onPickDate,
-        onDateChanged: onDateChanged,
-        onEditText: onEditText,
-        onFieldSubmitted: onFieldSubmitted,
-        onEditingComplete: onEditingComplete,
-        focusNode: focusNode,
-        pickerHelpText: pickerHelpText,
-        validator: validator,
-        onSaved: onSaved,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AdaptiveDatePickerProvider(
+    datePicker: datePicker,
+    child: _DatePickerFormField(
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      decoration: decoration,
+      onPickDate: onPickDate,
+      onDateChanged: onDateChanged,
+      onEditText: onEditText,
+      onFieldSubmitted: onFieldSubmitted,
+      onEditingComplete: onEditingComplete,
+      focusNode: focusNode,
+      pickerHelpText: pickerHelpText,
+      validator: validator,
+      onSaved: onSaved,
+    ),
+  );
 }

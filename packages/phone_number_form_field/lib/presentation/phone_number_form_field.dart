@@ -120,7 +120,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
     // are stable for the current locale.
     final textSearch = TextSearch(searchTerms);
     return TextFormField(
-      key: PhoneNumberFormField.countrySearchBarKey,
+      key: PhoneNumberFormField.textInputKey,
       focusNode: widget.focusNode,
       controller: _controller,
       keyboardType: TextInputType.phone,
@@ -201,7 +201,7 @@ class const PhoneNumberFormField({
   static const Key countrySearchAnchorKey = Key('phoneNumberTextField_searchAnchor');
 
   /// The [Key] for the phone number text input search/entry field.
-  static const Key countrySearchBarKey = Key('phoneNumberTextField_searchBar');
+  static const textInputKey = Key('phoneNumberTextField_textInput');
 
   /// Generates a [Key] for a country suggestion tile based on the country's alpha2 code.
   static Key countrySuggestionKey(Iso3166Country country) => Key(
