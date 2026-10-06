@@ -318,5 +318,33 @@ void main() {
       expect(savedState!.regionCode, '+44');
       expect(savedState!.rawText, isNotEmpty);
     });
+    
+    test('throws AssertionError if prefix is provided in decoration', () {
+      expect(
+        () => PhoneNumberFormField(
+          decoration: const InputDecoration(prefix: Text('+1')),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('throws AssertionError if prefixIcon is provided in decoration', () {
+      expect(
+        () => PhoneNumberFormField(
+          decoration: const InputDecoration(prefixIcon: Icon(Icons.phone)),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('throws AssertionError if prefixText is provided in decoration', () {
+      expect(
+        () => PhoneNumberFormField(
+          decoration: const InputDecoration(prefixText: '+1'),
+        ),
+        throwsAssertionError,
+      );
+    });
+
   });
 }
