@@ -224,6 +224,9 @@ class PhoneNumberFormField({
   /// This allows you to apply rich features to the field, such as floating labels, borders,
   /// and error handling. However, a runtime assertion will be thrown if you provide a prefix,
   /// as the prefix is used to provide the mandatory international number code.
+  /// 
+  /// If you provide a hint, you will lose the locale-aware phone number masking feature provided
+  /// by this package. 
   final InputDecoration? decoration;
 
   /// Callback invoked when the phone number input changes or country selection changes.
