@@ -1,3 +1,16 @@
+## 1.0.0
+
+* Bumped version to `1.0.0` for official stable release.
+* **Adaptive date picker consolidation**:
+  - Replaced provider classes with `AdaptiveDatePicker` interface hierarchy (`AdaptiveCupertinoDatePicker`, `AdaptiveMaterialDatePicker`).
+  - Added `AdaptiveDatePickerProvider` widget and direct `datePicker` injection parameter on `DatePickerFormField`.
+  - Added standalone `AdaptiveDatePicker` usage support outside form field contexts.
+* **Flexible decoration**:
+  - Allowed overriding `hintText` and calendar launcher `suffixIcon` via `decoration`.
+* Updated `material_ui` dependency constraint to `^1.5.0`.
+* Bumped `saible_consulting_core` dependency constraint to `^1.0.0`.
+
+
 ## 0.2.3
 
 * Bumped `saible_consulting_core` dependency constraint to `^0.2.3`.
