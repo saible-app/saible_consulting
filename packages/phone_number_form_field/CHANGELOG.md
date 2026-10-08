@@ -6,7 +6,6 @@
 * Added an `onFieldSubmitted` callback, forwarded to the underlying `TextFormField`.
 * Bumped `saible_consulting_core` dependency constraint to `^1.0.1`.
 
-
 ## 1.0.0
 
 * Bumped version to `1.0.0` for official stable release.
@@ -14,7 +13,6 @@
 * Allowed overriding `hintText` via `decoration` without interfering with dial code prefix selector.
 * Updated `material_ui` dependency constraint to `^1.5.0` and `dlibphonenumber` to `^1.1.73`.
 * Bumped `saible_consulting_core` dependency constraint to `^1.0.0`.
-
 
 ## 0.2.3
 

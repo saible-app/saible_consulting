@@ -3,7 +3,6 @@
 * Bumped version to `1.0.1` across the Saible Consulting package suite.
 * Bumped `saible_consulting_core` dependency constraint to `^1.0.1`.
 
-
 ## 1.0.0
 
 * Bumped version to `1.0.0` for official stable release.
@@ -15,7 +14,6 @@
   - Allowed overriding `hintText` and calendar launcher `suffixIcon` via `decoration`.
 * Updated `material_ui` dependency constraint to `^1.5.0`.
 * Bumped `saible_consulting_core` dependency constraint to `^1.0.0`.
-
 
 ## 0.2.3
 

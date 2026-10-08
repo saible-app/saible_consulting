@@ -3,14 +3,12 @@
 * Bumped version to `1.0.1` across the Saible Consulting package suite.
 * Bumped `saible_consulting_core` dependency constraint to `^1.0.1`.
 
-
 ## 1.0.0
 
 * Bumped version to `1.0.0` for official stable release.
 * Added support for custom `suffixIcon` in `InputDecoration`, overriding default country flag / globe icon.
 * Updated `material_ui` dependency constraint to `^1.5.0`.
 * Bumped `saible_consulting_core` dependency constraint to `^1.0.0`.
-
 
 ## 0.2.3
 
