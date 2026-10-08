@@ -1,3 +1,11 @@
+## 1.0.1
+
+* Fixed initial value and example hint formatting so that pre-filled numbers render identically to as-you-type input.
+  - `internationalFormatWithoutTrunk()` now formats numbers using the region's national style with the national (trunk) prefix stripped, so `+12015550123` renders as `(201) 555-0123` rather than the international `201-555-0123`.
+  - `PhoneNumberFormField` now renders its `initialValue` with the same formatting as the as-you-type formatter.
+* Added an `onFieldSubmitted` callback, forwarded to the underlying `TextFormField`.
+* Bumped `saible_consulting_core` dependency constraint to `^1.0.1`.
+
 ## 1.0.0
 
 * Bumped version to `1.0.0` for official stable release.
@@ -5,7 +13,6 @@
 * Allowed overriding `hintText` via `decoration` without interfering with dial code prefix selector.
 * Updated `material_ui` dependency constraint to `^1.5.0` and `dlibphonenumber` to `^1.1.73`.
 * Bumped `saible_consulting_core` dependency constraint to `^1.0.0`.
-
 
 ## 0.2.3
 

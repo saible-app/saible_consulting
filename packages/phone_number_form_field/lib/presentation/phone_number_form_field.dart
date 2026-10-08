@@ -41,12 +41,14 @@ class const _PhoneNumberField({
   this.decoration,
   this.initialValue,
   this.onPhoneNumberChanged,
+  this.onFieldSubmitted,
   this.validator,
   this.onSaved,
 }) extends StatefulWidget {
   final FocusNode? focusNode;
   final InputDecoration? decoration;
   final ValueChanged<PhoneNumberState>? onPhoneNumberChanged;
+  final void Function(String)? onFieldSubmitted;
   final PhoneNumberState? initialValue;
   final String? Function(PhoneNumberState state)? validator;
   final void Function(PhoneNumberState state)? onSaved;
@@ -70,7 +72,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
       final country = Iso3166Country.values.firstWhereOrNull((c) => c.alpha2.toLowerCase() == regionCode);
       if (country != null) {
         _selectedCountry = country;
-        _controller.text = phoneUtil.getNationalSignificantNumber(phoneNumber);
+        _controller.text = phoneNumber.internationalFormatWithoutTrunk();
       }
     }
   }
@@ -134,6 +136,7 @@ class _PhoneNumberFieldState() extends State<_PhoneNumberField> {
       // parsed PhoneNumberState rather than the raw text.
       validator: (_) => widget.validator?.call(_stateFor(_controller.text)),
       onSaved: (_) => widget.onSaved?.call(_stateFor(_controller.text)),
+      onFieldSubmitted: widget.onFieldSubmitted,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         hintText: widget.decoration?.hintText ?? _selectedCountry.examplePhoneNumberWithoutTrunk(),
         errorMaxLines: widget.decoration?.errorMaxLines ?? 2,
@@ -191,6 +194,7 @@ class PhoneNumberFormField({
   this.initialValue,
   this.decoration,
   this.onPhoneNumberChanged,
+  this.onFieldSubmitted,
   this.validator,
   this.onSaved,
 }) extends StatelessWidget {
@@ -232,6 +236,9 @@ class PhoneNumberFormField({
   /// Callback invoked when the phone number input changes or country selection changes.
   final ValueChanged<PhoneNumberState>? onPhoneNumberChanged;
 
+  /// Callback invoked when the user indicates they are done editing (e.g. presses Enter/Submit).
+  final void Function(String)? onFieldSubmitted;
+
   /// An optional initial value to populate the field with.
   final PhoneNumberState? initialValue;
 
@@ -257,6 +264,7 @@ class PhoneNumberFormField({
     initialValue: initialValue,
     decoration: decoration,
     onPhoneNumberChanged: onPhoneNumberChanged,
+    onFieldSubmitted: onFieldSubmitted,
     validator: validator,
     onSaved: onSaved,
   ));

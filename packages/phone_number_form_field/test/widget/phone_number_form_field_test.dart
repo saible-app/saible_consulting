@@ -164,6 +164,39 @@ void main() {
       expect(find.text(Iso3166Country.unitedStates.flagEmoji()), findsOneWidget);
     });
 
+    testWidgets('formats a US initialValue in national style, matching as-you-type output', (tester) async {
+      // Standard reserved 555 fictional US number: +12015550123. The field must
+      // render `(201) 555-0123`, not the international `201-555-0123`, so that
+      // pre-filled values display identically to a number typed by the user.
+      const initial = PhoneNumberState(
+        rawText: '201 555 0123',
+        e164: '+12015550123',
+        regionCode: '+1',
+      );
+
+      await tester.pumpWidget(
+        buildTestWidget(
+          labelText: 'Phone Number',
+          initialValue: initial,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final textFormField = tester.widget<TextFormField>(
+        find.byKey(PhoneNumberFormField.textInputKey),
+      );
+      expect(textFormField.controller?.text, '(201) 555-0123');
+
+      // Typing the same number must produce the same rendered text.
+      await tester.enterText(find.byKey(PhoneNumberFormField.textInputKey), '2015550123');
+      await tester.pumpAndSettle();
+
+      final typedFormField = tester.widget<TextFormField>(
+        find.byKey(PhoneNumberFormField.textInputKey),
+      );
+      expect(typedFormField.controller?.text, '(201) 555-0123');
+    });
+
     testWidgets('formats as-you-type and notifies onPhoneNumberChanged with valid E164', (tester) async {
       final changedValues = <PhoneNumberState>[];
 

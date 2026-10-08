@@ -44,7 +44,7 @@ Add `saible_consulting_core` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  saible_consulting_core: ^1.0.0
+  saible_consulting_core: ^1.0.1
 ```
 
 Import the package in your Dart code:
