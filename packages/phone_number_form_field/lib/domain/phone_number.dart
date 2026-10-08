@@ -21,11 +21,21 @@ const defaultRegionCode = 'GB';
 
 /// Formatting utilities on [PhoneNumber].
 extension FormatUtils on PhoneNumber {
-  /// Returns the phone number formatted internationally without the trunk/country code prefix.
+  /// Returns the phone number formatted the way this package renders it inside
+  /// the field: the region's national format with its national (trunk) prefix
+  /// removed, e.g. `(201) 555-0123` for `+12015550123` or `20 7946 0123` for
+  /// `+442079460123`.
+  ///
+  /// This deliberately mirrors the output of `AsYouTypePhoneNumberFormatter`
+  /// rather than the international format, so that initial values, example
+  /// hints and as-you-type input all display identically.
   String internationalFormatWithoutTrunk() {
-    final String intlFormatted = phoneUtil.format(this, PhoneNumberFormat.international);
-    final String countryCodePrefix = '+$countryCode';
-    return intlFormatted.replaceFirst(countryCodePrefix, '').trim();
+    final String nationalFormatted = phoneUtil.format(this, PhoneNumberFormat.national);
+    final String? regionCode = phoneUtil.getRegionCodeForNumber(this);
+    final String? nationalPrefix =
+        regionCode == null ? null : phoneUtil.getNddPrefixForRegion(regionCode, true);
+    if (nationalPrefix == null || nationalPrefix.isEmpty) return nationalFormatted;
+    return nationalFormatted.replaceFirst(RegExp('^$nationalPrefix\\s?'), '');
   }
 }
 
